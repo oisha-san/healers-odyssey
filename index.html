@@ -1770,7 +1770,12 @@ body.light-mode .sidebar-nav li a:hover {
                 <h3>📇 Anki Integration</h3>
                 <p class="setting-desc">Connect to <strong>Anki desktop</strong> via the free <a href="https://ankiweb.net/shared/info/2055492159" target="_blank">AnkiConnect plugin</a>. Completed reviews sync as XP automatically.</p>
                 <div class="anki-requirements">
-                    <strong>Requirements:</strong> Anki desktop must be open · AnkiConnect plugin installed (code: 2055492159) · Same computer only
+                    <strong>Setup (3 steps):</strong>
+                    <ol style="margin:6px 0 0 16px;line-height:1.9;font-size:0.95em">
+                        <li>Install <a href="https://ankiweb.net/shared/info/2055492159" target="_blank">AnkiConnect plugin</a> in Anki (code: 2055492159)</li>
+                        <li>In Anki → Tools → Add-ons → AnkiConnect → <strong>Config</strong>, add <code style="font-size:0.85em">"webCorsOriginList": ["*"]</code> (or your site's URL) → restart Anki</li>
+                        <li>Keep Anki open on the same computer, then click Test Connection below</li>
+                    </ol>
                 </div>
                 <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:10px">
                     <button id="ankiTestBtn" class="btn-purple">🔌 Test Connection</button>
@@ -8638,12 +8643,18 @@ JSON format (ONLY — no markdown):
             if (status) { status.textContent = `✅ Connected! AnkiConnect v${version}`; status.style.color = 'var(--success)'; }
             if (syncBtn) syncBtn.disabled = false;
             if (btn) { btn.textContent = '✅ Connected'; btn.disabled = false; }
-            // Start auto-sync if interval is set
             scheduleAnkiSync();
             showToast('📇 Anki connected! Reviews will sync automatically.', 'success', 4000);
         } catch (e) {
+            const isCors = e.message.includes('fetch') || e.message.includes('NetworkError') || e.message.includes('Failed');
+            const corsHint = isCors
+                ? `<br><br><strong>Most likely cause: CORS not configured.</strong><br>
+                   In Anki → Tools → Add-ons → AnkiConnect → Config, add this site's origin to <code>webCorsOriginList</code>:<br>
+                   <code style="font-size:0.85em;word-break:break-all">"${location.origin}"</code><br>
+                   Then restart Anki and try again.`
+                : '';
             if (status) {
-                status.innerHTML = `❌ Cannot connect. Make sure:<br>• Anki is open<br>• AnkiConnect plugin is installed<br><small style="opacity:0.7">${e.message}</small>`;
+                status.innerHTML = `❌ Cannot connect — ${isCors ? 'CORS blocked' : e.message}${corsHint}`;
                 status.style.color = 'var(--error)';
             }
             if (btn) { btn.textContent = '🔌 Test Connection'; btn.disabled = false; }
@@ -8655,32 +8666,77 @@ JSON format (ONLY — no markdown):
         const status = document.getElementById('anki-status');
         const today = getTodayDateString();
         try {
-            // Get today's review count from Anki
             const reviewCount = await ankiRequest('getNumCardsReviewedToday');
             if (typeof reviewCount !== 'number') throw new Error('Unexpected response');
 
-            const lastCount = parseInt(localStorage.getItem('ankiLastSyncCount') || '0');
-            const newReviews = Math.max(0, reviewCount - lastCount);
+            // Reset baseline every new day
+            const lastSyncDate = localStorage.getItem('ankiLastSyncDate') || '';
+            if (lastSyncDate !== today) {
+                localStorage.setItem('ankiLastSyncCount', '0');
+                localStorage.setItem('ankiLastSyncDate', today);
+            }
 
-            if (newReviews > 0) {
-                // Award XP and count reviews
-                const xpPerReview = XP_PER_REVIEW_BASE + skills.reviewMastery * REVIEW_MASTERY_XP_PER_POINT;
-                const totalXP = gainXP(newReviews * Math.ceil(xpPerReview * 0.5)); // 50% of normal review XP (Anki doesn't use SRS intervals)
-                totalReviewsCompleted += newReviews;
-                recordHeatmapActivity('reviews', newReviews);
-                if (weeklyStats) weeklyStats.reviews = (weeklyStats.reviews || 0) + newReviews;
-                checkReviewAchievements();
+            const lastCount  = parseInt(localStorage.getItem('ankiLastSyncCount') || '0');
+            const newCards   = Math.max(0, reviewCount - lastCount);
+
+            if (newCards > 0) {
+                // ── XP: Anki cards = questions (full question XP, not review XP) ──
+                const xpPerCard = XP_PER_QUESTION;
+                const totalXP   = gainXP(newCards * xpPerCard);
+
+                // ── Counters: questions only — NOT game reviews ──────────────
+                // Game reviews = diseases you studied here and revisit on schedule.
+                // Anki cards are external questions answered, not that system.
+                totalQuestions += newCards;
+                recordHeatmapActivity('questions', newCards);
+                if (weeklyStats) {
+                    weeklyStats.questions = (weeklyStats.questions || 0) + newCards;
+                }
+
+                // ── Daily task progress ──────────────────────────────────────
+                // Cards count toward question-type tasks only
+                const beforeTasks = dailyTasks.map(t => ({ type: t.type, prog: t.progress, done: t.completed }));
+                updateTaskProgress(TASK_TYPES.QUESTIONS,      newCards);
+                updateTaskProgress(TASK_TYPES.HARD_QUESTIONS, newCards);
+                const afterTasks  = dailyTasks.map(t => ({ type: t.type, prog: t.progress, done: t.completed }));
+
+                // Build a list of tasks that actually moved
+                const updatedTasks = dailyTasks.filter((t, i) =>
+                    afterTasks[i].prog > beforeTasks[i].prog || (afterTasks[i].done && !beforeTasks[i].done)
+                );
+                const taskSummary = updatedTasks.length > 0
+                    ? ` · updated: ${updatedTasks.map(t => t.name || t.type).join(', ')}`
+                    : ' · no matching tasks today';
+
+                // ── Monthly task progress ────────────────────────────────────
+                if (getYearMonthString() === lastMonthlyTasksGeneratedDate) {
+                    monthlyTaskProgress.questionsAnsweredThisMonthCount =
+                        (monthlyTaskProgress.questionsAnsweredThisMonthCount || 0) + newCards;
+                    updateActiveMonthlyTasksProgress();
+                }
+
+                checkQuestionAchievements();
                 localStorage.setItem('ankiLastSyncCount', reviewCount.toString());
-                addQuest(`📇 Anki sync: +${newReviews} reviews counted (+${totalXP} XP)`);
+                addQuest(`📇 Anki: +${newCards} questions (+${totalXP} XP)${taskSummary}`);
                 updateAndSave();
-                if (status) { status.textContent = `✅ Synced at ${new Date().toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'})} — +${newReviews} new Anki reviews`; status.style.color = 'var(--success)'; }
-                showToast(`📇 +${newReviews} Anki reviews synced! +${totalXP} XP`, 'success', 3000);
+
+                if (status) {
+                    status.textContent = `✅ Synced ${new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'})} — +${newCards} questions, +${totalXP} XP${taskSummary}`;
+                    status.style.color = 'var(--success)';
+                }
+                showToast(`📇 +${newCards} Anki questions → +${totalXP} XP${updatedTasks.length ? ' · tasks updated!' : ''}`, 'success', 3500);
             } else {
-                if (status) { status.textContent = `✅ Synced — no new reviews since last sync`; status.style.color = 'var(--text-muted)'; }
+                if (status) {
+                    status.textContent = `✅ Up to date — ${reviewCount} cards done today`;
+                    status.style.color = 'var(--text-muted)';
+                }
             }
             lastAnkiSyncDate = today;
         } catch (e) {
-            if (status) { status.textContent = `⚠️ Sync failed — is Anki still open? (${e.message})`; status.style.color = 'var(--warning)'; }
+            if (status) {
+                status.textContent = `⚠️ Sync failed — is Anki still open? (${e.message})`;
+                status.style.color = 'var(--warning)';
+            }
         }
     }
 
