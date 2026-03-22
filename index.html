@@ -738,7 +738,6 @@ body.light-mode .heat-4 { background:var(--gold); }
 .focus-timer-total { font-size:0.8em; color:var(--text-2); margin-top:4px; }
 .focus-timer-btns { display:flex; flex-direction:column; gap:6px; flex-shrink:0; }
 #focus-timer-btn { background:linear-gradient(135deg,#0284c7,var(--info)); color:#fff; margin:0; }
-#focus-pause-btn { background:linear-gradient(135deg,#d97706,var(--warning)); color:#111; margin:0; }
 #focus-reset-btn { background:var(--bg-3); color:var(--text-2); border:1px solid var(--border); margin:0; font-size:0.8em; padding:6px 12px; }
 #focus-reset-btn:hover:not(:disabled) { background:var(--bg-4); color:var(--text); transform:translateY(-1px); box-shadow:none; }
 
@@ -1521,7 +1520,6 @@ body.light-mode .sidebar-nav li a:hover {
                 </div>
                 <div class="focus-timer-btns">
                     <button id="focus-timer-btn">▶ Start</button>
-                    <button id="focus-pause-btn" style="display:none">⏸ Pause</button>
                     <button id="focus-reset-btn" style="display:none">↺ Reset</button>
                 </div>
             </div>
@@ -4934,14 +4932,14 @@ const achievementDescriptions = {
         }
     }
 
-    function loadTrack(index) {
+    function loadTrack(index, forcePlay = false) {
         if (!bgmAudioElement) return;
-        const wasPlaying = !bgmAudioElement.paused;
+        const wasPlaying = !bgmAudioElement.paused || bgmAudioElement.ended;
         currentTrackIndex = ((index % PLAYLIST.length) + PLAYLIST.length) % PLAYLIST.length;
         const track = PLAYLIST[currentTrackIndex];
         bgmAudioElement.src = track.url;
         bgmAudioElement.load();
-        if (wasPlaying) {
+        if (wasPlaying || forcePlay) {
             bgmAudioElement.play().then(() => updateMusicButton(true)).catch(() => updateMusicButton(false));
         } else {
             updateMusicButton(false);
@@ -4953,7 +4951,6 @@ const achievementDescriptions = {
 
     function nextTrack() {
         if (repeatOneMode) {
-            // Restart current
             bgmAudioElement.currentTime = 0;
             bgmAudioElement.play();
             return;
@@ -5002,7 +4999,15 @@ const achievementDescriptions = {
     // Auto-advance when track ends
     bgmAudioElement?.addEventListener('ended', () => {
         if (repeatOneMode) return; // loop attribute handles it
-        if (PLAYLIST.length > 1 || repeatMode) nextTrack();
+        if (PLAYLIST.length > 1 || repeatMode) {
+            if (shuffleMode) {
+                if (shuffledOrder.length === 0) buildShuffleOrder();
+                const nextIdx = shuffledOrder.splice(0, 1)[0];
+                loadTrack(nextIdx, true); // forcePlay=true so shuffle always continues
+            } else {
+                loadTrack(currentTrackIndex + 1, true);
+            }
+        }
     });
 
     // --- Main Music Toggle ---
@@ -7657,24 +7662,28 @@ function renderMonthlyTasksUI() {
     // ===== FEATURE: Focus Timer (Pomodoro) =====================
     // ============================================================
     function startFocusTimer() {
+        const btn = document.getElementById('focus-timer-btn');
+        const resetBtn = document.getElementById('focus-reset-btn');
+
+        if (focusTimerActive && !focusTimerPaused) {
+            // Running → Pause on click
+            pauseFocusTimer(); return;
+        }
         if (focusTimerPaused) {
-            // Resume
+            // Paused → Resume on click
             focusTimerPaused = false; focusTimerActive = true;
             focusTimerInterval = setInterval(() => { focusTimerSecondsLeft--; updateFocusTimerDisplay(); if (focusTimerSecondsLeft <= 0) stopFocusTimer(true); }, 1000);
             updateFocusTimerDisplay();
-            const btn = document.getElementById('focus-timer-btn');
             if (btn) { btn.textContent = '⏸ Pause'; btn.classList.add('timer-active'); }
             showToast('▶ Resumed!', 'info', 1500); return;
         }
-        if (focusTimerActive) return;
+        // Not running → Start fresh
         focusTimerActive = true; focusTimerPaused = false;
         focusTimerSecondsLeft = FOCUS_TIMER_DURATION_SECS;
         updateFocusTimerDisplay();
         focusTimerInterval = setInterval(() => { focusTimerSecondsLeft--; updateFocusTimerDisplay(); if (focusTimerSecondsLeft <= 0) stopFocusTimer(true); }, 1000);
-        const btn = document.getElementById('focus-timer-btn');
         if (btn) { btn.textContent = '⏸ Pause'; btn.classList.add('timer-active'); }
-        document.getElementById('focus-pause-btn')?.style.setProperty('display','inline-flex');
-        document.getElementById('focus-reset-btn')?.style.setProperty('display','inline-flex');
+        if (resetBtn) resetBtn.style.display = 'inline-flex';
         playSound('skillUp');
         showToast('🎯 Focus session started! 25 minutes of deep study.', 'info', 3000);
     }
@@ -7693,9 +7702,7 @@ function renderMonthlyTasksUI() {
         focusTimerSecondsLeft = FOCUS_TIMER_DURATION_SECS;
         updateFocusTimerDisplay();
         const btn = document.getElementById('focus-timer-btn');
-        if (btn) { btn.textContent = '▶ Start Focus (25 min)'; btn.classList.remove('timer-active'); }
-        const pauseBtn = document.getElementById('focus-pause-btn');
-        if (pauseBtn) pauseBtn.style.display = 'none';
+        if (btn) { btn.textContent = '▶ Start'; btn.classList.remove('timer-active'); }
         const resetBtn = document.getElementById('focus-reset-btn');
         if (resetBtn) resetBtn.style.display = 'none';
     }
@@ -7722,9 +7729,7 @@ function renderMonthlyTasksUI() {
         focusTimerSecondsLeft = FOCUS_TIMER_DURATION_SECS;
         updateFocusTimerDisplay();
         const btn = document.getElementById('focus-timer-btn');
-        if (btn) { btn.textContent = '▶ Start Focus (25 min)'; btn.classList.remove('timer-active'); }
-        const pauseBtn = document.getElementById('focus-pause-btn');
-        if (pauseBtn) pauseBtn.style.display = 'none';
+        if (btn) { btn.textContent = '▶ Start'; btn.classList.remove('timer-active'); }
         const resetBtn = document.getElementById('focus-reset-btn');
         if (resetBtn) resetBtn.style.display = 'none';
     }
@@ -8980,7 +8985,6 @@ updateActiveMonthlyTasksProgress(); // Ensure initial progress syncs from loaded
     questionsInputEl?.addEventListener('keypress', (event) => { if (event.key === 'Enter') handleAddQuestions(); });
     dailyStudyBtnEl?.addEventListener('click', handleRecordDailyStudy);
     document.getElementById('focus-timer-btn')?.addEventListener('click', startFocusTimer);
-    document.getElementById('focus-pause-btn')?.addEventListener('click', pauseFocusTimer);
     document.getElementById('focus-reset-btn')?.addEventListener('click', resetFocusTimer);
     document.getElementById('daily-case-btn')?.addEventListener('click', handleDailyCase);
     document.getElementById('cloudSetupBtn')?.addEventListener('click', handleCloudSetup);
