@@ -1719,6 +1719,23 @@ body.light-mode .sidebar-nav li a:hover {
             <h2>⚙️ Settings</h2>
 
             <div class="setting-group">
+                <h3>🤖 AI / API Key</h3>
+                <p class="setting-desc">
+                    AI features (USMLE quizzes, boss battles, study planner) require an Anthropic API key.
+                    Get one free at <a href="https://console.anthropic.com" target="_blank">console.anthropic.com</a> — you pay only for usage (fractions of a cent per quiz).
+                </p>
+                <div class="cloud-sync-row">
+                    <label>API Key:</label>
+                    <input type="password" id="anthropicApiKeyInput" placeholder="sk-ant-..." autocomplete="off" style="flex:1;margin:0">
+                </div>
+                <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:8px">
+                    <button id="saveApiKeyBtn" class="btn-info">💾 Save Key</button>
+                    <button id="clearApiKeyBtn" class="btn-ghost">✕ Clear</button>
+                </div>
+                <p id="apiKeyStatus" class="setting-status"></p>
+            </div>
+
+            <div class="setting-group">
                 <h3>☁️ Cloud Sync</h3>
                 <p class="setting-desc">Sync your save across devices using a free <strong><a href="https://jsonbin.io" target="_blank">JSONBin.io</a></strong> account.</p>
                 <div class="cloud-sync-row">
@@ -3210,7 +3227,7 @@ const specialties = {
             "AI & Machine Learning Applications in Radiology"
         ],
         "requiredLevel": 63,
-        "icon": "🩻"
+        "icon": "📷"
     },
 
     "Pathology": {
@@ -3392,7 +3409,7 @@ const specialties = {
             "Pulmonary Rehabilitation: Exercise Prescription & Outcomes"
         ],
         "requiredLevel": 39,
-        "icon": "🫁"
+        "icon": "🌬️"
     },
 
     "Gastroenterology": {
@@ -3720,7 +3737,7 @@ const specialties = {
             "Complement (C3, C4, CH50): Consumption in SLE & MPGN"
         ],
         "requiredLevel": 82,
-        "icon": "🦴"
+        "icon": "🦵"
     },
 
     "Hematology & Oncology": {
@@ -3870,7 +3887,7 @@ const specialties = {
             "Cystoscopy: Rigid vs Flexible, Indications & Complications"
         ],
         "requiredLevel": 74,
-        "icon": "🫀"
+        "icon": "💧"
     },
 
     "Ophthalmology": {
@@ -5030,6 +5047,18 @@ const achievementDescriptions = {
          const day = String(today.getDate()).padStart(2, '0');
          return `${year}-${month}-${day}`;
      }
+    function formatStudyTime(minutes) {
+        if (minutes < 60) return `${minutes} min`;
+        const hours = Math.floor(minutes / 60);
+        const mins  = minutes % 60;
+        if (hours < 24) return mins > 0 ? `${hours}h ${mins}m` : `${hours}h`;
+        const days  = Math.floor(hours / 24);
+        const hrs   = hours % 24;
+        if (days < 7) return hrs > 0 ? `${days}d ${hrs}h` : `${days}d`;
+        const weeks = Math.floor(days / 7);
+        const rem   = days % 7;
+        return rem > 0 ? `${weeks}w ${rem}d` : `${weeks}w`;
+    }
 function getYearMonthString() {
      const today = new Date();
      const year = today.getFullYear();
@@ -5102,7 +5131,7 @@ function getYearMonthString() {
 
          // Update total study time display
          const studyMinsEl = document.getElementById('total-study-mins');
-         if (studyMinsEl) studyMinsEl.textContent = totalStudyMinutes;
+         if (studyMinsEl) studyMinsEl.textContent = formatStudyTime(totalStudyMinutes);
 
          // Reviews due count
          const now = Date.now();
@@ -6708,10 +6737,7 @@ if (getYearMonthString() === lastMonthlyTasksGeneratedDate) {
           <div style="color:#7a7d85;font-size:0.9em">Claude is generating 5 USMLE-level clinical vignettes...</div>`;
 
         try {
-            const response = await fetch('https://api.anthropic.com/v1/messages', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
+            const bossData = await anthropicFetch({
                     model: 'claude-sonnet-4-20250514',
                     max_tokens: 3500,
                     system: 'You are an elite USMLE Step 2 CK question writer. Generate boss-level clinical vignettes — harder than standard USMLE, integrating multiple concepts. Return ONLY valid JSON.',
@@ -6728,12 +6754,9 @@ REQUIREMENTS:
 Return ONLY this JSON (no markdown):
 {"questions":[{"q":"vignette...","options":{"A":"...","B":"...","C":"...","D":"..."},"correct":"A","explanation":"Why correct + why top distractor fails."}]}`
                     }]
-                })
-            });
+                });
 
-            if (!response.ok) throw new Error(`API ${response.status}`);
-            const data = await response.json();
-            const text = data.content?.[0]?.text || '';
+            const text = bossData.content?.[0]?.text || '';
             const parsed = JSON.parse(text.replace(/```json|```/g,'').trim());
             const questions = parsed.questions;
             if (!Array.isArray(questions) || questions.length === 0) throw new Error('No questions returned');
@@ -6744,7 +6767,7 @@ Return ONLY this JSON (no markdown):
             card.innerHTML = `
               <div style="color:#f04444;font-size:2em;margin-bottom:16px">⚠️</div>
               <p style="color:#f04444;font-weight:700;margin-bottom:8px">Failed to load Boss Battle</p>
-              <p style="color:#7a7d85;font-size:0.85em;margin-bottom:20px">${err.message}<br>Check your internet connection.</p>
+              <p style="color:#7a7d85;font-size:0.85em;margin-bottom:20px">${err.message}<br>${err.message.includes('key') ? 'Go to Settings → AI / API Key to add yours.' : 'Check your internet connection.'}</p>
               <button onclick="document.body.removeChild(this.closest('[style*=fixed]'))" style="background:rgba(255,255,255,0.08);color:#e8e8ea;border:1px solid #2a2d35;padding:10px 24px;border-radius:10px;cursor:pointer">Close</button>`;
         }
     }
@@ -6919,7 +6942,7 @@ Return ONLY this JSON (no markdown):
             <p><strong>Total Questions Answered:</strong> ${totalQuestions}</p>
             <p><strong>Total Reviews Completed:</strong> ${totalReviewsCompleted}</p>
             <p><strong>Total Skill Levels Purchased:</strong> ${totalSkillLevelsPurchased}</p>
-            <p><strong>Total Focus Minutes:</strong> ${totalStudyMinutes} (${focusSessionsCompleted} sessions)</p>
+            <p><strong>Total Focus Time:</strong> ${formatStudyTime(totalStudyMinutes)} (${focusSessionsCompleted} sessions)</p>
             <p><strong>Personal Records:</strong> ${personalRecords.mostTopicsInOneDay} topics in a day · ${personalRecords.mostQuestionsInOneDay} questions in a day</p>
             <hr style="border-color:var(--border);margin:14px 0">
             <p><strong>⚔️ Boss Battle Record:</strong></p>
@@ -7351,7 +7374,7 @@ function renderMonthlyTasksUI() {
     // ============================================================
     function recordHeatmapActivity(type, count = 1) {
         const today = getTodayDateString();
-        if (!studyHeatmap[today]) studyHeatmap[today] = { topics: 0, questions: 0, reviews: 0 };
+        if (!studyHeatmap[today]) studyHeatmap[today] = { topics: 0, questions: 0, reviews: 0, focus: 0 };
         studyHeatmap[today][type] = (studyHeatmap[today][type] || 0) + count;
     }
     function renderHeatmap() {
@@ -7497,13 +7520,18 @@ function renderMonthlyTasksUI() {
                 let title = cur.toLocaleDateString('en-US', { weekday:'short', year:'numeric', month:'short', day:'numeric' });
                 if (inYear && !isFuture) {
                     const data = studyHeatmap[key] || {};
-                    const total = (data.topics||0) + Math.floor((data.questions||0)/5) + (data.reviews||0);
+                    const total = (data.topics||0) + Math.floor((data.questions||0)/5) + (data.reviews||0) + (data.focus||0)*3;
                     if (total >= 1)  intensity = 1;
                     if (total >= 5)  intensity = 2;
                     if (total >= 15) intensity = 3;
                     if (total >= 30) intensity = 4;
-                    if (data.topics||data.questions||data.reviews) {
-                        title += `\n📚 ${data.topics||0} topics · ❓ ${data.questions||0} Qs · 🔄 ${data.reviews||0} reviews`;
+                    if (data.topics||data.questions||data.reviews||data.focus) {
+                        let parts = [];
+                        if (data.topics)    parts.push(`📚 ${data.topics} topics`);
+                        if (data.questions) parts.push(`❓ ${data.questions} Qs`);
+                        if (data.reviews)   parts.push(`🔄 ${data.reviews} reviews`);
+                        if (data.focus)     parts.push(`⏱ ${data.focus} focus session${data.focus>1?'s':''}`);
+                        title += '\n' + parts.join(' · ');
                     }
                 }
 
@@ -7713,9 +7741,9 @@ function renderMonthlyTasksUI() {
             const bonusXP = gainXP(FOCUS_TIMER_BONUS_XP);
             totalStudyMinutes += 25; focusSessionsCompleted++;
             playSound('levelUp');
-            triggerCelebration(`🎉 Focus Session Complete!<br><span style="font-size:0.55em">+${bonusXP} XP · ${totalStudyMinutes} total minutes</span>`);
-            addQuest(`⏱ Completed focus session #${focusSessionsCompleted}! (+${bonusXP} XP)`);
-            recordHeatmapActivity('questions', 5);
+            triggerCelebration(`🎉 Focus Session Complete!<br><span style="font-size:0.55em">+${bonusXP} XP · ${formatStudyTime(totalStudyMinutes)} total</span>`);
+            addQuest(`⏱ Focus session #${focusSessionsCompleted} complete! (+${bonusXP} XP) · ${formatStudyTime(totalStudyMinutes)} total`);
+            recordHeatmapActivity('focus', 1);
             updateTaskProgress(TASK_TYPES.FOCUS, 1);
             if (getYearMonthString() === lastMonthlyTasksGeneratedDate)
                 monthlyTaskProgress.focusSessionsThisMonthCount = (monthlyTaskProgress.focusSessionsThisMonthCount||0) + 1;
@@ -8200,19 +8228,12 @@ Respond ONLY with valid JSON — no markdown, no preamble:
   ]
 }`;
 
-            const response = await fetch('https://api.anthropic.com/v1/messages', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
+            const data = await anthropicFetch({
                     model: 'claude-sonnet-4-20250514',
                     max_tokens: 2400,
                     system: 'You are a world-class USMLE question writer. Every question must be a clinical vignette. Questions must be USMLE Step 1/2 difficulty — not general knowledge. All facts must be evidence-based. Return ONLY valid JSON.',
                     messages: [{ role: 'user', content: prompt }]
-                })
             });
-
-            if (!response.ok) throw new Error(`API error ${response.status}`);
-            const data = await response.json();
             const text = data.content?.[0]?.text || '';
             const parsed = JSON.parse(text.replace(/```json|```/g, '').trim());
             const questions = parsed.questions;
@@ -8575,10 +8596,7 @@ Respond ONLY with valid JSON — no markdown, no preamble:
         const reviewDue = getSortedReviewItems().length;
 
         try {
-            const resp = await fetch('https://api.anthropic.com/v1/messages', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
+            const data = await anthropicFetch({
                     model: 'claude-sonnet-4-20250514',
                     max_tokens: 1000,
                     system: 'You are a USMLE study coach. Generate concise, actionable weekly plans. Return ONLY valid JSON.',
@@ -8595,9 +8613,7 @@ Generate a 7-day study plan. Each day: 1-2 specific focus areas, a target (topic
 JSON format (ONLY — no markdown):
 {"plan": [{"day": "Monday", "focus": "...", "target": "...", "tip": "..."}]}`
                     }]
-                })
             });
-            const data = await resp.json();
             const text = data.content?.[0]?.text || '';
             const parsed = JSON.parse(text.replace(/```json|```/g,'').trim());
             const days = parsed.plan;
@@ -8752,6 +8768,54 @@ JSON format (ONLY — no markdown):
         if (minutes > 0) {
             ankiSyncIntervalId = setInterval(syncAnkiReviews, minutes * 60 * 1000);
         }
+    }
+
+
+    // ══════════════════════════════════════════════════════════════
+    // ===== FEATURE: Anthropic API Key (for GitHub Pages) =========
+    // ══════════════════════════════════════════════════════════════
+    let anthropicApiKey = localStorage.getItem('healers_anthropic_key') || '';
+
+    function loadApiKeyUI() {
+        const input = document.getElementById('anthropicApiKeyInput');
+        if (input && anthropicApiKey) input.value = anthropicApiKey;
+        updateApiKeyStatus();
+    }
+
+    function saveApiKey() {
+        const input = document.getElementById('anthropicApiKeyInput');
+        const key = (input?.value || '').trim();
+        anthropicApiKey = key;
+        if (key) localStorage.setItem('healers_anthropic_key', key);
+        else     localStorage.removeItem('healers_anthropic_key');
+        updateApiKeyStatus();
+        showToast(key ? '🔑 API key saved!' : '🔑 API key cleared', key ? 'success' : 'info', 2500);
+    }
+
+    function updateApiKeyStatus() {
+        const status = document.getElementById('apiKeyStatus');
+        if (!status) return;
+        if (anthropicApiKey) {
+            status.textContent = `✅ Key active (${anthropicApiKey.slice(0,8)}...)`;
+            status.style.color = 'var(--success)';
+        } else {
+            status.innerHTML = `⚠️ No key — AI features disabled. Get a free key at <a href="https://console.anthropic.com" target="_blank" style="color:var(--gold)">console.anthropic.com</a>`;
+            status.style.color = 'var(--warning)';
+        }
+    }
+
+    async function anthropicFetch(body) {
+        if (!anthropicApiKey) throw new Error('No API key. Add yours in Settings → AI / API Key.');
+        const resp = await fetch('https://api.anthropic.com/v1/messages', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', 'x-api-key': anthropicApiKey, 'anthropic-version': '2023-06-01', 'anthropic-dangerous-request-headers': 'true' },
+            body: JSON.stringify(body)
+        });
+        if (!resp.ok) {
+            const err = await resp.json().catch(() => ({}));
+            throw new Error(err?.error?.message || `API error ${resp.status}`);
+        }
+        return resp.json();
     }
 
     // ============================================================
@@ -8953,6 +9017,7 @@ updateActiveMonthlyTasksProgress(); // Ensure initial progress syncs from loaded
         updateComboDisplay();
         loadCloudCredentials();
         updateCloudUI();
+        loadApiKeyUI();
         renderExamCountdown();
         updateStreakFreezeDisplay();
         checkAndResetWeeklyStats();
@@ -9044,6 +9109,12 @@ updateActiveMonthlyTasksProgress(); // Ensure initial progress syncs from loaded
         const idx = parseInt(e.target.value);
         loadTrack(idx);
         if (bgmAudioElement?.paused) { bgmAudioElement.play().then(() => { updateMusicButton(true); checkAchievement('Music Lover'); }).catch(()=>{}); }
+    });
+    document.getElementById('saveApiKeyBtn')?.addEventListener('click', saveApiKey);
+    document.getElementById('clearApiKeyBtn')?.addEventListener('click', () => {
+        const input = document.getElementById('anthropicApiKeyInput');
+        if (input) input.value = '';
+        saveApiKey();
     });
     document.getElementById('ankiTestBtn')?.addEventListener('click', testAnkiConnection);
     document.getElementById('ankiSyncBtn')?.addEventListener('click', syncAnkiReviews);
