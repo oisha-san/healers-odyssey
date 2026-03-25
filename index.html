@@ -1721,15 +1721,66 @@ body.light-mode .sidebar-nav li a:hover {
             <div class="setting-group">
                 <h3>🤖 AI / API Key</h3>
                 <p class="setting-desc">
-                    AI features (USMLE quizzes, boss battles, study planner) require an Anthropic API key.
-                    Get one free at <a href="https://console.anthropic.com" target="_blank">console.anthropic.com</a> — you pay only for usage (fractions of a cent per quiz).
+                    AI features (USMLE quizzes, boss battles, study planner) need a proxy to work from GitHub Pages.
+                    Set up a free Cloudflare Worker proxy in ~2 minutes — see instructions below.
                 </p>
+
+                <div style="background:var(--bg-1);border:1px solid var(--border-gold);border-radius:8px;padding:14px;margin-bottom:14px;font-size:0.82em;line-height:1.85">
+                    <strong style="color:var(--gold)">⚡ Quick Setup (2 min)</strong>
+                    <ol style="margin:8px 0 0 16px;color:var(--text-2)">
+                        <li>Create a free account at <a href="https://cloudflare.com" target="_blank">cloudflare.com</a></li>
+                        <li>Go to <strong>Workers &amp; Pages → Create → Worker</strong></li>
+                        <li>Replace all the code with the worker script below, click <strong>Deploy</strong></li>
+                        <li>Copy your Worker URL (e.g. <code style="font-size:0.9em">https://my-worker.workers.dev</code>) and paste it here</li>
+                        <li>Add your Anthropic API key from <a href="https://console.anthropic.com" target="_blank">console.anthropic.com</a></li>
+                    </ol>
+                    <details style="margin-top:10px">
+                        <summary style="cursor:pointer;color:var(--gold);font-weight:600">📋 Cloudflare Worker script (click to expand)</summary>
+                        <pre id="worker-script-pre" style="background:var(--bg);border:1px solid var(--border);border-radius:6px;padding:10px;margin-top:8px;overflow-x:auto;font-size:0.8em;white-space:pre;color:var(--text-2)">export default {
+  async fetch(request, env) {
+    if (request.method === 'OPTIONS') {
+      return new Response(null, { headers: {
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Methods': 'POST',
+        'Access-Control-Allow-Headers': 'Content-Type, X-Api-Key',
+      }});
+    }
+    const apiKey = request.headers.get('X-Api-Key');
+    const body = await request.text();
+    const resp = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-api-key': apiKey,
+        'anthropic-version': '2023-06-01',
+      },
+      body,
+    });
+    const data = await resp.text();
+    return new Response(data, {
+      status: resp.status,
+      headers: {
+        'Content-Type': 'application/json',
+        'Access-Control-Allow-Origin': '*',
+      },
+    });
+  }
+};</pre>
+                        <button onclick="navigator.clipboard?.writeText(document.getElementById('worker-script-pre').textContent).then(()=>this.textContent='✅ Copied!').catch(()=>{})" style="margin-top:6px;font-size:0.78em;padding:5px 12px">📋 Copy Script</button>
+                    </details>
+                </div>
+
+                <div class="cloud-sync-row">
+                    <label>Worker URL:</label>
+                    <input type="text" id="anthropicProxyInput" placeholder="https://my-worker.workers.dev" autocomplete="off" style="flex:1;margin:0">
+                </div>
                 <div class="cloud-sync-row">
                     <label>API Key:</label>
                     <input type="password" id="anthropicApiKeyInput" placeholder="sk-ant-..." autocomplete="off" style="flex:1;margin:0">
                 </div>
                 <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:8px">
-                    <button id="saveApiKeyBtn" class="btn-info">💾 Save Key</button>
+                    <button id="saveApiKeyBtn" class="btn-info">💾 Save</button>
+                    <button id="testAiBtn" class="btn-purple">🧪 Test AI</button>
                     <button id="clearApiKeyBtn" class="btn-ghost">✕ Clear</button>
                 </div>
                 <p id="apiKeyStatus" class="setting-status"></p>
@@ -8772,44 +8823,78 @@ JSON format (ONLY — no markdown):
 
 
     // ══════════════════════════════════════════════════════════════
-    // ===== FEATURE: Anthropic API Key (for GitHub Pages) =========
+    // ===== FEATURE: Anthropic API Key + Proxy (for GitHub Pages) =
     // ══════════════════════════════════════════════════════════════
-    let anthropicApiKey = localStorage.getItem('healers_anthropic_key') || '';
+    let anthropicApiKey  = localStorage.getItem('healers_anthropic_key')   || '';
+    let anthropicProxyUrl = localStorage.getItem('healers_anthropic_proxy') || '';
 
     function loadApiKeyUI() {
-        const input = document.getElementById('anthropicApiKeyInput');
-        if (input && anthropicApiKey) input.value = anthropicApiKey;
+        const keyInput   = document.getElementById('anthropicApiKeyInput');
+        const proxyInput = document.getElementById('anthropicProxyInput');
+        if (keyInput   && anthropicApiKey)   keyInput.value   = anthropicApiKey;
+        if (proxyInput && anthropicProxyUrl) proxyInput.value = anthropicProxyUrl;
         updateApiKeyStatus();
     }
 
     function saveApiKey() {
-        const input = document.getElementById('anthropicApiKeyInput');
-        const key = (input?.value || '').trim();
-        anthropicApiKey = key;
-        if (key) localStorage.setItem('healers_anthropic_key', key);
-        else     localStorage.removeItem('healers_anthropic_key');
+        const key   = (document.getElementById('anthropicApiKeyInput')?.value  || '').trim();
+        const proxy = (document.getElementById('anthropicProxyInput')?.value   || '').trim();
+        anthropicApiKey   = key;
+        anthropicProxyUrl = proxy;
+        if (key)   localStorage.setItem('healers_anthropic_key',   key);
+        else       localStorage.removeItem('healers_anthropic_key');
+        if (proxy) localStorage.setItem('healers_anthropic_proxy', proxy);
+        else       localStorage.removeItem('healers_anthropic_proxy');
         updateApiKeyStatus();
-        showToast(key ? '🔑 API key saved!' : '🔑 API key cleared', key ? 'success' : 'info', 2500);
+        showToast('💾 AI settings saved!', 'success', 2000);
     }
 
     function updateApiKeyStatus() {
         const status = document.getElementById('apiKeyStatus');
         if (!status) return;
-        if (anthropicApiKey) {
-            status.textContent = `✅ Key active (${anthropicApiKey.slice(0,8)}...)`;
+        const hasKey   = !!anthropicApiKey;
+        const hasProxy = !!anthropicProxyUrl;
+        if (hasKey && hasProxy) {
+            status.textContent = `✅ Ready — proxy set, key active (${anthropicApiKey.slice(0,8)}...)`;
             status.style.color = 'var(--success)';
-        } else {
-            status.innerHTML = `⚠️ No key — AI features disabled. Get a free key at <a href="https://console.anthropic.com" target="_blank" style="color:var(--gold)">console.anthropic.com</a>`;
+        } else if (hasKey && !hasProxy) {
+            status.textContent = `⚠️ API key set but no proxy URL — AI will fail on GitHub Pages. Add your Worker URL above.`;
             status.style.color = 'var(--warning)';
+        } else {
+            status.innerHTML = `❌ Not configured — AI features disabled. Follow the setup steps above.`;
+            status.style.color = 'var(--error)';
         }
     }
 
+    async function testAiConnection() {
+        const btn    = document.getElementById('testAiBtn');
+        const status = document.getElementById('apiKeyStatus');
+        if (btn) { btn.disabled = true; btn.textContent = '⏳ Testing...'; }
+        try {
+            const data = await anthropicFetch({
+                model: 'claude-sonnet-4-20250514',
+                max_tokens: 10,
+                messages: [{ role: 'user', content: 'Say "OK"' }]
+            });
+            const reply = data.content?.[0]?.text || '';
+            if (status) { status.textContent = `✅ Connected! Claude replied: "${reply.trim()}"`;  status.style.color = 'var(--success)'; }
+            showToast('🤖 AI connection works!', 'success', 3000);
+        } catch(e) {
+            if (status) { status.textContent = `❌ Test failed: ${e.message}`; status.style.color = 'var(--error)'; }
+            showToast('❌ AI test failed — ' + e.message, 'error', 5000);
+        }
+        if (btn) { btn.disabled = false; btn.textContent = '🧪 Test AI'; }
+    }
+
     async function anthropicFetch(body) {
-        if (!anthropicApiKey) throw new Error('No API key. Add yours in Settings → AI / API Key.');
-        const resp = await fetch('https://api.anthropic.com/v1/messages', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json', 'x-api-key': anthropicApiKey, 'anthropic-version': '2023-06-01', 'anthropic-dangerous-request-headers': 'true' },
-            body: JSON.stringify(body)
+        if (!anthropicApiKey)  throw new Error('No API key. Add yours in Settings → AI / API Key.');
+        if (!anthropicProxyUrl) throw new Error('No proxy URL. Deploy a Cloudflare Worker and add its URL in Settings → AI / API Key.');
+        // Route through proxy so CORS doesn't block GitHub Pages
+        const url    = anthropicProxyUrl.replace(/\/$/, '');
+        const resp   = await fetch(url, {
+            method:  'POST',
+            headers: { 'Content-Type': 'application/json', 'X-Api-Key': anthropicApiKey },
+            body:    JSON.stringify(body)
         });
         if (!resp.ok) {
             const err = await resp.json().catch(() => ({}));
@@ -9111,9 +9196,12 @@ updateActiveMonthlyTasksProgress(); // Ensure initial progress syncs from loaded
         if (bgmAudioElement?.paused) { bgmAudioElement.play().then(() => { updateMusicButton(true); checkAchievement('Music Lover'); }).catch(()=>{}); }
     });
     document.getElementById('saveApiKeyBtn')?.addEventListener('click', saveApiKey);
+    document.getElementById('testAiBtn')?.addEventListener('click', testAiConnection);
     document.getElementById('clearApiKeyBtn')?.addEventListener('click', () => {
-        const input = document.getElementById('anthropicApiKeyInput');
-        if (input) input.value = '';
+        const ki = document.getElementById('anthropicApiKeyInput');
+        const pi = document.getElementById('anthropicProxyInput');
+        if (ki) ki.value = '';
+        if (pi) pi.value = '';
         saveApiKey();
     });
     document.getElementById('ankiTestBtn')?.addEventListener('click', testAnkiConnection);
