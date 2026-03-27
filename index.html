@@ -5726,7 +5726,7 @@ monthlyTasks = []; lastMonthlyTasksGeneratedDate = null; monthlyTaskProgress = {
              let count = 0;
              for (const specName in specialties) {
                  const specData = specialties[specName];
-                 if (data.level >= specData.requiredLevel && studied[specName] &&
+                 if (level >= specData.requiredLevel && studied[specName] &&
                      specData.diseases.every(d => studied[specName][d])) { count++; }
              }
              masteredSpecialtyCount = count;
