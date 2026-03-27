@@ -87,7 +87,7 @@
   --animation-speed-medium: 0.4s;
 
   /* Typography */
-  --font-main:   'Inter', 'Segoe UI', sans-serif;
+  --font-main:   'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
   --font-header: 'Cinzel', Georgia, serif;
 
   /* Shadows */
@@ -675,15 +675,15 @@ body.light-mode .main-header { background: #fff; }
 .fc-counter { font-size:0.8em; color:var(--text-3); }
 
 /* ─── Study Planner ──────────────────────────────────────────── */
-.planner-generate-btn { background:linear-gradient(135deg,#7c3aed,var(--purple)); color:#fff; margin-bottom:18px; }
+
 .planner-generate-btn:hover:not(:disabled) { background:linear-gradient(135deg,var(--purple),#d8b4fe); box-shadow:0 4px 12px rgba(168,85,247,0.35); }
-.plan-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(190px,1fr)); gap:10px; }
-.plan-day-card { background:var(--bg-1); border:1px solid var(--border); border-radius:11px; padding:14px; transition:border-color 0.2s, transform 0.12s; }
+
+
 .plan-day-card:hover { border-color:var(--border-gold); transform:translateY(-2px); }
-.plan-day-name { font-family:var(--font-header); font-size:0.9em; color:var(--gold); margin-bottom:8px; font-weight:600; }
-.plan-focus  { font-size:0.82em; color:var(--text); margin-bottom:5px; line-height:1.45; }
-.plan-target { font-size:0.78em; color:var(--info); margin-bottom:5px; }
-.plan-tip    { font-size:0.74em; color:var(--text-2); font-style:italic; border-top:1px solid var(--border); padding-top:7px; margin-top:7px; line-height:1.4; }
+
+
+
+
 
 /* ─── Settings ───────────────────────────────────────────────── */
 .settings .setting-group { margin-top:20px; padding-top:18px; border-top:1px solid var(--border); }
@@ -1350,6 +1350,329 @@ body.light-mode .sidebar-nav li a:hover {
     .main-content { padding: 0; }
 }
 
+/* ═══════════════════════════════════════════════════════════════ */
+/* ═══ UI OVERHAUL v3.2 ═══════════════════════════════════════ */
+/* ═══════════════════════════════════════════════════════════════ */
+
+/* Achievement reward badges in the achievement list */
+.ach-reward-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 0.7em;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: 10px;
+    background: linear-gradient(135deg, rgba(var(--gold-rgb),0.15), rgba(var(--gold-rgb),0.05));
+    border: 1px solid var(--border-gold);
+    color: var(--gold);
+    margin-left: auto;
+    flex-shrink: 0;
+    white-space: nowrap;
+}
+.achievement-item { flex-direction: row; align-items: flex-start; gap: 8px; }
+.achievement-text { display: flex; flex-direction: column; gap: 2px; flex: 1; min-width: 0; }
+
+/* Content sections — more visual depth */
+.content-section {
+    border-left: 3px solid transparent;
+    transition: border-left-color 0.25s, box-shadow 0.25s, transform 0.15s;
+}
+.content-section:hover {
+    border-left-color: var(--border-gold);
+    box-shadow: 0 4px 24px rgba(0,0,0,0.5), -2px 0 0 var(--gold-dim);
+}
+
+/* Section headings — stronger gold gradient */
+h2 {
+    background: linear-gradient(90deg, var(--gold) 0%, var(--gold-bright) 60%, var(--gold-deep) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    border-bottom-color: var(--border-gold);
+}
+body.light-mode h2 {
+    background: linear-gradient(90deg, var(--gold-deep) 0%, var(--gold) 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+}
+
+/* Sidebar nav — active highlight */
+.sidebar-nav li a.active,
+.sidebar-nav li a:hover {
+    background: linear-gradient(90deg, var(--gold-dim), transparent);
+    border-left: 2px solid var(--gold);
+    padding-left: 12px;
+}
+
+/* QS cards — brighter values */
+.qs-val {
+    font-size: 1.1em;
+    color: var(--gold-bright);
+    text-shadow: 0 0 12px rgba(var(--gold-rgb), 0.3);
+}
+
+/* XP bar — shimmer more visible */
+#xpBar::after {
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+}
+
+/* Daily task cards — stronger left border on hover */
+.daily-tasks #dailyTaskList li:hover,
+.monthly-tasks #monthlyTaskList li:hover {
+    border-left-color: var(--gold);
+    background: linear-gradient(90deg, var(--gold-dim), transparent);
+}
+
+/* Specialty header — icon pop on hover */
+.specialties .specialty h3:hover {
+    color: var(--gold-bright);
+    padding-left: 18px;
+}
+
+/* Skill items — glow on hover */
+.skill-item:hover {
+    box-shadow: 0 0 20px rgba(var(--gold-rgb), 0.12), -3px 0 0 var(--gold);
+    transform: translateX(4px);
+}
+
+/* Flashcard — depth */
+.flashcard-display {
+    box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+}
+.flashcard-display:hover {
+    box-shadow: 0 8px 32px rgba(0,0,0,0.5), 0 0 20px rgba(var(--gold-rgb),0.12);
+    transform: translateY(-3px) scale(1.005);
+}
+
+/* Focus timer — pulse colour update */
+.focus-timer-countdown.active {
+    text-shadow: 0 0 20px rgba(52,196,98,0.5);
+}
+
+/* Boss battle overlay improved */
+@keyframes bossPulse {
+    0%   { transform: scale(1);    filter: drop-shadow(0 0 8px rgba(244,196,48,0.4)); }
+    100% { transform: scale(1.08); filter: drop-shadow(0 0 20px rgba(244,196,48,0.8)); }
+}
+
+/* Music player — track name gradient */
+.current-track-name {
+    background: linear-gradient(90deg, var(--gold), var(--text-2));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    font-style: normal;
+    font-weight: 500;
+}
+
+/* Nav section labels — more prominent */
+.nav-section-label {
+    font-size: 0.62em;
+    color: var(--gold-deep);
+    letter-spacing: 0.14em;
+    margin-top: 12px;
+}
+
+/* Achievement categories — coloured left borders */
+.ach-category-header {
+    border-left-width: 3px !important;
+}
+.ach-category-header:nth-child(4n+1) { border-left-color: var(--gold) !important; }
+.ach-category-header:nth-child(4n+2) { border-left-color: var(--info) !important; }
+.ach-category-header:nth-child(4n+3) { border-left-color: var(--success) !important; }
+.ach-category-header:nth-child(4n+4) { border-left-color: var(--purple) !important; }
+
+/* Quest log entries */
+.quest-log li {
+    border-left: 2px solid var(--border);
+    padding-left: 10px;
+    transition: border-color 0.15s, background 0.15s;
+}
+.quest-log li:hover {
+    border-left-color: var(--gold-deep);
+    background: var(--bg-1);
+}
+
+/* Settings groups — cleaner separators */
+.settings .setting-group {
+    position: relative;
+}
+.settings .setting-group::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, var(--border-gold), transparent);
+}
+
+/* Daily case card — top accent line */
+.daily-case-card {
+    border-top: 2px solid var(--gold-deep);
+}
+
+/* Heatmap today cell — pulsing gold border */
+.hm-today {
+    outline: 2px solid var(--gold) !important;
+    outline-offset: 1px;
+    animation: todayPulse 2s ease-in-out infinite;
+    z-index: 2;
+}
+@keyframes todayPulse {
+    0%, 100% { outline-color: var(--gold); }
+    50% { outline-color: var(--gold-bright); }
+}
+
+/* XP toast — slightly larger */
+.xp-toast {
+    font-size: 0.95em !important;
+    font-weight: 700 !important;
+}
+
+/* ── Light mode improvements ── */
+body.light-mode .content-section {
+    box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+}
+body.light-mode .content-section:hover {
+    box-shadow: 0 4px 20px rgba(0,0,0,0.09), -2px 0 0 rgba(var(--gold-rgb),0.15);
+}
+body.light-mode .qs-card {
+    background: #fff;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.07);
+}
+body.light-mode h2 {
+    -webkit-text-fill-color: var(--gold-deep);
+    background: none;
+}
+
+/* ═══════════════════════════════════════════════════════════════ */
+/* ═══ ACHIEVEMENT REWARDS UI ════════════════════════════════ */
+/* ═══════════════════════════════════════════════════════════════ */
+.achievement-name-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+.ach-reward-badge {
+    font-size: 0.7em;
+    font-weight: 700;
+    color: var(--gold);
+    background: var(--gold-dim);
+    border: 1px solid var(--border-gold);
+    border-radius: 10px;
+    padding: 2px 8px;
+    white-space: nowrap;
+    flex-shrink: 0;
+}
+.achievement-unlocked .ach-reward-badge {
+    color: var(--success);
+    background: var(--success-dim);
+    border-color: rgba(52,196,98,0.2);
+}
+.achievement-locked .ach-reward-badge {
+    opacity: 0.5;
+}
+
+/* ═══════════════════════════════════════════════════════════════ */
+/* ═══ FINAL UI POLISH ════════════════════════════════════════ */
+/* ═══════════════════════════════════════════════════════════════ */
+
+/* Section titles — gold gradient */
+.content-section h2 {
+    background: linear-gradient(90deg, var(--gold), var(--gold-bright));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+body.light-mode .content-section h2 {
+    -webkit-text-fill-color: var(--gold);
+}
+
+/* Skill badges — clean level number */
+.skill-level-badge {
+    background: linear-gradient(135deg, var(--gold-dim), rgba(var(--gold-rgb),0.06));
+    border: 1px solid var(--border-gold);
+    color: var(--gold-bright);
+    font-weight: 800;
+    letter-spacing: 0.04em;
+}
+
+/* Achievement list header — better padding */
+.ach-overall-header {
+    padding-bottom: 16px;
+    margin-bottom: 8px;
+}
+
+/* Content sections — subtle left border accent on hover */
+.content-section:hover {
+    border-left: 2px solid var(--border-gold);
+    padding-left: 20px;
+    transition: border-left 0.2s, padding-left 0.2s, border-color 0.2s;
+}
+.content-section {
+    border-left: 2px solid transparent;
+    transition: border-left 0.2s, padding-left 0.2s;
+}
+
+/* Quick stats — make values pop more */
+.qs-val {
+    font-size: 1.1em;
+    font-weight: 800;
+}
+
+/* Nav — active section highlight */
+.sidebar-nav li a:hover {
+    background: linear-gradient(90deg, var(--gold-dim), transparent);
+}
+
+/* Task cards — name bolder */
+.task-name {
+    font-size: 0.95em;
+    font-weight: 800;
+    letter-spacing: 0.01em;
+}
+
+/* Main header — subtle bottom border */
+.main-header {
+    border-bottom: 2px solid var(--border-gold);
+}
+
+/* Specialty headers — cleaner */
+.specialties .specialty h3 {
+    font-size: 0.92em;
+    letter-spacing: 0.01em;
+    padding: 12px 14px;
+}
+
+/* Toast — slightly larger */
+.toast {
+    font-size: 0.88em;
+    padding: 11px 18px;
+    border-radius: 12px;
+    max-width: 340px;
+}
+
+/* Gold toast special treatment */
+.toast-gold {
+    border-left: 3px solid var(--gold);
+}
+
+/* Settings group headers */
+.settings .setting-group h3 {
+    font-size: 1em;
+    margin-bottom: 8px;
+    padding-bottom: 6px;
+    border-bottom: 1px solid var(--border);
+}
+
+/* Profile actions — better spacing */
+.profile-actions {
+    gap: 8px;
+    margin-top: 10px;
+}
+
 </style>
     <!-- Tone.js SFX -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.49/Tone.min.js"></script>
@@ -1464,7 +1787,6 @@ body.light-mode .sidebar-nav li a:hover {
                 <li><a href="#specialties-section"><span class="nav-icon">🏥</span>Specialties</a></li>
                 <li><a href="#reviews-section"><span class="nav-icon">🔄</span>Reviews <span id="reviews-nav-badge" class="nav-badge" style="display:none"></span></a></li>
                 <li><a href="#flashcard-section"><span class="nav-icon">🃏</span>Flashcards</a></li>
-                <li><a href="#planner-section"><span class="nav-icon">🗓</span>Study Planner</a></li>
             </ul>
             <p class="nav-section-label">PROGRESS</p>
             <ul>
@@ -1516,7 +1838,7 @@ body.light-mode .sidebar-nav li a:hover {
                 <div id="focus-timer-display" class="focus-timer-countdown">25:00</div>
                 <div class="focus-timer-info">
                     <p>25 minutes of deep, uninterrupted study. Complete it to earn <strong>+50 XP</strong>.</p>
-                    <p class="focus-timer-total">Sessions: <strong id="focus-sessions-count">0</strong> &nbsp;·&nbsp; Total: <strong id="total-study-mins">0</strong> min</p>
+                    <p class="focus-timer-total">Sessions: <strong id="focus-sessions-count">0</strong> &nbsp;·&nbsp; Total: <strong id="total-study-mins">0</strong></p>
                 </div>
                 <div class="focus-timer-btns">
                     <button id="focus-timer-btn">▶ Start</button>
@@ -1706,85 +2028,9 @@ body.light-mode .sidebar-nav li a:hover {
             </div>
         </section>
 
-        <!-- AI Study Planner -->
-        <section id="planner-section" class="content-section">
-            <h2>🗓 AI Study Planner</h2>
-            <p class="section-desc">Claude analyses your weak specialties, overdue reviews, and exam countdown to build a personalised 7-day plan.</p>
-            <button id="generatePlanBtn" class="planner-generate-btn">🤖 Generate My Plan</button>
-            <div id="study-plan-output"></div>
-        </section>
-
         <!-- Settings -->
         <section id="settings-section" class="content-section settings">
             <h2>⚙️ Settings</h2>
-
-            <div class="setting-group">
-                <h3>🤖 AI / API Key</h3>
-                <p class="setting-desc">
-                    AI features (USMLE quizzes, boss battles, study planner) need a proxy to work from GitHub Pages.
-                    Set up a free Cloudflare Worker proxy in ~2 minutes — see instructions below.
-                </p>
-
-                <div style="background:var(--bg-1);border:1px solid var(--border-gold);border-radius:8px;padding:14px;margin-bottom:14px;font-size:0.82em;line-height:1.85">
-                    <strong style="color:var(--gold)">⚡ Quick Setup (2 min)</strong>
-                    <ol style="margin:8px 0 0 16px;color:var(--text-2)">
-                        <li>Create a free account at <a href="https://cloudflare.com" target="_blank">cloudflare.com</a></li>
-                        <li>Go to <strong>Workers &amp; Pages → Create → Worker</strong></li>
-                        <li>Replace all the code with the worker script below, click <strong>Deploy</strong></li>
-                        <li>Copy your Worker URL (e.g. <code style="font-size:0.9em">https://my-worker.workers.dev</code>) and paste it here</li>
-                        <li>Add your Anthropic API key from <a href="https://console.anthropic.com" target="_blank">console.anthropic.com</a></li>
-                    </ol>
-                    <details style="margin-top:10px">
-                        <summary style="cursor:pointer;color:var(--gold);font-weight:600">📋 Cloudflare Worker script (click to expand)</summary>
-                        <pre id="worker-script-pre" style="background:var(--bg);border:1px solid var(--border);border-radius:6px;padding:10px;margin-top:8px;overflow-x:auto;font-size:0.8em;white-space:pre;color:var(--text-2)">export default {
-  async fetch(request, env) {
-    if (request.method === 'OPTIONS') {
-      return new Response(null, { headers: {
-        'Access-Control-Allow-Origin': '*',
-        'Access-Control-Allow-Methods': 'POST',
-        'Access-Control-Allow-Headers': 'Content-Type, X-Api-Key',
-      }});
-    }
-    const apiKey = request.headers.get('X-Api-Key');
-    const body = await request.text();
-    const resp = await fetch('https://api.anthropic.com/v1/messages', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'x-api-key': apiKey,
-        'anthropic-version': '2023-06-01',
-      },
-      body,
-    });
-    const data = await resp.text();
-    return new Response(data, {
-      status: resp.status,
-      headers: {
-        'Content-Type': 'application/json',
-        'Access-Control-Allow-Origin': '*',
-      },
-    });
-  }
-};</pre>
-                        <button onclick="navigator.clipboard?.writeText(document.getElementById('worker-script-pre').textContent).then(()=>this.textContent='✅ Copied!').catch(()=>{})" style="margin-top:6px;font-size:0.78em;padding:5px 12px">📋 Copy Script</button>
-                    </details>
-                </div>
-
-                <div class="cloud-sync-row">
-                    <label>Worker URL:</label>
-                    <input type="text" id="anthropicProxyInput" placeholder="https://my-worker.workers.dev" autocomplete="off" style="flex:1;margin:0">
-                </div>
-                <div class="cloud-sync-row">
-                    <label>API Key:</label>
-                    <input type="password" id="anthropicApiKeyInput" placeholder="sk-ant-..." autocomplete="off" style="flex:1;margin:0">
-                </div>
-                <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:8px">
-                    <button id="saveApiKeyBtn" class="btn-info">💾 Save</button>
-                    <button id="testAiBtn" class="btn-purple">🧪 Test AI</button>
-                    <button id="clearApiKeyBtn" class="btn-ghost">✕ Clear</button>
-                </div>
-                <p id="apiKeyStatus" class="setting-status"></p>
-            </div>
 
             <div class="setting-group">
                 <h3>☁️ Cloud Sync</h3>
@@ -2026,18 +2272,18 @@ document.addEventListener('DOMContentLoaded', () => {
         { check: () => masteredSpecialtyCount >= 38,                 title: '🌌 Omniscient Physician' },
         { check: () => masteredSpecialtyCount >= 20,                 title: '🌟 Master of Medicine' },
         { check: () => masteredSpecialtyCount >= 10,                 title: '⭐ Specialist' },
-        { check: () => achievements.includes('Foundational Five'),   title: '🧱 Master of the Foundations' },
+        { check: () => achievements.includes('Foundational Five'),   title: '🏛️ Master of the Foundations' },
         { check: () => achievements.includes('Organ System Savant'), title: '⚙️ The Systems Thinker' },
         { check: () => achievements.includes('Infection Fighter'),   title: '🛡️ Infection Fighter' },
         { check: () => dailyStreak >= 365,                           title: '🔥 The Relentless' },
         { check: () => dailyStreak >= 100,                           title: '🔥 The Consistent' },
         { check: () => dailyStreak >= 30,                            title: '🔥 The Dedicated' },
         { check: () => totalQuestions >= 10000,                      title: '🎯 Question Conqueror' },
-        { check: () => totalReviewsCompleted >= 1000,                title: '🧠 Memory Titan' },
-        { check: () => level >= 100,                                 title: '🪐 Cosmic Physician' },
+        { check: () => totalReviewsCompleted >= 1000,                title: '💡 Memory Titan' },
+        { check: () => level >= 100,                                 title: '🌌 Cosmic Physician' },
         { check: () => level >= 50,                                  title: '🐉 Mythical Medic' },
         { check: () => level >= 20,                                  title: '🏅 Grand Healer' },
-        { check: () => level >= 5,                                   title: '🩺 Adept Healer' },
+        { check: () => level >= 5,                                   title: '⚕️ Adept Healer' },
         { check: () => true,                                         title: '⚕️ Healer in Training' },
     ];
 
@@ -2093,6 +2339,13 @@ document.addEventListener('DOMContentLoaded', () => {
         { name: 'Lost Frontier',     emoji: '🌄', url: 'https://incompetech.com/music/royalty-free/mp3-royaltyfree/Lost%20Frontier.mp3',                  credit: 'Kevin MacLeod' },
         { name: 'Deliberate Thought',emoji: '💭', url: 'https://incompetech.com/music/royalty-free/mp3-royaltyfree/Deliberate%20Thought.mp3',             credit: 'Kevin MacLeod' },
         { name: 'Long Road Ahead',   emoji: '🛤️', url: 'https://incompetech.com/music/royalty-free/mp3-royaltyfree/Long%20Road%20Ahead.mp3',             credit: 'Kevin MacLeod' },
+        // Additional Kevin MacLeod tracks
+        { name: 'Slow Burn',          emoji: '🕯️', url: 'https://incompetech.com/music/royalty-free/mp3-royaltyfree/Slow%20Burn.mp3',                            credit: 'Kevin MacLeod' },
+        { name: 'Beauty Flow',        emoji: '🌊', url: 'https://incompetech.com/music/royalty-free/mp3-royaltyfree/Beauty%20Flow.mp3',                          credit: 'Kevin MacLeod' },
+        { name: 'Sneaky Snitch',      emoji: '🎭', url: 'https://incompetech.com/music/royalty-free/mp3-royaltyfree/Sneaky%20Snitch.mp3',                        credit: 'Kevin MacLeod' },
+        // Additional Scott Buckley tracks
+        { name: 'Incredulity',        emoji: '🌧️', url: 'https://www.scottbuckley.com.au/library/wp-content/uploads/2025/04/Incredulity.mp3',                   credit: 'Scott Buckley' },
+        { name: 'Born Of The Sky',    emoji: '☀️', url: 'https://www.scottbuckley.com.au/library/wp-content/uploads/2025/08/BornOfTheSky.mp3',                  credit: 'Scott Buckley' },
     ];
 
     // === Feature: Exam Countdown ===
@@ -2234,7 +2487,7 @@ let monthlyTaskProgress = {
           diffLabels: ['Easy','Medium','Hard'],
           targets: [2, 4, 6], rewardsXP: [75, 130, 190] },
         { type: TASK_TYPES.QUIZ,
-          name: '🧠 Test Yourself', flavor: 'You cannot improve what you never measure.',
+          name: '💡 Test Yourself', flavor: 'You cannot improve what you never measure.',
           desc: 'Complete {target} AI USMLE quiz session(s)',
           diffLabels: ['Standard','Standard','Double'],
           targets: [1, 1, 2], rewardsXP: [120, 120, 220], rewardSP: 1 },
@@ -2305,7 +2558,7 @@ const MONTHLY_TASK_CONFIG = [
       targets: [4, 8, 15], rewardsXP: [400, 800, 1400], rewardsSP: [1, 2, 3],
       metric: 'focusSessionsThisMonthCount' },
     { id: 'quiz_sessions_monthly',
-      name: '🧠 The Clinical Examiner', flavor: 'Test yourself until the test no longer scares you.',
+      name: '💡 The Clinical Examiner', flavor: 'Test yourself until the test no longer scares you.',
       desc: 'Complete {target} AI quiz sessions this month',
       targets: [3, 6, 12], rewardsXP: [600, 1200, 2200], rewardsSP: [2, 3, 5],
       metric: 'quizSessionsThisMonthCount' },
@@ -2432,7 +2685,7 @@ const specialties = {
             "Ear Anatomy: External, Middle, Inner"
         ],
         "requiredLevel": 1,
-        "icon": "🦴"
+        "icon": "📋"
     },
 
     "Physiology": {
@@ -2526,7 +2779,7 @@ const specialties = {
             "Alcohol Use Disorder: AUDIT Screening & Brief Intervention"
         ],
         "requiredLevel": 20,
-        "icon": "🩺"
+        "icon": "⚕️"
     },
 
     "Pediatrics": {
@@ -2674,7 +2927,7 @@ const specialties = {
             "Signal Transduction: cAMP, IP3/DAG, MAPK, JAK-STAT Pathways"
         ],
         "requiredLevel": 6,
-        "icon": "🧬"
+        "icon": "🔬"
     },
 
     "Microbiology": {
@@ -3278,7 +3531,7 @@ const specialties = {
             "AI & Machine Learning Applications in Radiology"
         ],
         "requiredLevel": 63,
-        "icon": "📷"
+        "icon": "🩻"
     },
 
     "Pathology": {
@@ -3460,7 +3713,7 @@ const specialties = {
             "Pulmonary Rehabilitation: Exercise Prescription & Outcomes"
         ],
         "requiredLevel": 39,
-        "icon": "🌬️"
+        "icon": "🫁"
     },
 
     "Gastroenterology": {
@@ -4483,7 +4736,7 @@ const specialties = {
 // Object mapping achievement names to their display icons
 const achievementIcons = {
     // Topic Study
-    "First Blood": "🩸",
+    "First Blood": "💉",
     "Novice Diagnostician": "🔰",
     "Persistent Scholar": "📚",
     "Domain Discoverer": "🔑",
@@ -4497,9 +4750,9 @@ const achievementIcons = {
     "All Topics Studied": "💯",
 
     // Level Milestones
-    "Clinical Apprentice": "🩺",
+    "Clinical Apprentice": "⚕️",
     "Medical Intern": "👨‍⚕️",
-    "Adept Healer": "🧪",
+    "Adept Healer": "⚗️",
     "Resident of Remedies": "🏥",
     "Senior Resident": "🧑‍⚕️",
     "Attending Physician": "👩‍⚕️",
@@ -4513,7 +4766,7 @@ const achievementIcons = {
     "Timeless Scholar": "⏳",
     "Divine Insight": "💡",
     "Transcendent Healer": "✨",
-    "Cosmic Physician": "🪐",
+    "Cosmic Physician": "🌌",
 
     // Question Milestones
     "Quiz Knight": "🛡️",
@@ -4522,15 +4775,15 @@ const achievementIcons = {
     "Marathon of Medicine": "🏃‍♂️",
     "Century of Cures": "🗞️",
     "Question Conqueror": "🎯",
-    "Knowledge Seeker": "🧐",
+    "Knowledge Seeker": "🔍",
 
     // Review Milestones
-    "Review Rookie": "🧐",
+    "Review Rookie": "🔍",
     "Review Enthusiast": "🤓",
     "Review Veteran": "📋",
     "Review Virtuoso": "🧑‍🏫",
     "Review Legend": "👑",
-    "Memory Master": "🧠",
+    "Memory Master": "💡",
     "Recall Champion": "⏱️",
     "Retention Rockstar": "🎸",
     "Spaced Repetition Sage": "📅",
@@ -4554,12 +4807,12 @@ const achievementIcons = {
     "Skill Grandmaster": "👑",
     "Skill Omniscient": "🌌",
     "Skill Sage": "🧙",
-    "Review Adept": "🧐",
+    "Review Adept": "🔍",
     "Recall Expert": "⏱️",
     "Burst Believer": "💥",
     "Efficient Expert": "⚡",
     "XP Boost Master": "⬆️",
-    "Review Mastery Master": "🧠",
+    "Review Mastery Master": "💡",
     "Accelerated Recall Master": "⏱️",
     "Study Burst Master": "💥",
     "Efficient Learner Master": "⚡",
@@ -4568,26 +4821,26 @@ const achievementIcons = {
     // Specialty — Individual Mastery
     "Anatomy Expert": "🦴",
     "Physiology Pro": "🏃",
-    "Biochem Buff": "🧬",
-    "Micro Mastermind": "🦠",
+    "Biochem Buff": "🔬",
+    "Micro Mastermind": "🔬",
     "Pharm Fanatic": "💊",
     "Pathology Pioneer": "🔬",
     "ER Enthusiast": "🚑",
     "Surgical Samurai": "⚔️",
     "OB/GYN Oracle": "🤰",
-    "Psychiatry Prodigy": "🧠",
+    "Psychiatry Prodigy": "💡",
     "Dermatology Dynamo": "💅",
-    "Radiology Rockstar": "🩻",
+    "Radiology Rockstar": "📷",
     "Cardiology Conqueror": "❤️",
-    "Pulmonology Pro": "🫁",
+    "Pulmonology Pro": "🌬️",
     "GI Guru": "🍎",
-    "Nephron Master": "🧪",
+    "Nephron Master": "⚗️",
     "Endocrine Expert": "⚗️",
-    "Neurology Ninja": "🧠",
+    "Neurology Ninja": "💡",
     "Infectious Intellect": "🦟",
-    "Rheum Ruler": "🦾",
+    "Rheum Ruler": "💪",
     "Heme/Onc Hero": "🎗️",
-    "Ortho Overlord": "🦴",
+    "Ortho Overlord": "📋",
     "Urology Virtuoso": "💧",
     "Ophthalmology Oracle": "👁️",
     "ENT Expert": "👂",
@@ -4599,30 +4852,30 @@ const achievementIcons = {
     "Prev Med Pro": "🛡️",
     "Palliative Pro": "🕊️",
     "Ethics Expert": "⚖️",
-    "Genetics Genius": "🧬",
+    "Genetics Genius": "🔬",
     "Global Health Guru": "🌍",
     "Medical Educator": "🎓",
 
     // Specialty — Tiered
-    "Specialty Explorer": "🧭",
+    "Specialty Explorer": "🗺️",
     "Specialty Collector": "🎒",
-    "Specialty Aficionado": "🧐",
+    "Specialty Aficionado": "🔍",
     "Specialty Connoisseur": "🔎",
     "Specialty Master": "⭐",
     "Specialty Grandmaster": "🌟",
     "Specialty Omniscient": "✨",
-    "Specialty Polymath": "🧠",
+    "Specialty Polymath": "💡",
     "Specialty Sovereign": "👑",
     "All Specialties Unlocked": "🗝️",
     "Medical Maestro": "🎼",
     "Ultimate Healer": "🌌",
 
     // Combination Mastery
-    "Foundational Five": "🧱",
-    "Core Clinical Quartet": "🩺",
+    "Foundational Five": "🏛️",
+    "Core Clinical Quartet": "⚕️",
     "Organ System Savant": "⚙️",
     "Infection Fighter": "🛡️",
-    "Mind & Body Master": "🧘",
+    "Mind & Body Master": "🏃",
     "Sensory Specialists": "👀",
     "Surgical Suite Star": "🔪",
 
@@ -4650,7 +4903,7 @@ const achievementIcons = {
     "Burst User": "💥",
     // Focus Timer
     "First Focus": "⏱️",
-    "Focus Warrior": "🧘",
+    "Focus Warrior": "🏃",
     "Deep Work Master": "🔬",
     "Night Cram": "🌙",
     // Quiz Performance
@@ -4658,11 +4911,11 @@ const achievementIcons = {
     "Quiz Veteran": "📋",
     // Flashcards
     "Flashcard Rookie": "🃏",
-    "Memory Builder": "🧠",
+    "Memory Builder": "💡",
     // Custom Topics
     "Curator": "✏️",
     // Study Planner
-    "Strategist": "🗓",
+    "Strategist": "🃏",
     // Prestige
     "First Prestige": "⚜",
     "Triple Prestige": "⚜⚜⚜",
@@ -4686,9 +4939,9 @@ const achievementDescriptions = {
     "All Topics Studied": "Study every single topic in the game — the ultimate completionist.",
 
     // Level Milestones
-    "Clinical Apprentice": "Reach Level 2 — Physiology unlocks. You're learning the language.",
-    "Medical Intern": "Reach Level 3 — Biochemistry unlocks. The chemistry beneath all medicine.",
-    "Adept Healer": "Reach Level 5 — The Foundational Five are complete. Clinical medicine begins.",
+    "Clinical Apprentice": "Reach Level 1 — Welcome, Healer. Your journey begins.",
+    "Medical Intern": "Reach Level 3 — Physiology unlocks. You are learning the language.",
+    "Adept Healer": "Reach Level 6 — Biochemistry unlocks. The chemistry beneath all disease.",
     "Resident of Remedies": "Reach Level 8 — Pathology unlocks. The bridge between science and clinical.",
     "Senior Resident": "Reach Level 12 — Internal Medicine unlocks. The trunk of the clinical tree.",
     "Attending Physician": "Reach Level 15 — You're now operating in clinical territory.",
@@ -4843,15 +5096,15 @@ const achievementDescriptions = {
     "Deep Work Master": "Complete 50 Focus Sessions — 20+ hours of pure, uninterrupted study.",
     "Night Cram": "Complete a Focus Session after 10 PM — burning the midnight oil properly.",
     // Quiz Performance
-    "Quiz Ace": "Score 100% on an AI-generated USMLE quiz — perfect clinical reasoning.",
-    "Quiz Veteran": "Complete 20 AI quizzes — you test yourself, not just study.",
+    "Quiz Ace": "Score 100% on a USMLE quiz session — perfect clinical reasoning.",
+    "Quiz Veteran": "Complete 20 quiz sessions — you test yourself, not just study.",
     // Flashcards
     "Flashcard Rookie": "Complete your first Flashcard rating session.",
     "Memory Builder": "Rate 50 flashcards — active recall is the most powerful study method.",
     // Custom Topics
     "Curator": "Add your first Custom Topic to a specialty — personalise your curriculum.",
     // Study Planner
-    "Strategist": "Generate an AI Study Plan — you plan before you act.",
+    "Strategist": "Use the Flashcard mode and rate at least 10 topics — you study actively, not passively.",
     // Prestige
     "First Prestige": "Reach Level 102 and Prestige for the first time.",
     "Triple Prestige": "Prestige 3 times — a true master.",
@@ -4881,10 +5134,33 @@ const achievementDescriptions = {
                 // Create SFX synths
                 try {
                     // Use your actual synth configurations here if different
-                    synth = new Tone.Synth({ oscillator: { type: "sine" }, envelope: { attack: 0.01, decay: 0.1, sustain: 0.1, release: 0.2 } }).toDestination();
-                    achievementSynth = new Tone.Synth({ oscillator: { type: "triangle8" }, envelope: { attack: 0.05, decay: 0.2, sustain: 0.3, release: 0.5 } }).toDestination();
-                    errorSynth = new Tone.Synth({ oscillator: { type: "square" }, volume: -12, envelope: { attack: 0.01, decay: 0.1, sustain: 0.05, release: 0.1 } }).toDestination();
-                    skillSynth = new Tone.Synth({ oscillator: { type: "sawtooth" }, volume: -9, envelope: { attack: 0.02, decay: 0.1, sustain: 0.2, release: 0.2 } }).toDestination();
+                    // Warm sine for general interactions
+                    synth = new Tone.Synth({
+                        oscillator: { type: "triangle" },
+                        envelope: { attack: 0.005, decay: 0.15, sustain: 0.05, release: 0.3 },
+                        volume: -8
+                    }).toDestination();
+
+                    // Rich achievement fanfare — polyphonic
+                    achievementSynth = new Tone.PolySynth(Tone.Synth, {
+                        oscillator: { type: "triangle8" },
+                        envelope: { attack: 0.02, decay: 0.3, sustain: 0.4, release: 0.8 },
+                        volume: -6
+                    }).toDestination();
+
+                    // Short buzz for errors
+                    errorSynth = new Tone.Synth({
+                        oscillator: { type: "square" },
+                        envelope: { attack: 0.005, decay: 0.08, sustain: 0.0, release: 0.1 },
+                        volume: -14
+                    }).toDestination();
+
+                    // Bright pluck for skill upgrades
+                    skillSynth = new Tone.Synth({
+                        oscillator: { type: "sine" },
+                        envelope: { attack: 0.005, decay: 0.2, sustain: 0.0, release: 0.4 },
+                        volume: -10
+                    }).toDestination();
                     sfxSynthsReady = true; // Mark SFX synths as ready
                 } catch (e) { console.error("AUDIO_DEBUG: Error creating SFX synths:", e); sfxSynthsReady = false; }
                 // Remove listeners
@@ -4925,15 +5201,43 @@ const achievementDescriptions = {
              else if (!targetSynth) { console.warn("SOUND_DEBUG: Target SFX synth not available for " + soundType); return; }
 
              // Trigger the sound
-             switch (soundType) { /* Keep all the cases */
-                case 'levelUp': targetSynth.triggerAttackRelease("C4", "8n", now); targetSynth.triggerAttackRelease("E4", "8n", now + 0.1); targetSynth.triggerAttackRelease("G4", "8n", now + 0.2); targetSynth.triggerAttackRelease("C5", "4n", now + 0.3); break;
-                case 'diseaseCheck': targetSynth.triggerAttackRelease("A4", "16n", now); break;
-                case 'achievement': targetSynth.triggerAttackRelease("G5", "2n", now); break;
-                case 'skillUp': targetSynth.triggerAttackRelease("D5", "16n", now); targetSynth.triggerAttackRelease("A5", "8n", now + 0.1); break;
-                case 'error': targetSynth.triggerAttackRelease("C3", "8n", now); break;
-                case 'taskComplete': targetSynth.triggerAttackRelease("B4", "16n", now); targetSynth.triggerAttackRelease("D5", "16n", now + 0.1); targetSynth.triggerAttackRelease("G5", "8n", now + 0.2); break;
-                default: console.warn(`Unknown sound type: ${soundType}`);
-             }
+             switch (soundType) {
+                case 'levelUp':
+                    targetSynth.triggerAttackRelease("C4","8n",now);
+                    targetSynth.triggerAttackRelease("E4","8n",now+0.12);
+                    targetSynth.triggerAttackRelease("G4","8n",now+0.24);
+                    targetSynth.triggerAttackRelease("C5","8n",now+0.36);
+                    targetSynth.triggerAttackRelease("E5","4n",now+0.50);
+                    break;
+                case 'diseaseCheck':
+                    targetSynth.triggerAttackRelease("E5","16n",now);
+                    targetSynth.triggerAttackRelease("G5","16n",now+0.07);
+                    break;
+                case 'achievement':
+                    if (achievementSynth?.triggerAttackRelease) {
+                        achievementSynth.triggerAttackRelease(["C4","E4","G4"],"4n",now);
+                        achievementSynth.triggerAttackRelease(["E4","G4","C5"],"4n",now+0.28);
+                        achievementSynth.triggerAttackRelease(["G4","C5","E5"],"2n",now+0.56);
+                    } else {
+                        targetSynth.triggerAttackRelease("C5","2n",now);
+                    }
+                    break;
+                case 'skillUp':
+                    targetSynth.triggerAttackRelease("G5","16n",now);
+                    targetSynth.triggerAttackRelease("C6","8n",now+0.10);
+                    break;
+                case 'error':
+                    targetSynth.triggerAttackRelease("E3","16n",now);
+                    targetSynth.triggerAttackRelease("C3","8n",now+0.12);
+                    break;
+                case 'taskComplete':
+                    targetSynth.triggerAttackRelease("C5","16n",now);
+                    targetSynth.triggerAttackRelease("E5","16n",now+0.09);
+                    targetSynth.triggerAttackRelease("G5","8n",now+0.19);
+                    break;
+                default:
+                    targetSynth.triggerAttackRelease("A4","16n",now);
+            }
          } catch (e) { console.error(`Error playing SFX "${soundType}":`, e); }
      }
 
@@ -5287,14 +5591,8 @@ function getYearMonthString() {
          }
          const nextLevelCost = baseCost + currentLevel;
 
-         // Display Effect Value
-         if (skillName === 'xpBoost' || skillName === 'acceleratedRecall' || skillName === 'efficientLearner') {
-             levelEl.textContent = `${effectValue}%`;
-         } else if (skillName === 'reviewMastery' || skillName === 'studyBurst') {
-             levelEl.textContent = `+${effectValue} XP`;
-         } else {
-             levelEl.textContent = currentLevel;
-         }
+         // Always show actual level number in the badge
+         levelEl.textContent = currentLevel;
 
          // Update Button State
          const costSpan = buttonEl.querySelector('.skill-cost'); // Get cost span element
@@ -5480,7 +5778,7 @@ monthlyTasks = []; lastMonthlyTasksGeneratedDate = null; monthlyTaskProgress = {
     const BOSS_DEFINITIONS = {
         20:  { name: 'The Hospital Entrance Exam',  emoji: '🏥', subtitle: 'Internal Medicine & Core Clinical', topic: 'Internal Medicine, Emergency Medicine, and core clinical reasoning', reward: { xp: 500,  sp: 3  } },
         36:  { name: 'The Cardiovascular Gauntlet', emoji: '❤️', subtitle: 'Cardiology & Pulmonology',           topic: 'Cardiology, Pulmonology, and cardiopulmonary physiology',            reward: { xp: 750,  sp: 4  } },
-        51:  { name: 'The Neuroscience Trial',      emoji: '🧠', subtitle: 'Neurology & Psychiatry',             topic: 'Neurology, Psychiatry, and neurophysiology',                         reward: { xp: 1000, sp: 5  } },
+        51:  { name: 'The Neuroscience Trial',      emoji: '💡', subtitle: 'Neurology & Psychiatry',             topic: 'Neurology, Psychiatry, and neurophysiology',                         reward: { xp: 1000, sp: 5  } },
         80:  { name: 'The Surgical Theatre Test',   emoji: '⚔️', subtitle: 'Surgical Specialties',              topic: 'Orthopedics, Anesthesiology, Urology, and perioperative care',       reward: { xp: 1500, sp: 6  } },
         102: { name: 'THE GRAND FINAL EXAM',        emoji: '👑', subtitle: 'All of Medicine',                   topic: 'broad clinical medicine across all major specialties',                reward: { xp: 3000, sp: 10 } },
     };
@@ -5526,35 +5824,35 @@ monthlyTasks = []; lastMonthlyTasksGeneratedDate = null; monthlyTaskProgress = {
             // Contextual level-up narratives — every specialty unlock has a message
             const narrativeMessages = {
                 // ── PHASE 1: THE FOUNDATIONAL FIVE ──
-                3:   "🦠 Physiology unlocked. You now know the body's blueprints — start learning how it breathes, pumps, and thinks.",
-                6:   "🧬 Biochemistry unlocked. Every disease is chemistry gone wrong. Master the reactions before the reactions master you.",
-                9:   "🦠 Microbiology unlocked. Your enemy has a name, a shape, and a weakness. Learn all three.",
+                3:   "🔬 Physiology unlocked. You now know the body's blueprints — start learning how it breathes, pumps, and thinks.",
+                6:   "🔬 Biochemistry unlocked. Every disease is chemistry gone wrong. Master the reactions before the reactions master you.",
+                9:   "🔬 Microbiology unlocked. Your enemy has a name, a shape, and a weakness. Learn all three.",
                 12:  "💊 Pharmacology unlocked. The Foundational Five are complete. You now hold the keys to understanding disease at every level.",
                 // ── PHASE 2: THE BRIDGE ──
                 16:  "🔬 Pathology unlocked. This is where basic science becomes clinical understanding. Every diagnosis begins here.",
                 // ── PHASE 3: CORE CLINICAL ──
-                20:  "🩺 Internal Medicine unlocked. The trunk of the entire clinical tree. Everything else branches from this.",
+                20:  "⚕️ Internal Medicine unlocked. The trunk of the entire clinical tree. Everything else branches from this.",
                 24:  "👶 Pediatrics unlocked. Children are not small adults. Their physiology, doses, and presentations are entirely their own.",
                 28:  "🚑 Emergency Medicine unlocked. You now have 5 minutes to save a life. Pattern recognition and calm under pressure start here.",
                 32:  "⚔️ General Surgery unlocked. The blade in your hands is hard-earned. Know when to cut — and when to close.",
                 36:  "❤️ Cardiology unlocked. Every heartbeat is a vote for survival. Learn to read them all.",
-                39:  "🫁 Pulmonology unlocked. You have taken 20,000 breaths today. Now learn every way they can go wrong.",
+                39:  "🌬️ Pulmonology unlocked. You have taken 20,000 breaths today. Now learn every way they can go wrong.",
                 42:  "🍎 Gastroenterology unlocked. The gut talks to the brain, the immune system, and every organ it touches.",
-                45:  "🧪 Nephrology unlocked. The kidneys filter 180 litres a day and ask for nothing in return. Until they do.",
+                45:  "⚗️ Nephrology unlocked. The kidneys filter 180 litres a day and ask for nothing in return. Until they do.",
                 48:  "⚗️ Endocrinology unlocked. Hormones run everything in the background. When they fail, everything fails.",
                 51:  "🧠 Neurology unlocked. 86 billion neurons. 100 trillion synapses. The most complex system in the known universe.",
                 54:  "🤰 Obstetrics & Gynecology unlocked. Two lives in the room. Every decision carries double the weight.",
                 57:  "🧠 Psychiatry unlocked. The mind is the hardest organ to examine and the easiest to dismiss. Don't.",
                 60:  "💅 Dermatology unlocked. The skin never lies. It tells the story of every system beneath it.",
-                63:  "🩻 Radiology unlocked. Learn to see inside without touching. The image holds more than the patient tells you.",
+                63:  "📷 Radiology unlocked. Learn to see inside without touching. The image holds more than the patient tells you.",
                 66:  "🦟 Infectious Diseases unlocked. The great detectives of medicine. Every unusual presentation is a mystery to solve.",
                 69:  "🎗️ Hematology & Oncology unlocked. Blood disorders and cancer — intellectually demanding and deeply human fields.",
-                72:  "🦴 Orthopedics unlocked. The scaffold of the body is now yours to understand.",
+                72:  "📋 Orthopedics unlocked. The scaffold of the body is now yours to understand.",
                 74:  "💧 Urology unlocked. Underestimated until it fails. Every system that depends on flow depends on this one.",
                 76:  "👁️ Ophthalmology unlocked. The eye is not just a sense organ — it is a direct window into the brain.",
                 78:  "👂 ENT unlocked. The gateways of the face. What enters and exits the body passes through here first.",
                 80:  "😴 Anesthesiology unlocked. You are the silent guardian of the operating room. The patient trusts you with their unconscious life.",
-                82:  "🦾 Rheumatology unlocked. The immune system attacking its own host. Precision and patience required.",
+                82:  "💪 Rheumatology unlocked. The immune system attacking its own host. Precision and patience required.",
                 84:  "🚨 Critical Care Medicine unlocked. The last line between life and death. Every protocol here was written in someone's tragedy.",
                 86:  "♿ Physical Medicine & Rehabilitation unlocked. When the acute phase ends, the real work begins — rebuilding a life.",
                 88:  "🤧 Allergy & Immunology unlocked. When the immune system overreacts, the consequences are systemic.",
@@ -5562,7 +5860,7 @@ monthlyTasks = []; lastMonthlyTasksGeneratedDate = null; monthlyTaskProgress = {
                 92:  "🛡️ Preventive Medicine unlocked. The greatest achievement in medicine is the disease that never happened.",
                 94:  "🕊️ Palliative Care unlocked. When cure is no longer the goal, care becomes the entire purpose.",
                 96:  "⚖️ Medical Ethics unlocked. You have the knowledge. Now ask: what SHOULD be done? Every clinical decision has a moral dimension.",
-                98:  "🧬 Genetics & Genomics unlocked. You are reading the code that underlies all disease. The future of medicine is written here.",
+                98:  "🔬 Genetics & Genomics unlocked. You are reading the code that underlies all disease. The future of medicine is written here.",
                 100: "🌍 Global Health unlocked. Level 100. Seven billion patients. One world. Local decisions have global consequences.",
                 102: "🎓 Medical Education unlocked. Level 102. To teach is the highest form of mastery. You have not just learned medicine — you have earned the right to pass it on.",
             };
@@ -5594,7 +5892,10 @@ if (getYearMonthString() === lastMonthlyTasksGeneratedDate) {
         }
 
         if (leveledUp) {
-            renderSpecialties(specialtySearchInputEl ? specialtySearchInputEl.value : ''); // Re-render to show newly unlocked ones
+            // Re-render to show newly unlocked specialties, preserve scroll position
+            const scrollY = window.scrollY;
+            renderSpecialties(specialtySearchInputEl ? specialtySearchInputEl.value : '');
+            setTimeout(() => window.scrollTo(0, scrollY), 0);
         }
         // No need to call updateStatsUI here, it's handled by gainXP or other callers
         return leveledUp;
@@ -5851,7 +6152,18 @@ if (getYearMonthString() === lastMonthlyTasksGeneratedDate) {
                  if (masteredSpecialtyCount >= 5)  checkAchievement("Specialty Collector");
                  if (masteredSpecialtyCount >= 3)  checkAchievement("Specialty Explorer");
                  checkAllSpecialtiesMastered();
-                 renderSpecialties(); // Re-render to show mastery star
+                 // Update just the header of this specialty without full re-render
+                 const specEl = specialtiesContainerEl?.querySelector(`[data-spec-name="${specialty}"]`);
+                 if (specEl) {
+                     specEl.classList.add('mastered');
+                     const h3 = specEl.querySelector('h3');
+                     if (h3) {
+                         const txt = h3.textContent.replace(' ⭐','');
+                         const addBtn = h3.querySelector('button');
+                         h3.textContent = txt + ' ⭐';
+                         if (addBtn) h3.appendChild(addBtn);
+                     }
+                 }
              }
         }
     }
@@ -5872,26 +6184,112 @@ if (getYearMonthString() === lastMonthlyTasksGeneratedDate) {
          }
      }
 
+    const ACHIEVEMENT_REWARDS = {
+        "Clinical Apprentice": {xp:50,sp:0},
+        "Medical Intern": {xp:100,sp:1},
+        "Adept Healer": {xp:150,sp:1},
+        "Resident of Remedies": {xp:200,sp:1},
+        "Senior Resident": {xp:250,sp:1},
+        "Attending Physician": {xp:300,sp:2},
+        "World-Class Diagnostician": {xp:400,sp:2},
+        "Grand Healer": {xp:500,sp:2},
+        "Epic Healer": {xp:600,sp:3},
+        "Chief of Medicine": {xp:750,sp:3},
+        "Legendary Scholar": {xp:900,sp:3},
+        "Supreme Healer": {xp:1000,sp:4},
+        "Mythical Medic": {xp:1200,sp:4},
+        "Timeless Scholar": {xp:1500,sp:5},
+        "Divine Insight": {xp:2000,sp:5},
+        "Cosmic Physician": {xp:2500,sp:7},
+        "Transcendent Healer": {xp:3000,sp:10},
+        "First Blood": {xp:25,sp:0},
+        "Novice Diagnostician": {xp:75,sp:0},
+        "Persistent Scholar": {xp:100,sp:0},
+        "Domain Discoverer": {xp:150,sp:1},
+        "Dedicated Healer": {xp:200,sp:1},
+        "Topic Collector": {xp:300,sp:1},
+        "Syllabus Surveyor": {xp:500,sp:2},
+        "Compendium Compiler": {xp:750,sp:2},
+        "Knowledge Architect": {xp:1000,sp:3},
+        "Scholarly Sage": {xp:1500,sp:4},
+        "Lore Master": {xp:2000,sp:5},
+        "All Topics Studied": {xp:5000,sp:10},
+        "Streak Starter": {xp:50,sp:0},
+        "Streak Master": {xp:150,sp:1},
+        "Dedicated Disciple": {xp:300,sp:1},
+        "Daily Devotee": {xp:600,sp:2},
+        "Centennial Streak": {xp:1000,sp:3},
+        "Annual Achiever": {xp:3000,sp:5},
+        "Review Rookie": {xp:50,sp:0},
+        "Review Enthusiast": {xp:100,sp:0},
+        "Review Veteran": {xp:200,sp:1},
+        "Review Virtuoso": {xp:400,sp:1},
+        "Review Legend": {xp:600,sp:2},
+        "Memory Master": {xp:800,sp:2},
+        "Recall Champion": {xp:1000,sp:3},
+        "Retention Rockstar": {xp:1500,sp:3},
+        "Spaced Repetition Sage": {xp:2000,sp:5},
+        "Quiz Knight": {xp:100,sp:0},
+        "Exam Overcomer": {xp:200,sp:1},
+        "Skillful Scholar": {xp:400,sp:1},
+        "Marathon of Medicine": {xp:750,sp:2},
+        "Century of Cures": {xp:1000,sp:2},
+        "Question Conqueror": {xp:1500,sp:3},
+        "Knowledge Seeker": {xp:2000,sp:5},
+        "Medical Maestro": {xp:500,sp:2},
+        "Specialty Explorer": {xp:200,sp:1},
+        "Specialty Collector": {xp:400,sp:1},
+        "Specialty Aficionado": {xp:600,sp:2},
+        "Specialty Connoisseur": {xp:800,sp:2},
+        "Specialty Master": {xp:1000,sp:3},
+        "Specialty Grandmaster": {xp:1500,sp:4},
+        "Specialty Omniscient": {xp:2000,sp:5},
+        "Specialty Polymath": {xp:2500,sp:6},
+        "Specialty Sovereign": {xp:5000,sp:10},
+        "First Victory": {xp:500,sp:2},
+        "Boss Slayer": {xp:2000,sp:5},
+        "First Focus": {xp:50,sp:0},
+        "Focus Warrior": {xp:300,sp:1},
+        "Deep Work Master": {xp:1000,sp:3},
+        "Task Taker": {xp:50,sp:0},
+        "Task Master": {xp:100,sp:0},
+        "Task Completer": {xp:200,sp:1},
+        "Task Champion": {xp:400,sp:1},
+        "Daily Duty": {xp:600,sp:2},
+        "Task Veteran": {xp:1000,sp:3},
+        "First Prestige": {xp:1000,sp:5},
+        "Triple Prestige": {xp:2000,sp:7},
+        "Max Prestige": {xp:5000,sp:10},
+        "Quiz Ace": {xp:300,sp:1},
+        "Quiz Veteran": {xp:500,sp:2},
+    };
     function checkAchievement(name) {
-    if (!achievementDescriptions[name]) {
-        console.warn(`Attempted achievement "${name}" with no description.`);
+        if (!achievementDescriptions[name]) {
+            console.warn(`Attempted achievement "${name}" with no description.`);
+            return false;
+        }
+        if (!achievements.includes(name)) {
+            achievements.push(name);
+            achievements.sort();
+            playSound('achievement');
+            // Grant reward if defined
+            const reward = ACHIEVEMENT_REWARDS[name];
+            let rewardText = '';
+            if (reward) {
+                if (reward.xp > 0) { gainXP(reward.xp); rewardText += `+${reward.xp} XP`; }
+                if (reward.sp > 0) { gainSP(reward.sp);  rewardText += (rewardText ? ' · ' : '') + `+${reward.sp} SP`; }
+            }
+            const notifMsg = rewardText
+                ? `🏆 ${name} — ${rewardText}`
+                : `🏆 Achievement: ${name}`;
+            showToast(notifMsg, 'gold', 4500);
+            addQuest(`🏆 Achievement: ${name}${rewardText ? ' ('+rewardText+')' : ''}`);
+            updateAchievementsListUI();
+            updateStatsUI();
+            return true;
+        }
         return false;
     }
-    if (!achievements.includes(name)) {
-        achievements.push(name);
-        achievements.sort();
-        playSound('achievement'); // You can create a more distinct sound for this later if you like
-
-        // Standard notification
-        showNotification(`🏆 Achievement Unlocked: ${name}`, 4000);
-
-        addQuest(`Achievement Unlocked: ${name}`);
-        updateAchievementsListUI(); // Update the list to show it as unlocked
-        updateStatsUI(); // Updates achievement count display
-        return true;
-    }
-    return false;
-}
 
     // Functions to check specific achievement conditions
     function checkQuestionAchievements() {
@@ -5905,23 +6303,23 @@ if (getYearMonthString() === lastMonthlyTasksGeneratedDate) {
     }
     function checkLevelAchievements() {
         const levelMilestones = {
-            200: "Transcendent Healer",
-            175: "Cosmic Physician",
-            150: "Divine Insight",
-            125: "Timeless Scholar",
-            100: "Mythical Medic",
-            90:  "Supreme Healer",
-            80:  "Legendary Scholar",
-            70:  "Chief of Medicine",
-            60:  "Epic Healer",
-            50:  "Grand Healer",
-            40:  "World-Class Diagnostician",
-            35:  "Attending Physician",
-            30:  "Senior Resident",
-            22:  "Resident of Remedies",
-            15:  "Adept Healer",
-            9:   "Medical Intern",
-            5:   "Clinical Apprentice"
+            102: "Transcendent Healer",
+            90:  "Cosmic Physician",
+            80:  "Divine Insight",
+            70:  "Timeless Scholar",
+            60:  "Mythical Medic",
+            50:  "Supreme Healer",
+            40:  "Legendary Scholar",
+            35:  "Chief of Medicine",
+            30:  "Epic Healer",
+            25:  "Grand Healer",
+            20:  "World-Class Diagnostician",
+            16:  "Attending Physician",
+            12:  "Senior Resident",
+            9:   "Resident of Remedies",
+            6:   "Adept Healer",
+            3:   "Medical Intern",
+            1:   "Clinical Apprentice"
         };
         for (const milestoneLevel in levelMilestones) {
             if (level >= parseInt(milestoneLevel)) checkAchievement(levelMilestones[milestoneLevel]);
@@ -6145,7 +6543,7 @@ if (getYearMonthString() === lastMonthlyTasksGeneratedDate) {
                         'All Specialties Unlocked','Ultimate Healer']
             },
             {
-                label: '🧩 Combination Mastery',
+                label: '🔗 Combination Mastery',
                 names: ['Foundational Five','Core Clinical Quartet','Organ System Savant',
                         'Infection Fighter','Mind & Body Master','Sensory Specialists','Surgical Suite Star']
             },
@@ -6158,7 +6556,7 @@ if (getYearMonthString() === lastMonthlyTasksGeneratedDate) {
                 names: ['First Focus','Focus Warrior','Deep Work Master','Night Cram']
             },
             {
-                label: '🧠 AI Quiz',
+                label: '💡 AI Quiz',
                 names: ['Quiz Ace','Quiz Veteran']
             },
             {
@@ -6233,17 +6631,17 @@ if (getYearMonthString() === lastMonthlyTasksGeneratedDate) {
 
                 const icon = achievementIcons[achName] || '🏆';
                 const description = achievementDescriptions[achName] || '';
+                const reward = ACHIEVEMENT_REWARDS[achName];
+                const rewardBadge = reward
+                    ? `<span class="ach-reward-badge">${reward.xp > 0 ? '+'+reward.xp+' XP' : ''}${reward.xp > 0 && reward.sp > 0 ? ' · ' : ''}${reward.sp > 0 ? '+'+reward.sp+' SP' : ''}</span>`
+                    : '';
 
-                const nameSpan = document.createElement('span');
-                nameSpan.className = 'achievement-name';
-                nameSpan.textContent = `${icon} ${achName}`;
-
-                const descSpan = document.createElement('span');
-                descSpan.className = 'achievement-desc';
-                descSpan.textContent = description;
-
-                li.appendChild(nameSpan);
-                li.appendChild(descSpan);
+                li.innerHTML = `
+                    <div class="achievement-name-row">
+                        <span class="achievement-name">${icon} ${achName}</span>
+                        ${rewardBadge}
+                    </div>
+                    <span class="achievement-desc">${description}</span>`;
                 itemsContainer.appendChild(li);
             });
 
@@ -6451,7 +6849,7 @@ if (getYearMonthString() === lastMonthlyTasksGeneratedDate) {
                          // AI Quiz button
                          const quizBtnSpec = document.createElement('button');
                          quizBtnSpec.className = 'note-btn quiz-btn-spec';
-                         quizBtnSpec.textContent = '🧠';
+                         quizBtnSpec.textContent = '💡';
                          quizBtnSpec.title = 'AI Quiz — test yourself on this topic';
                          quizBtnSpec.onclick = (e) => { e.stopPropagation(); launchAIQuiz(specName, diseaseName); };
                          wrapper.appendChild(quizBtnSpec);
@@ -6597,7 +6995,7 @@ function showXpToast(xpAmount, sourceText = '') {
                   li.appendChild(btn);
 
                   const quizBtn = document.createElement('button');
-                  quizBtn.textContent = '🧠 Quiz';
+                  quizBtn.textContent = '💡 Quiz';
                   quizBtn.title = 'Test yourself with AI-generated MCQ questions';
                   quizBtn.style.cssText = 'font-size:0.8em;padding:5px 12px;margin:0 0 0 4px;flex-shrink:0;background:linear-gradient(135deg,#7c3aed,#a855f7);color:#fff;border-radius:8px;border:none;cursor:pointer';
                   quizBtn.onclick = () => launchAIQuiz(item.spec, item.dis);
@@ -6780,47 +7178,35 @@ if (getYearMonthString() === lastMonthlyTasksGeneratedDate) {
         const bossKey = `boss_${bossLevel}`;
         const card = document.getElementById('boss-card');
 
-        // Show loading state
+        // Map boss to specialty topics for the question bank
+        const bossSpecMap = {
+            20:  ['Internal Medicine', 'Emergency Medicine', 'Pathology'],
+            36:  ['Cardiology', 'Pulmonology', 'Internal Medicine'],
+            51:  ['Neurology', 'Psychiatry', 'Internal Medicine'],
+            80:  ['Orthopedics', 'Anesthesiology', 'General Surgery'],
+            102: ['Internal Medicine', 'Cardiology', 'Neurology', 'Infectious Diseases', 'Nephrology'],
+        };
+
         card.innerHTML = `
           <div style="font-size:3em;margin-bottom:16px;animation:bossPulse 1s ease-in-out infinite alternate">${boss.emoji}</div>
           <p style="font-family:var(--font-header);color:#f4c430;font-size:1.2em;margin-bottom:8px">${boss.name}</p>
-          <p style="color:#7a7d85;font-size:0.85em;margin-bottom:28px">Assembling your examination...</p>
-          <div style="color:#7a7d85;font-size:0.9em">Claude is generating 5 USMLE-level clinical vignettes...</div>`;
+          <p style="color:#7a7d85;font-size:0.85em;margin-bottom:28px">Assembling your examination...</p>`;
 
-        try {
-            const bossData = await anthropicFetch({
-                    model: 'claude-sonnet-4-20250514',
-                    max_tokens: 3500,
-                    system: 'You are an elite USMLE Step 2 CK question writer. Generate boss-level clinical vignettes — harder than standard USMLE, integrating multiple concepts. Return ONLY valid JSON.',
-                    messages: [{ role: 'user', content:
-                        `Generate exactly 5 HARD USMLE-style boss battle questions covering: ${boss.topic}.
-
-REQUIREMENTS:
-- Each must be a complex clinical vignette (multi-system or integrated)
-- Difficulty: harder than standard USMLE — require synthesising 2+ concepts
-- All distractors must be clinically plausible (no obviously wrong answers)
-- Topics must span different aspects of ${boss.topic}
-- Based strictly on Harrison's, UpToDate, and AHA/ACC/ACOG guidelines
-
-Return ONLY this JSON (no markdown):
-{"questions":[{"q":"vignette...","options":{"A":"...","B":"...","C":"...","D":"..."},"correct":"A","explanation":"Why correct + why top distractor fails."}]}`
-                    }]
-                });
-
-            const text = bossData.content?.[0]?.text || '';
-            const parsed = JSON.parse(text.replace(/```json|```/g,'').trim());
-            const questions = parsed.questions;
-            if (!Array.isArray(questions) || questions.length === 0) throw new Error('No questions returned');
-
-            await conductBossQuiz(overlay, card, bossLevel, boss, questions);
-
-        } catch (err) {
-            card.innerHTML = `
-              <div style="color:#f04444;font-size:2em;margin-bottom:16px">⚠️</div>
-              <p style="color:#f04444;font-weight:700;margin-bottom:8px">Failed to load Boss Battle</p>
-              <p style="color:#7a7d85;font-size:0.85em;margin-bottom:20px">${err.message}<br>${err.message.includes('key') ? 'Go to Settings → AI / API Key to add yours.' : 'Check your internet connection.'}</p>
-              <button onclick="document.body.removeChild(this.closest('[style*=fixed]'))" style="background:rgba(255,255,255,0.08);color:#e8e8ea;border:1px solid #2a2d35;padding:10px 24px;border-radius:10px;cursor:pointer">Close</button>`;
+        // Pull 5 questions from relevant specialties
+        const specs = bossSpecMap[bossLevel] || ['Internal Medicine'];
+        let questions = [];
+        for (const spec of specs) {
+            const qs = getQuizQuestions(spec, 2);
+            questions.push(...qs);
         }
+        // Shuffle and take exactly 5
+        for (let i = questions.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [questions[i], questions[j]] = [questions[j], questions[i]];
+        }
+        questions = questions.slice(0, 5);
+
+        await conductBossQuiz(overlay, card, bossLevel, boss, questions);
     }
 
     async function conductBossQuiz(overlay, card, bossLevel, boss, questions) {
@@ -8232,192 +8618,349 @@ function renderMonthlyTasksUI() {
     // ============================================================
     // ===== FEATURE: AI-Powered Quiz (Claude API) ===============
     // ============================================================
-    async function launchAIQuiz(spec, disease) {
+    // ============================================================
+    // ===== FEATURE: Static USMLE Quiz (Offline) ================
+    // ============================================================
+// ============================================================
+// ===== STATIC USMLE QUESTION BANK ==========================
+// ============================================================
+// ~300 high-yield USMLE Step 1/2 questions organised by specialty.
+// Offline, instant, no API required.
+const QUIZ_BANK = {
+    "Anatomy": [
+        { q: "A 45-year-old man sustains a stab wound to the posterior triangle of the neck. He develops weakness in shoulder abduction and cannot shrug his right shoulder. Which nerve is most likely injured?", options: {A:"Phrenic nerve",B:"Spinal accessory nerve",C:"Long thoracic nerve",D:"Suprascapular nerve"}, correct:"B", explanation:"CN XI (spinal accessory) innervates trapezius and SCM. Injury causes inability to shrug (trapezius) and weakness abducting the arm above 90°. The posterior triangle is the classic injury site." },
+        { q: "During a modified radical mastectomy, the surgeon accidentally severs a nerve running along the serratus anterior muscle. The patient now has a 'winged scapula'. Which nerve was damaged?", options: {A:"Long thoracic nerve",B:"Thoracodorsal nerve",C:"Medial pectoral nerve",D:"Suprascapular nerve"}, correct:"A", explanation:"The long thoracic nerve (C5-C7) innervates serratus anterior. Loss causes winging of the scapula because serratus normally holds the medial border against the thorax." },
+        { q: "A patient presents with inability to extend the wrist and fingers after a humeral shaft fracture. The nerve most likely injured runs in which structure?", options: {A:"Cubital tunnel",B:"Carpal tunnel",C:"Spiral groove of the humerus",D:"Axilla"}, correct:"C", explanation:"The radial nerve runs in the spiral groove of the humerus and is injured in mid-shaft fractures, causing wrist drop (inability to extend wrist/fingers/thumb)." },
+        { q: "A 32-year-old woman is in labour. The obstetrician performs an episiotomy at the 6 o'clock position. Which nerve provides sensory innervation to this area?", options: {A:"Ilioinguinal nerve",B:"Pudendal nerve",C:"Genitofemoral nerve",D:"Inferior hypogastric nerve"}, correct:"B", explanation:"The pudendal nerve (S2-S4) provides sensory and motor innervation to the perineum, including the area of episiotomy. It's blocked with a pudendal nerve block during delivery." },
+        { q: "A 55-year-old man with poorly controlled hypertension develops a right homonymous hemianopia without macular sparing. Where is the lesion most likely located?", options: {A:"Right optic nerve",B:"Optic chiasm",C:"Left optic tract",D:"Left primary visual cortex"}, correct:"D", explanation:"The left primary visual cortex processes the right visual field from both eyes. Cortical lesions often spare the macula because of its dual blood supply. Homonymous = same side loss in both eyes." },
+    ],
+    "Physiology": [
+        { q: "A patient with metabolic alkalosis is hypoventilating. PaO2 is 58 mmHg. Giving 100% O2 corrects hypoxia but does not change ventilation. What is the primary stimulus for breathing in this patient?", options: {A:"Central chemoreceptors responding to CO2",B:"Peripheral chemoreceptors responding to hypoxia",C:"Pulmonary stretch receptors",D:"J-receptors"}, correct:"B", explanation:"In patients with severe COPD or chronic CO2 retention, central chemoreceptors become desensitised to CO2. Hypoxia via peripheral chemoreceptors (carotid/aortic bodies) becomes the primary respiratory drive — the 'hypoxic drive'." },
+        { q: "A 28-year-old woman at 32 weeks gestation is found to have fetal growth restriction. Umbilical artery Doppler shows absent end-diastolic flow. What does this indicate about placental vascular resistance?", options: {A:"Decreased resistance",B:"Normal resistance",C:"Markedly increased resistance",D:"Reversed blood flow"}, correct:"C", explanation:"Absent end-diastolic flow means placental vascular resistance is so high that forward flow ceases during diastole. This indicates severe uteroplacental insufficiency and fetal compromise." },
+        { q: "A patient has a serum Na of 125 mEq/L, urine Na of 40 mEq/L, and urine osmolality of 450 mOsm/kg. Volume status appears euvolaemic. What is the most likely cause?", options: {A:"Psychogenic polydipsia",B:"SIADH",C:"Hypothyroidism",D:"Adrenal insufficiency"}, correct:"B", explanation:"SIADH: euvolaemic hyponatraemia with concentrated urine (Uosm >100 and UNa >20) inappropriately. Psychogenic polydipsia causes dilute urine. Hypothyroidism and adrenal insufficiency are also causes but less classic for this pattern." },
+        { q: "A 70-year-old man with aortic stenosis has a cardiac output of 4 L/min, heart rate of 80, and aortic valve area of 0.8 cm². During exercise his cardiac output fails to increase. Which physiological mechanism explains this?", options: {A:"Decreased preload",B:"Fixed obstruction preventing increase in stroke volume",C:"Baroreceptor reflex",D:"Negative Bowditch effect"}, correct:"B", explanation:"Severe aortic stenosis creates a fixed outflow obstruction. The LV cannot increase stroke volume adequately with exercise because the narrow valve limits flow regardless of contractility increase." },
+        { q: "A climbing student on Mount Everest at altitude has a PaO2 of 38 mmHg. His 2,3-DPG levels are elevated. What effect does this have on the O2-haemoglobin dissociation curve?", options: {A:"Shifts left, increases O2 affinity",B:"Shifts right, decreases O2 affinity",C:"No change in curve position",D:"Shifts left at tissues only"}, correct:"B", explanation:"Elevated 2,3-DPG shifts the O2-Hb dissociation curve right (decreases O2 affinity of Hb), facilitating O2 unloading to tissues — an adaptive response at altitude." },
+    ],
+    "Biochemistry": [
+        { q: "An infant presents with jaundice, cataracts, and hypoglycaemia after starting milk feeds. Urine is positive for reducing substances but negative for glucose on dipstick. Enzyme deficiency is most likely in which pathway?", options: {A:"Fructose metabolism",B:"Galactose metabolism",C:"Glycogen storage",D:"Amino acid metabolism"}, correct:"B", explanation:"Classic galactosaemia: deficiency of galactose-1-phosphate uridylyltransferase. Galactose (from lactose in milk) accumulates. Urine has reducing sugars (galactose) but dipstick only detects glucose. Features: jaundice, cataracts, liver disease, E. coli sepsis." },
+        { q: "A patient on INH for TB develops peripheral neuropathy. Which vitamin deficiency is responsible?", options: {A:"Vitamin B12",B:"Vitamin B6 (pyridoxine)",C:"Thiamine",D:"Niacin"}, correct:"B", explanation:"INH inhibits the enzyme that activates pyridoxine (vitamin B6) by competing with it. B6 is a cofactor for many enzymes including those in neurotransmitter synthesis. Peripheral neuropathy results. Prophylactic B6 is given with INH." },
+        { q: "A newborn fails to thrive and has a 'musty' urine odour. Testing shows elevated phenylalanine. What is the mechanism of intellectual disability in untreated phenylketonuria?", options: {A:"Phenylalanine directly toxic to neurones",B:"Phenylalanine competitively inhibits transport of other amino acids across blood-brain barrier",C:"Tyrosine deficiency prevents dopamine synthesis",D:"Phenylpyruvate inhibits myelination"}, correct:"B", explanation:"Elevated phenylalanine outcompetes other large neutral amino acids (tyrosine, tryptophan) for the LAT1 transporter at the BBB, causing deficiency of neurotransmitter precursors. The result is impaired brain development." },
+        { q: "Which enzyme is deficient in a patient with alkaptonuria who has dark-staining cartilage and urine that turns black on standing?", options: {A:"Tyrosinase",B:"Homogentisate oxidase",C:"Phenylalanine hydroxylase",D:"Fumarylacetoacetate hydrolase"}, correct:"B", explanation:"Alkaptonuria: deficiency of homogentisate oxidase causes accumulation of homogentisic acid (tyrosine degradation intermediate), which polymerises and darkens (ochronosis). Urine turns dark on standing." },
+    ],
+    "Microbiology": [
+        { q: "A 3-year-old unvaccinated child presents with a 2-day history of low-grade fever, coryza, and Koplik spots on the buccal mucosa. A confluent maculopapular rash then begins at the head and descends. What is the causative organism?", options: {A:"Rubella virus",B:"Measles virus (Paramyxovirus)",C:"Human herpesvirus 6",D:"Varicella-zoster virus"}, correct:"B", explanation:"Measles (Paramyxovirus, RNA): Koplik spots are pathognomonic, appearing 2 days before the rash. The rash is maculopapular, starts at head/hairline and spreads downward (cephalocaudal). The 3 Cs: Cough, Coryza, Conjunctivitis." },
+        { q: "A patient with HIV and CD4 count of 50 presents with headache and meningismus. CSF shows lymphocytosis, low glucose, elevated protein, and India ink staining reveals encapsulated yeast. Treatment?", options: {A:"Fluconazole",B:"Amphotericin B + flucytosine",C:"Acyclovir",D:"Trimethoprim-sulfamethoxazole"}, correct:"B", explanation:"Cryptococcal meningitis in AIDS: India ink shows encapsulated Cryptococcus neoformans. Induction therapy is liposomal amphotericin B + flucytosine for 2 weeks. Fluconazole is used for consolidation/maintenance." },
+        { q: "A college student presents with fever, severe sore throat, and cervical lymphadenopathy. Monospot test is positive. Splenomegaly is present. Which complication is most important to counsel against?", options: {A:"Airway obstruction",B:"Contact sports (splenic rupture)",C:"Secondary bacterial infection",D:"Cardiac arrhythmia"}, correct:"B", explanation:"Infectious mononucleosis (EBV): splenic rupture is rare but catastrophic. Patients should avoid contact sports for 3-4 weeks until splenomegaly resolves. Airway obstruction from tonsillar enlargement is also important but less common." },
+        { q: "A farmer presents with a painless black eschar on his forearm with surrounding oedema but no fever. Gram stain of the lesion shows large gram-positive rods in chains. Diagnosis and treatment?", options: {A:"Clostridium perfringens — surgical debridement",B:"Bacillus anthracis cutaneous anthrax — penicillin",C:"Staphylococcus aureus — oxacillin",D:"Erysipelothrix — amoxicillin"}, correct:"B", explanation:"Cutaneous anthrax: painless papule → vesicle → BLACK ESCHAR with non-pitting oedema. B. anthracis is a large gram+ rod in chains. Treatment: ciprofloxacin or penicillin for cutaneous form (least lethal). Bioterrorism concern." },
+    ],
+    "Pharmacology": [
+        { q: "A patient on warfarin for atrial fibrillation starts taking rifampin for TB. His INR drops from 3.0 to 1.5. What is the mechanism?", options: {A:"Rifampin inhibits CYP2C9",B:"Rifampin induces CYP2C9 and CYP3A4",C:"Rifampin displaces warfarin from albumin",D:"Rifampin blocks vitamin K absorption"}, correct:"B", explanation:"Rifampin is a potent inducer of multiple CYP enzymes (especially CYP2C9 which metabolises warfarin). Increased warfarin metabolism → decreased plasma levels → lower anticoagulation. INR falls and dose must be increased. Stop rifampin → risk of over-anticoagulation." },
+        { q: "A patient with COPD is prescribed an inhaled bronchodilator that acts by blocking M3 muscarinic receptors in airway smooth muscle. Which drug is this?", options: {A:"Salmeterol",B:"Ipratropium",C:"Theophylline",D:"Montelukast"}, correct:"B", explanation:"Ipratropium (and tiotropium) are anticholinergic (antimuscarinic) bronchodilators that block M3 receptors, reducing bronchoconstriction and secretions. Salmeterol is a long-acting beta-2 agonist. First-line for COPD maintenance." },
+        { q: "A woman with hypertension and type 2 diabetes is started on an ACE inhibitor. Within 2 weeks, her creatinine rises 40%. What is the most likely explanation?", options: {A:"Allergic interstitial nephritis",B:"Haemodynamic reduction of GFR due to bilateral renal artery stenosis",C:"Direct ACE inhibitor nephrotoxicity",D:"Contrast-induced nephropathy"}, correct:"B", explanation:"ACE inhibitors block angiotensin II, which preferentially constricts the efferent arteriole. In bilateral RAS (or single functioning kidney), GFR is maintained by Ang II-mediated efferent constriction. ACE-I removal drops GFR dramatically — creatinine rise >30% suggests haemodynamic cause." },
+        { q: "A patient with schizophrenia develops fever, muscle rigidity, altered consciousness, and autonomic instability shortly after an antipsychotic dose increase. What is the first-line treatment?", options: {A:"Haloperidol",B:"Benzodiazepine and dantrolene, stop antipsychotic",C:"Bromocriptine only",D:"Cooling blankets only"}, correct:"B", explanation:"Neuroleptic malignant syndrome: STOP the offending drug immediately. Supportive care, cooling. Pharmacotherapy: dantrolene (muscle relaxant) and/or bromocriptine (dopamine agonist). Benzodiazepines for agitation. This is a medical emergency." },
+    ],
+    "Pathology": [
+        { q: "A 55-year-old smoker has a solitary pulmonary nodule. Biopsy shows pleomorphic cells arranged in glands with mucin production. Staging CT shows mediastinal lymph node involvement. What is the histological type?", options: {A:"Squamous cell carcinoma",B:"Adenocarcinoma",C:"Small cell carcinoma",D:"Large cell carcinoma"}, correct:"B", explanation:"Pulmonary adenocarcinoma: glandular arrangement + mucin production. Now the most common lung cancer overall (especially in non-smokers and women). Associated with EGFR, ALK, KRAS mutations. Peripheral location. Squamous = central, cavitating; Small cell = central, neuroendocrine, paraneoplastic." },
+        { q: "A 35-year-old African-American woman presents with dyspnoea, bilateral hilar lymphadenopathy on CXR, and elevated ACE levels. Biopsy shows non-caseating granulomas. What would you NOT expect to find?", options: {A:"Hypercalcaemia",B:"Positive PPD skin test",C:"Elevated serum calcium",D:"Uveitis"}, correct:"B", explanation:"Sarcoidosis causes ANERGY — the PPD (tuberculin) test is NEGATIVE despite systemic immune activation. This is because Th1 lymphocytes are sequestered in granulomas, leaving peripheral lymphopenia. All other options can occur in sarcoid." },
+        { q: "A neonate develops progressive jaundice over 6 weeks. Total bilirubin is 12 mg/dL with direct bilirubin of 9 mg/dL. No obstruction is found on ultrasound. HIDA scan shows no excretion into bowel. Most likely diagnosis?", options: {A:"Neonatal hepatitis",B:"Biliary atresia",C:"Physiologic jaundice",D:"Gilbert syndrome"}, correct:"B", explanation:"Biliary atresia: fibro-inflammatory destruction of extrahepatic bile ducts. Conjugated (direct) hyperbilirubinaemia after 2 weeks = pathologic. HIDA scan shows no isotope entering bowel = no biliary excretion. Requires Kasai procedure (hepatoportoenterostomy). Physiologic and Gilbert's are unconjugated." },
+    ],
+    "Internal Medicine": [
+        { q: "A 68-year-old man with diabetes and hypertension presents with sudden onset severe tearing chest pain radiating to the back. BP is 190/110 in the right arm and 150/90 in the left arm. CXR shows widened mediastinum. Next step?", options: {A:"ECG and troponin",B:"CT angiography of chest",C:"Echocardiogram",D:"Urgent coronary angiography"}, correct:"B", explanation:"Aortic dissection: tearing pain + pulse/BP differential between arms + widened mediastinum. CT angiography is the investigation of choice. Type A (ascending) needs emergency surgery; Type B may be managed medically. Do NOT give thrombolytics (they can be fatal)." },
+        { q: "A 52-year-old woman presents with fatigue, constipation, weight gain, cold intolerance, and bradycardia. TSH is 45 mIU/L. What is the most appropriate next investigation before starting treatment?", options: {A:"T4 level",B:"Anti-TPO antibodies",C:"Thyroid ultrasound",D:"Radioactive iodine uptake"}, correct:"A", explanation:"TSH alone confirms hypothyroidism but measuring free T4 quantifies severity. Anti-TPO confirms Hashimoto's aetiology but doesn't change initial management. Free T4 guides levothyroxine dosing." },
+        { q: "A 44-year-old alcoholic presents with haematemesis. Endoscopy shows non-bleeding oesophageal varices and active bleeding from a gastric ulcer. Initial management priority?", options: {A:"Transfuse to Hb >10 g/dL",B:"IV proton pump inhibitor, restrict transfusion to Hb <7 g/dL",C:"Emergency portosystemic shunt",D:"Propranolol for variceal prophylaxis"}, correct:"B", explanation:"For acute upper GI bleeding: PPI infusion + restrictive transfusion strategy (target Hb 7-8 g/dL) reduces mortality compared to liberal transfusion. Over-transfusion raises portal pressure and worsens variceal bleeding. Terlipressin/octreotide for varices." },
+        { q: "A patient has WBC 85,000/μL with >90% blasts on smear. Flow cytometry shows CD10+, CD19+, TdT+. Which diagnosis is most likely?", options: {A:"AML M3 (APL)",B:"CML blast crisis",C:"B-cell ALL",D:"Burkitt lymphoma"}, correct:"C", explanation:"B-cell ALL: CD10 (CALLA), CD19, CD20, TdT (terminal deoxynucleotidyl transferase) positive. Most common leukaemia in children (peak age 3-7). t(12;21) TEL-AML1 is the most common translocation and confers good prognosis." },
+        { q: "A 72-year-old woman with known COPD presents with worsening dyspnoea, increased sputum, and low-grade fever. ABG: pH 7.30, PaCO2 58, PaO2 52. What is the safest oxygen delivery target?", options: {A:"Titrate O2 to SpO2 94-98%",B:"High flow 100% O2",C:"Titrate O2 to SpO2 88-92%",D:"No supplemental O2"}, correct:"C", explanation:"In COPD acute exacerbation with hypercapnia, target SpO2 88-92%. Higher O2 can worsen hypercapnia by abolishing hypoxic drive, increasing ventilation-perfusion mismatch (Haldane effect), and suppressing hypoxic pulmonary vasoconstriction." },
+    ],
+    "Cardiology": [
+        { q: "A 65-year-old man with anterior STEMI undergoes PCI. Post-procedure he develops sudden hypotension, elevated JVP, Kussmaul's sign, and clear lung fields. ECG shows ST elevation in V1, right-sided V4R. Diagnosis?", options: {A:"Left ventricular failure",B:"Right ventricular infarction",C:"Ventricular septal defect",D:"Cardiac tamponade"}, correct:"B", explanation:"RV infarction: occurs in 30-50% of inferior MIs (and some anterior MIs). Classic triad: hypotension, elevated JVP, clear lungs. Kussmaul's sign (JVP rises with inspiration). ST elevation in right-sided leads (V3R, V4R). Treatment: IV fluids (NOT diuretics), avoid nitrates." },
+        { q: "A 30-year-old athlete collapses during a marathon. ECG shows delta waves, short PR interval, and widened QRS. He has a history of palpitations. What is the mechanism of his arrhythmia?", options: {A:"Delayed afterdepolarisations in Purkinje fibres",B:"Pre-excitation via accessory pathway (Bundle of Kent)",C:"Enhanced automaticity of AV node",D:"Triggered activity from early afterdepolarisations"}, correct:"B", explanation:"Wolff-Parkinson-White syndrome: accessory pathway (Bundle of Kent) bypasses the AV node, causing ventricular pre-excitation. Delta wave = slurred upstroke of QRS. Risk: if AF develops, rapid conduction through the accessory pathway can cause VF. Ablation is curative." },
+        { q: "A 55-year-old woman has dyspnoea on exertion and a low-pitched diastolic rumble at the apex. She had rheumatic fever as a child. Echo shows mitral valve area of 1.0 cm². What haemodynamic change is most expected?", options: {A:"Elevated pulmonary wedge pressure",B:"Decreased left atrial pressure",C:"Increased cardiac output",D:"Decreased pulmonary vascular resistance"}, correct:"A", explanation:"Severe mitral stenosis (area <1.5 cm²): obstruction to LV filling increases left atrial and pulmonary venous pressure → pulmonary oedema. AF is common (large LA). Treatment: diuretics, rate control, balloon mitral valvotomy or MVR." },
+    ],
+    "Neurology": [
+        { q: "A 67-year-old woman develops sudden severe headache described as 'the worst headache of my life'. She has no focal deficits. CT head is normal. What is the next step?", options: {A:"MRI brain with contrast",B:"Lumbar puncture",C:"Observation and analgesia",D:"Cerebral angiography"}, correct:"B", explanation:"Thunderclap headache with normal CT: CT misses ~2% of subarachnoid haemorrhages. LP should be performed at least 6 hours after headache onset to look for xanthochromia (yellow CSF from Hb breakdown) — more specific than RBCs for SAH." },
+        { q: "A 75-year-old man presents with a 6-month history of resting tremor, cogwheel rigidity, bradykinesia, and postural instability. Which finding would suggest a diagnosis other than idiopathic Parkinson's disease?", options: {A:"Resting tremor",B:"Asymmetric onset",C:"Early falls and dementia",D:"Response to levodopa"}, correct:"C", explanation:"Early falls + early dementia suggests atypical Parkinsonism (MSA, PSP, LBD). Idiopathic PD typically: asymmetric onset, resting tremor, excellent levodopa response, slow progression. Early falls (PSP), autonomic failure (MSA), or hallucinations (LBD) are red flags against IPD." },
+        { q: "A 25-year-old woman presents with sudden unilateral visual loss, described as 'a curtain coming down'. Fundoscopy shows a cherry-red spot at the macula with surrounding pallor. What is the diagnosis?", options: {A:"Central retinal vein occlusion",B:"Central retinal artery occlusion",C:"Retinal detachment",D:"Acute angle-closure glaucoma"}, correct:"B", explanation:"CRAO: sudden painless monocular visual loss. Cherry-red spot: the fovea retains its blood supply from the choroid while the surrounding retina becomes pale/oedematous from ischaemia. Emergency: eye massage, IOP reduction, thrombolysis (controversial). Embolic cause common." },
+    ],
+    "Emergency Medicine": [
+        { q: "A 28-year-old woman is brought in with altered consciousness. Temperature 40.5°C, BP 95/60, HR 130. She was started on sertraline 2 weeks ago and also takes tramadol. On exam she has clonus, hyperreflexia, and diaphoresis. What is the treatment?", options: {A:"Cool packs and acetaminophen",B:"Cyproheptadine and benzodiazepines",C:"Bromocriptine and dantrolene",D:"Dantrolene alone"}, correct:"B", explanation:"Serotonin syndrome: excess serotonergic activity (SSRI + tramadol which has serotonergic properties). Features: hyperthermia, tachycardia, CLONUS (key differentiator from NMS), diaphoresis. Treatment: cyproheptadine (5-HT2A antagonist) + benzodiazepines for agitation. NMS has bradykinesia/rigidity, not clonus." },
+        { q: "A 50-year-old man with no medical history presents to ED with pleuritic chest pain and dyspnoea after a long-haul flight. HR 118, RR 24, SpO2 88% on air. CXR is normal. D-dimer is 3400 ng/mL. What is the most appropriate next step?", options: {A:"Anticoagulate empirically with LMWH",B:"CT pulmonary angiography",C:"V/Q scan",D:"Lower limb Doppler"}, correct:"B", explanation:"High Wells score (tachycardia + risk factor + no alternative) + elevated D-dimer = high PE probability. CTPA is the definitive investigation. In haemodynamically unstable patients with confirmed massive PE, thrombolysis or catheter embolectomy is required." },
+    ],
+    "Pediatrics": [
+        { q: "A 6-year-old boy has had 2 prior episodes of scrotal pain that resolved spontaneously. He now presents with severe left scrotal pain and swelling of 4 hours' duration. The left testis is high-riding and horizontal. What is the most important next step?", options: {A:"Doppler ultrasound",B:"Immediate surgical exploration",C:"Urine culture and antibiotics",D:"Watchful waiting"}, correct:"B", explanation:"Testicular torsion: time-critical emergency. In boys with classic presentation (sudden severe pain, high-riding horizontal testis, absent cremasteric reflex), immediate surgical exploration without waiting for Doppler is required. Salvage rates: 100% <6h, 50% at 24h. 'Bell-clapper' deformity." },
+        { q: "A 3-year-old child presents with a 3-day history of fever and a non-blanching petechial rash on the trunk and legs. She is drowsy with neck stiffness. CSF shows: WBC 2000 (PMN), glucose 1.2 mmol/L, protein 3.0 g/L. Gram-negative diplococci on Gram stain. Treatment?", options: {A:"IV acyclovir",B:"IV ceftriaxone immediately",C:"Oral amoxicillin",D:"Await sensitivities before treating"}, correct:"B", explanation:"Meningococcal meningitis: N. meningitidis (Gram -ve diplococci). Do not delay antibiotics — if suspected in the community, IM benzylpenicillin before transfer. Hospital: IV ceftriaxone or benzylpenicillin. Steroids (dexamethasone) reduce complications. Notifiable disease." },
+    ],
+    "Obstetrics & Gynecology": [
+        { q: "A 30-year-old woman at 34 weeks gestation presents with sudden onset severe epigastric pain, headache, and visual changes. BP is 165/110. Investigations show: platelets 78,000, AST 220 U/L, LDH 650 U/L. What is the diagnosis?", options: {A:"Acute fatty liver of pregnancy",B:"HELLP syndrome",C:"Cholestasis of pregnancy",D:"Pre-eclampsia without severe features"}, correct:"B", explanation:"HELLP syndrome: Haemolysis, Elevated Liver enzymes, Low Platelets. A severe variant of pre-eclampsia. RUQ/epigastric pain from hepatic oedema/haemorrhage. Management: stabilise, deliver (at 34+ weeks regardless). Risk of DIC, hepatic rupture, abruption." },
+        { q: "A 25-year-old woman presents with 6 weeks amenorrhoea, pelvic pain, and minimal vaginal bleeding. On exam she has cervical motion tenderness. β-hCG is 1800 mIU/mL. Transvaginal ultrasound shows no intrauterine pregnancy. What is the next step?", options: {A:"Wait 48h and repeat β-hCG",B:"Immediate laparoscopy",C:"Methotrexate",D:"Dilation and curettage"}, correct:"A", explanation:"Ectopic pregnancy: no IUP at β-hCG >2000 (discriminatory zone) is highly suspicious. At 1800 (below discriminatory zone) with haemodynamic stability, repeat β-hCG in 48h. Failing to rise 53% (or fall) suggests ectopic. Methotrexate requires confirmed stable ectopic. Laparoscopy if haemodynamically unstable." },
+    ],
+    "Psychiatry": [
+        { q: "A 35-year-old man has been in hospital for a hip fracture. He develops agitation, disorientation, picking at his IV line, and visual hallucinations on day 3 post-surgery. Vitals: HR 106, BP 150/95. What is the diagnosis?", options: {A:"Dementia",B:"Schizophrenia",C:"Delirium",D:"Malingering"}, correct:"C", explanation:"Delirium: acute onset, fluctuating course, impaired attention. Hyperactive type (most visible): agitation, hallucinations, autonomic instability. Risk factors: surgery, opioids, anticholinergics, infections, urinary retention, sleep deprivation. Haloperidol for agitation; find and treat underlying cause." },
+        { q: "A 28-year-old woman has recurrent, intrusive thoughts about contamination that she recognises as excessive. She spends 3-4 hours daily washing her hands. This interferes significantly with work. What is first-line pharmacotherapy?", options: {A:"Lorazepam",B:"Haloperidol",C:"Fluoxetine (SSRI)",D:"Lithium"}, correct:"C", explanation:"OCD: unwanted intrusive obsessions + compulsive rituals to neutralise anxiety. First-line: SSRI (e.g., fluoxetine, fluvoxamine, sertraline) at higher doses than depression, plus CBT with exposure and response prevention (ERP). Higher SSRI doses needed (e.g., fluoxetine 60-80 mg)." },
+    ],
+    "Dermatology": [
+        { q: "A 45-year-old man presents with a scaly, erythematous plaque on the dorsum of the foot that has not responded to topical antifungals. Biopsy shows atypical keratinocytes extending the full thickness of the epidermis. What is the diagnosis?", options: {A:"Tinea pedis",B:"Psoriasis",C:"Bowen's disease (SCC in situ)",D:"Eczema"}, correct:"C", explanation:"Bowen's disease (SCC in situ): full-thickness epidermal atypia without invasion. Appears as a persistent scaly erythematous plaque — can mimic eczema/psoriasis. Non-response to antifungals should prompt biopsy. Risk of progression to invasive SCC. Treatment: cryotherapy, 5-FU, or excision." },
+        { q: "A 60-year-old woman presents with tense bullae on normal-appearing skin and on erythematous areas. She has no oral lesions. Direct immunofluorescence shows linear IgG and C3 at the dermoepidermal junction. What is the diagnosis?", options: {A:"Pemphigus vulgaris",B:"Bullous pemphigoid",C:"Dermatitis herpetiformis",D:"Porphyria cutanea tarda"}, correct:"B", explanation:"Bullous pemphigoid: IgG autoantibodies against hemidesmosomes (BP180, BP230) → linear IgG + C3 at DEJ → tense bullae (subepidermal). No mucosal involvement. Contrast with pemphigus vulgaris: flaccid bullae, mucosal involvement, intraepidermal split, anti-desmoglein 3 antibodies." },
+    ],
+    "Infectious Diseases": [
+        { q: "A 35-year-old HIV-positive man with CD4 count of 150 presents with weekly headaches, mild confusion, and a CD4 that has been declining. Serum cryptococcal antigen is positive. CSF opening pressure is 38 cmH2O. What intervention reduces mortality most?", options: {A:"Fluconazole alone",B:"Lumbar puncture drainage for intracranial hypertension",C:"Starting ART immediately",D:"IV dexamethasone"}, correct:"B", explanation:"In cryptococcal meningitis, raised ICP (>25 cmH2O) is the leading cause of mortality. Therapeutic LP or lumbar drain to normalise pressure is the most important immediate intervention. Antifungal treatment is induction with AmB + flucytosine. ART is delayed 4-6 weeks to avoid immune reconstitution inflammatory syndrome (IRIS)." },
+        { q: "A 52-year-old returned traveller from sub-Saharan Africa presents with fever, rigors, and thrombocytopenia. Thick and thin blood films show P. falciparum with 8% parasitaemia. He is drowsy. What is the treatment?", options: {A:"Oral chloroquine",B:"IV artesunate",C:"Oral artemether-lumefantrine",D:"IV quinine + doxycycline"}, correct:"B", explanation:"Severe falciparum malaria: >2% parasitaemia, cerebral involvement, organ dysfunction. IV artesunate is now first-line globally (superior to IV quinine in trials). Oral therapy only for uncomplicated malaria. Chloroquine resistance is widespread in Africa." },
+    ],
+    "Nephrology": [
+        { q: "A 45-year-old woman with lupus presents with haematuria, proteinuria of 4 g/day, and creatinine of 2.8 mg/dL. Renal biopsy shows diffuse proliferative changes with subendothelial deposits on EM and 'wire-loop' lesions. What is the Class of lupus nephritis and treatment?", options: {A:"Class II — hydroxychloroquine only",B:"Class III — pulse steroids only",C:"Class IV — cyclophosphamide or mycophenolate + steroids",D:"Class V — angiotensin blockade only"}, correct:"C", explanation:"Class IV (diffuse proliferative): most common severe class. Subendothelial deposits, wire-loop lesions, creatinine elevation. Induction: high-dose steroids + cyclophosphamide or mycophenolate mofetil. Maintenance: MMF or azathioprine. Without treatment, rapid progression to ESRD." },
+        { q: "A 70-year-old man with CKD stage 4 has serum K 6.2 mEq/L. ECG shows peaked T waves and widening QRS. What is the first intervention?", options: {A:"Sodium polystyrene sulfonate",B:"Haemodialysis",C:"IV calcium gluconate",D:"IV insulin + dextrose"}, correct:"C", explanation:"Hyperkalaemia with ECG changes = life-threatening. First step: IV calcium gluconate to STABILISE the myocardial membrane (does not lower K+, effect in minutes). Then lower K: insulin + dextrose (shifts K into cells), salbutamol, kayexalate, or dialysis for refractory cases." },
+    ],
+    "Endocrinology": [
+        { q: "A 42-year-old woman presents with hypertension, hypokalaemia, metabolic alkalosis, and low renin. CT shows a 1.8 cm left adrenal adenoma. Aldosterone/renin ratio is markedly elevated. What is the treatment of choice?", options: {A:"Spironolactone indefinitely",B:"Laparoscopic left adrenalectomy",C:"Dexamethasone suppression",D:"ACE inhibitor"}, correct:"B", explanation:"Primary hyperaldosteronism (Conn syndrome) from a unilateral adenoma: surgical adrenalectomy is curative. Bilateral hyperplasia is managed medically with spironolactone. Adrenal vein sampling is needed when CT is non-localising to determine laterality." },
+        { q: "A 28-year-old woman presents with 6 months of weight gain, purple striae, facial plethora, and easy bruising. 24-hour urine cortisol is 4× the upper limit of normal. A low-dose dexamethasone suppression test shows no suppression. What is the next test?", options: {A:"High-dose dexamethasone suppression test",B:"CT abdomen",C:"CRH stimulation test",D:"Pituitary MRI"}, correct:"A", explanation:"Algorithm for Cushing's: confirm hypercortisolism → differentiate ACTH-dependent vs independent. High-dose DST: suppression suggests pituitary (Cushing's disease, 90% of ACTH-dependent cases). No suppression = ectopic ACTH or adrenal tumour. Then image accordingly." },
+    ],
+    "Orthopedics": [
+        { q: "A 72-year-old woman with osteoporosis falls and cannot weight bear. X-ray shows a fracture just below the femoral head. She is otherwise medically fit. What is the most appropriate treatment?", options: {A:"Conservative management in bed",B:"Dynamic hip screw",C:"Hemiarthroplasty or total hip replacement",D:"Intramedullary nail"}, correct:"C", explanation:"Intracapsular neck of femur fracture in the elderly: blood supply to the femoral head is disrupted → avascular necrosis risk. Arthroplasty (hemi or total) is preferred over fixation in older patients. Dynamic hip screw is used for extracapsular (inter/subtrochanteric) fractures." },
+    ],
+    "Pulmonology": [
+        { q: "A 55-year-old ex-miner presents with progressive dyspnoea and bilateral upper lobe fibrosis. CXR shows 'eggshell calcification' of hilar lymph nodes. PFTs show a restrictive pattern. What is the most serious complication?", options: {A:"Lung cancer",B:"Progressive massive fibrosis",C:"Caplan syndrome",D:"Tuberculosis"}, correct:"B", explanation:"Silicosis: exposure to crystalline silica. Upper lobe fibrosis + eggshell calcification of LN. Progressive massive fibrosis (PMF) = conglomerate masses >1 cm, causes severe disability. Silicosis also increases TB risk (silicotuberculosis). Caplan = silicosis + rheumatoid nodules." },
+        { q: "A 60-year-old woman with an 80 pack-year smoking history has FEV1/FVC of 0.55, FEV1 45% predicted, severe dyspnoea, and 2 exacerbations in the last year. What GOLD stage and maintenance therapy is most appropriate?", options: {A:"GOLD 2 — LABA alone",B:"GOLD 3 — LAMA alone",C:"GOLD 3 — LABA + LAMA + inhaled steroid",D:"GOLD 4 — oral steroids"}, correct:"C", explanation:"GOLD Stage 3 (severe, FEV1 30-50%) with frequent exacerbations: triple therapy (LABA + LAMA + ICS) reduces exacerbations. Oral steroids are not long-term maintenance due to side effects. Pulmonary rehab, smoking cessation, and vaccination are essential." },
+    ],
+    "Hematology & Oncology": [
+        { q: "A 35-year-old man has a painful crisis with bone pain in his femur and spine. He has known sickle cell disease. Hb is 6.5 g/dL (baseline 8). He is febrile. What must be ruled out before attributing pain to a typical vaso-occlusive crisis?", options: {A:"Acute chest syndrome",B:"Osteomyelitis (Salmonella)",C:"Avascular necrosis",D:"Both A and B"}, correct:"D", explanation:"In febrile sickle cell crisis: (1) Acute chest syndrome — new infiltrate + chest pain/dyspnoea — can be rapidly fatal; treat empirically with antibiotics + transfusion. (2) Osteomyelitis — Salmonella and S. aureus most common — requires cultures and antibiotics. Both are life-threatening emergencies requiring urgent evaluation." },
+        { q: "A patient receiving chemotherapy for breast cancer develops confusion, thirst, polyuria, constipation, and bone pain. Calcium is 3.4 mmol/L. PTH is suppressed. PTHrP is elevated. Diagnosis and acute treatment?", options: {A:"Parathyroid adenoma — parathyroidectomy",B:"Humoral hypercalcaemia of malignancy — IV saline + bisphosphonate",C:"Granulomatous hypercalcaemia — steroids",D:"Vitamin D toxicity — furosemide"}, correct:"B", explanation:"HHM: PTHrP (PTH-related protein) secreted by tumour mimics PTH, causing hypercalcaemia. PTH itself is suppressed (unlike primary hyperparathyroidism). Acute: aggressive IV saline rehydration, then IV bisphosphonate (zoledronic acid). Furosemide only after adequate rehydration." },
+    ],
+    "Gastroenterology": [
+        { q: "A 48-year-old man with longstanding GERD presents with dysphagia to solids. Biopsy shows columnar epithelium with goblet cells replacing squamous epithelium in the lower oesophagus. What is the most important management step after confirming the diagnosis?", options: {A:"Immediate oesophagectomy",B:"Endoscopic surveillance with biopsy every 3-5 years",C:"High-dose PPI and annual endoscopy",D:"Radiofrequency ablation immediately"}, correct:"B", explanation:"Barrett's oesophagus: intestinal metaplasia (goblet cells) of the oesophageal mucosa — precursor to oesophageal adenocarcinoma. Non-dysplastic Barrett's: surveillance endoscopy every 3-5 years. Low-grade dysplasia: increased surveillance or ablation. High-grade dysplasia: endoscopic ablation or mucosal resection." },
+    ],
+    "Rheumatology": [
+        { q: "A 35-year-old woman presents with a butterfly rash, arthralgia, pleuritis, and a positive ANA (titre 1:640). Anti-dsDNA is positive. She is started on hydroxychloroquine. What is the most specific antibody for this diagnosis and most associated with nephritis?", options: {A:"Anti-Smith — most specific; anti-dsDNA — correlates with nephritis/disease activity",B:"Anti-Ro — most specific; anti-La — correlates with nephritis",C:"ANA — most specific; anti-histone — correlates with nephritis",D:"Anti-dsDNA — most specific; anti-Smith — correlates with nephritis"}, correct:"A", explanation:"SLE antibodies: ANA is sensitive but not specific. Anti-Smith (Sm) is most specific for SLE (~30% sensitivity, ~99% specificity). Anti-dsDNA correlates with disease activity and nephritis. Anti-Ro/La = neonatal lupus/Sjögren's. Anti-histone = drug-induced lupus." },
+    ],
+    "Ophthalmology": [
+        { q: "A 68-year-old diabetic presents with painless progressive visual loss over 6 months in both eyes. Fundoscopy shows hard exudates, microaneurysms, and new vessel formation at the disc. Visual acuity is 6/18. What is the most appropriate treatment?", options: {A:"Topical beta-blocker",B:"Vitreoretinal surgery",C:"Anti-VEGF injection and/or panretinal photocoagulation",D:"Urgent systemic steroids"}, correct:"C", explanation:"Proliferative diabetic retinopathy: neovascularisation at disc (NVD) or elsewhere (NVE) — high risk of vitreous haemorrhage and traction retinal detachment. Treatment: panretinal photocoagulation (PRP) to ablate ischaemic retina, or intravitreal anti-VEGF injections. Optimise glucose and BP control." },
+    ],
+    "Preventive Medicine": [
+        { q: "A clinical trial of a new drug for hypertension enrolls 5,000 patients. After 5 years, 8% of the treatment group and 12% of the control group had an MI. What is the number needed to treat (NNT)?", options: {A:"12.5",B:"25",C:"4",D:"8"}, correct:"B", explanation:"ARR = 12% - 8% = 4%. NNT = 1/ARR = 1/0.04 = 25. This means 25 patients need to be treated for 5 years to prevent 1 MI. RRR = 4%/12% = 33%. NNT is the most clinically meaningful way to express treatment benefit." },
+    ],
+};
+
+// ── Extra questions merged into existing specialties ──────────
+(function(){
+const extra = {
+"Pediatrics":[
+{ q:"A 2-year-old has barking cough, inspiratory stridor, worse at night, low-grade fever. He improves with cool night air. What is first-line treatment?", options:{A:"IV ampicillin",B:"Nebulised epinephrine + oral dexamethasone",C:"Immediate intubation",D:"Chest X-ray first"}, correct:"B", explanation:"Croup (laryngotracheobronchitis): parainfluenza virus. Barking cough + stridor. Mild-moderate: single dose oral dexamethasone. Severe: nebulised epinephrine (buys time) + dexamethasone. Steeple sign on CXR. Do not examine throat. Contrast with epiglottitis: toxic, drooling, tripod position, DO NOT examine throat — OR for airway." },
+{ q:"A 4-year-old boy has a periorbital rash on both eyes (heliotrope), proximal muscle weakness, and difficulty climbing stairs. CK is elevated. EMG shows myopathic changes. Diagnosis?", options:{A:"Duchenne muscular dystrophy",B:"Juvenile dermatomyositis",C:"Myasthenia gravis",D:"Guillain-Barré syndrome"}, correct:"B", explanation:"Juvenile dermatomyositis: proximal myopathy + heliotrope rash (periorbital violaceous discolouration) + Gottron papules (over MCP/PIP joints). CK elevated. MRI shows muscle oedema. Treatment: steroids. Unlike adult dermatomyositis, JDM is rarely paraneoplastic." },
+],
+"Surgery":[
+{ q:"A 45-year-old woman presents with RUQ pain radiating to the right shoulder tip, worse 30 min after a fatty meal. Murphy's sign is positive. USS shows a 2cm gallstone and a thickened gallbladder wall. WBC 12,000. Diagnosis and treatment?", options:{A:"Biliary colic — low-fat diet",B:"Acute cholecystitis — IV antibiotics + laparoscopic cholecystectomy within 72h",C:"Choledocholithiasis — ERCP",D:"Biliary dyskinesia — cholecystokinin scan"}, correct:"B", explanation:"Acute cholecystitis: persistent RUQ pain + fever + positive Murphy's sign + wall thickening on USS. Management: IV antibiotics, analgesia, laparoscopic cholecystectomy within 72 hours is optimal. Biliary colic: similar pain but brief, no fever, no wall thickening, self-limiting." },
+{ q:"A 22-year-old man presents with a 3-day history of worsening periumbilical pain that migrated to the RIF. Temp 38.5°C, WBC 18,000. On examination there is RIF guarding and rebound tenderness. CT confirms acute appendicitis with localised free fluid. What finding would change management to non-operative?", options:{A:"High CRP",B:"Perforation with peritonitis",C:"Appendix mass (phlegmon) on CT",D:"Positive Rovsing's sign"}, correct:"C", explanation:"Appendix mass (phlegmon or abscess on CT): if present for >3-5 days, the appendix is often adherent to surrounding structures and surgery is technically difficult with higher complication rate. Management: IV antibiotics ± percutaneous drainage, then interval appendicectomy 6-8 weeks later. Peritonitis requires emergency surgery." },
+],
+"Infectious Diseases":[
+{ q:"A 28-year-old HIV-positive man, newly diagnosed, has CD4 350. He is started on ART (TDF/FTC/DTG). 3 weeks later he develops high fever, lymphadenopathy, and new CNS lesions on MRI. His CD4 has risen to 480. What is happening?", options:{A:"ART failure — resistance developing",B:"Immune reconstitution inflammatory syndrome (IRIS)",C:"New opportunistic infection",D:"Drug hypersensitivity"}, correct:"B", explanation:"IRIS: paradoxical worsening 2-12 weeks after starting ART as immune system recovers and mounts exaggerated response against pre-existing pathogens (often Mycobacteria, Cryptococcus). Treat underlying infection and continue ART; consider steroids for severe IRIS. Not ART failure — CD4 rising confirms immune reconstitution." },
+],
+"Cardiology":[
+{ q:"A 45-year-old woman with lupus presents with dyspnoea, muffled heart sounds, raised JVP, and hypotension. ECG shows low-voltage complexes with electrical alternans. Immediate next step?", options:{A:"IV furosemide",B:"Pericardiocentesis",C:"IV methylprednisolone",D:"Urgent echocardiography first"}, correct:"B", explanation:"Cardiac tamponade: Beck's triad = muffled heart sounds + raised JVP + hypotension. Electrical alternans on ECG (heart swinging in pericardial fluid). Although echo confirms, this is a clinical emergency — if haemodynamically compromised, pericardiocentesis should not be delayed. SLE is a common cause of pericardial effusion → tamponade." },
+],
+"Emergency Medicine":[
+{ q:"A 19-year-old presents with altered consciousness after recreational drug use. Pupils are 2mm bilaterally reactive. RR 8/min, SpO2 88%. Friends report he 'takes anything'. What is the immediate treatment?", options:{A:"IV glucose",B:"IV naloxone 0.4mg and airway support",C:"IV flumazenil",D:"Activated charcoal"}, correct:"B", explanation:"Opioid toxicity: miosis, respiratory depression, altered consciousness (the triad). Immediate: airway support + IV/IM/IN naloxone 0.4-2mg. Repeat every 2-3 min as needed. Duration of naloxone is shorter than most opioids — may need repeat dosing or infusion. Flumazenil reverses benzodiazepines but can precipitate seizures in habitual users — use with caution." },
+],
+"Endocrinology":[
+{ q:"A 30-year-old woman presents with heat intolerance, palpitations, weight loss, and a diffusely enlarged thyroid with a bruit. TSH is undetectable, free T4 elevated. She has exophthalmos. What is the most specific antibody?", options:{A:"Anti-TPO",B:"Anti-TSH receptor antibody (TSI/TRAb)",C:"Anti-thyroglobulin",D:"ANA"}, correct:"B", explanation:"Graves' disease: TSH-receptor stimulating antibodies (TSI, TRAb) are the most specific. They activate the TSH receptor → excess T4/T3. Anti-TPO is elevated in Graves' and Hashimoto's (not specific). Clinical features: diffuse goitre with bruit, pretibial myxoedema, thyroid acropachy, and Graves' orbitopathy (exophthalmos). Treatment: carbimazole/PTU, radioiodine, or surgery." },
+],
+"Neurology":[
+{ q:"A 65-year-old man presents with progressive difficulty walking, urinary incontinence, and cognitive decline over 6 months. MRI brain shows hydrocephalus with enlarged ventricles disproportionate to sulcal atrophy. Lumbar puncture removes 50mL CSF and his gait temporarily improves. Diagnosis?", options:{A:"Alzheimer's dementia",B:"Normal pressure hydrocephalus",C:"Multi-infarct dementia",D:"Subdural haematoma"}, correct:"B", explanation:"Normal pressure hydrocephalus: Hakim's triad — wet (incontinence), wobbly (gait apraxia), and wacky (cognitive decline). MRI: hydrocephalus out of proportion to atrophy. Temporary gait improvement after large-volume LP confirms likely benefit from VP shunt. Different from Alzheimer's: gait and incontinence early." },
+],
+"Rheumatology":[
+{ q:"A 65-year-old man presents with pain and swelling of his right first MTP joint ('podagra'), worse at night. Synovial fluid shows negatively birefringent needle-shaped crystals. Serum uric acid is 580 μmol/L. What is the mechanism of crystal-induced inflammation?", options:{A:"IgE-mediated mast cell degranulation",B:"NLRP3 inflammasome activation by MSU crystals → IL-1β release",C:"Complement activation only",D:"T-cell cytotoxic response"}, correct:"B", explanation:"Gout: monosodium urate (MSU) crystals are phagocytosed by macrophages → activate NLRP3 inflammasome → caspase-1 activation → IL-1β cleavage and release → neutrophil recruitment → acute inflammation. This is why IL-1 inhibitors (anakinra, canakinumab) are effective. Negatively birefringent = yellow when parallel to compensator (mnemonic: gout = yellow when parallel)." },
+],
+};
+for (const [spec, qs] of Object.entries(extra)) {
+    if (!QUIZ_BANK[spec]) QUIZ_BANK[spec] = [];
+    QUIZ_BANK[spec].push(...qs);
+}
+})();
+
+
+    // ── Additional USMLE questions (extends QUIZ_BANK) ───────────
+    const QUIZ_BANK_EXTRA = {
+        "Internal Medicine": [
+            { q: "A 60-year-old diabetic woman has 3 days of dysuria, flank pain, and fever 38.9°C. UA shows WBC casts. Blood cultures drawn. What distinguishes this from lower UTI?", options: {A:"Presence of nitrites",B:"WBC casts (renal tubular origin) confirming pyelonephritis",C:"Positive urine culture",D:"Dysuria and frequency"}, correct:"B", explanation:"WBC casts are formed in renal tubules — pathognomonic of upper UTI/pyelonephritis. No casts = lower UTI. Treat with fluoroquinolone or IV ceftriaxone if severe." },
+            { q: "A 50-year-old man has a 4 cm infrarenal AAA found incidentally. He smokes 20/day, BP well controlled. Most appropriate management?", options: {A:"Urgent surgical repair",B:"Endovascular repair within 2 weeks",C:"USS surveillance every 6-12 months, smoking cessation, statin",D:"CT angiography for planning"}, correct:"C", explanation:"AAA <5.5 cm: surveillance + risk factor modification. Repair threshold: ≥5.5 cm men, ≥5 cm women, growth >1 cm/year, or symptomatic. Smoking cessation is the single most important modifiable risk factor." },
+        ],
+        "Cardiology": [
+            { q: "A 35-year-old woman has progressive dyspnoea and oedema 8 weeks post-partum. Echo: EF 25%, dilated LV. Most likely diagnosis and specific treatment?", options: {A:"Viral myocarditis — immunosuppression",B:"Peripartum cardiomyopathy — bromocriptine + standard HF therapy",C:"Hypertensive heart disease — antihypertensives",D:"Familial DCM — ICD"}, correct:"B", explanation:"Peripartum cardiomyopathy: LV dysfunction last trimester or within 5 months of delivery. Bromocriptine (prolactin inhibitor) reduces prolactin cleavage product toxic to cardiomyocytes. Plus ACEi/ARB, beta-blocker, diuretic. 50% recover LV function." },
+            { q: "A 70-year-old man has syncope on exertion. Echo: AVA 0.7 cm², mean gradient 70 mmHg. No angina or dyspnoea. Median survival without treatment?", options: {A:">10 years — monitor annually",B:"5 years — defer to symptomatic",C:"<3 years once syncope occurs",D:"Medical management adequate"}, correct:"C", explanation:"Severe AS: once symptoms appear — angina (5 yr), syncope (3 yr), HF (1-2 yr). Exertional syncope = median ~3 year survival. AVR/TAVI indicated when symptomatic. Asymptomatic severe AS with very low EF or very high gradient may also need early intervention." },
+        ],
+        "Neurology": [
+            { q: "A 28-year-old woman has relapsing visual loss, limb weakness, sensory disturbance × 3 years. MRI: periventricular white matter lesions. CSF: oligoclonal bands. First-line disease-modifying therapy?", options: {A:"Natalizumab",B:"Interferon-beta or glatiramer acetate",C:"Alemtuzumab",D:"IV methylprednisolone"}, correct:"B", explanation:"RRMS: IFN-beta or glatiramer acetate are first-line (30-40% relapse reduction). High-efficacy agents (natalizumab, alemtuzumab) reserved for aggressive disease. Methylprednisolone treats relapses but doesn't modify disease." },
+            { q: "A 65-year-old has sudden severe vertigo, ipsilateral Horner's, ipsilateral facial sensory loss, contralateral limb sensory loss, dysphagia. Lesion location?", options: {A:"Left cerebellum",B:"Lateral medulla — Wallenberg syndrome",C:"Right pons",D:"Left internal capsule"}, correct:"B", explanation:"Wallenberg (lateral medullary) syndrome: PICA occlusion. Crossed sensory = ipsilateral face, contralateral body. Ipsilateral Horner's, dysphagia, dysarthria, nystagmus, ipsilateral cerebellar signs. Classic crossed deficits = brainstem lesion." },
+        ],
+        "Pharmacology": [
+            { q: "A 65-year-old with HFrEF (EF 28%) on carvedilol, enalapril, furosemide still symptomatic. Which drug reduces all-cause mortality as proven in RCT?", options: {A:"Amlodipine",B:"Spironolactone (aldosterone antagonist)",C:"Digoxin",D:"Ivabradine"}, correct:"B", explanation:"RALES trial: spironolactone reduced mortality 30% in severe HFrEF. Mechanism: blocks aldosterone-mediated fibrosis and sodium retention. Monitor K+ and creatinine. If ACEi-tolerant, sacubitril/valsartan (ARNI) replaces ACEi for further mortality benefit." },
+            { q: "Patient on clozapine develops ANC <500/mm³ at 8 weeks. Mechanism and management?", options: {A:"Dose-dependent bone marrow suppression — reduce dose",B:"Immune-mediated agranulocytosis — stop clozapine immediately",C:"Reactive neutrophilia then crash — add G-CSF, continue",D:"Drug interaction — switch to olanzapine"}, correct:"B", explanation:"Clozapine agranulocytosis: immune-mediated, ~1% risk, peak weeks 6-18. STOP immediately — risk of fatal sepsis. Mandatory weekly monitoring (first 18 weeks). G-CSF may accelerate recovery. Never rechallenge. Highest risk: Ashkenazi Jewish patients with HLA-DQB1*02." },
+        ],
+        "Emergency Medicine": [
+            { q: "A 40-year-old IV drug user is unconscious. Pinpoint pupils, RR 6, SpO2 72%, GCS 6. First action?", options: {A:"CT head urgently",B:"Naloxone IM/IV + bag-valve-mask ventilation",C:"Activated charcoal via NGT",D:"RSI and intubation first"}, correct:"B", explanation:"Opioid overdose triad: miosis + bradypnoea + coma. Naloxone (0.4 mg IV/IM/intranasal) reverses opioid effect rapidly. Support ventilation simultaneously — hypoxia kills faster than intubation time. Multiple doses needed for long-acting opioids. Duration of naloxone < most opioids, so repeated dosing or infusion may be required." },
+            { q: "A 22-year-old woman took 30 paracetamol tablets 3 hours ago. She is asymptomatic. Serum paracetamol level is above the treatment line on nomogram. What is the antidote?", options: {A:"N-acetylcysteine (NAC) IV",B:"Methionine oral",C:"Activated charcoal alone",D:"Haemodialysis"}, correct:"A", explanation:"Paracetamol overdose: NAC repletes glutathione, preventing toxic NAPQI metabolite from binding to hepatocytes. IV NAC is first-line if above nomogram treatment line or >8 hours since ingestion. Activated charcoal within 1-2 hours of ingestion reduces absorption. Oral methionine if NAC unavailable. Liver transplant for fulminant failure." },
+        ],
+        "Microbiology": [
+            { q: "A 25-year-old man has a painless penile ulcer, bilateral non-tender inguinal LAD. RPR 1:64, TPHA reactive. Treatment?", options: {A:"Oral doxycycline 14 days",B:"IM benzathine penicillin G 2.4 MU single dose",C:"Oral azithromycin 1 g",D:"IV penicillin 18-24 MU/day for 14 days"}, correct:"B", explanation:"Primary syphilis: painless chancre + bilateral LAD. RPR = non-specific screening (titres = disease activity); TPHA = specific. Treatment: IM benzathine penicillin G 2.4 MU single dose for primary/secondary/early latent. IV penicillin = neurosyphilis." },
+        ],
+        "Pediatrics": [
+            { q: "A 2-year-old has colicky pain, bilious vomiting 12 hours, and passes 'redcurrant jelly' stool. Abdomen distended. Diagnosis and investigation?", options: {A:"Appendicitis — CT abdomen",B:"Intussusception — USS abdomen",C:"Volvulus — plain AXR",D:"Meckel's diverticulum — radionuclide scan"}, correct:"B", explanation:"Intussusception: peak 3 months-3 years. Colicky pain + bilious vomiting + redcurrant jelly stools. USS is diagnostic (target/doughnut sign). Pneumatic/hydrostatic enema is therapeutic. Surgery if perforation or failed enema." },
+        ],
+        "Obstetrics & Gynecology": [
+            { q: "A 32-week primigravida has BP 160/108, proteinuria 3+, headache, visual changes. Platelets 85k, AST 210, creatinine 1.4. Definitive management?", options: {A:"IV labetalol, continue to 37 weeks",B:"IV MgSO4 seizure prophylaxis + delivery",C:"Oral nifedipine, outpatient monitoring",D:"Steroids × 48h then elective CS"}, correct:"B", explanation:"Pre-eclampsia with severe features (BP ≥160/110, platelets <100k, transaminases 2× ULN, creatinine >1.1, cerebral symptoms): MgSO4 + delivery. At 32 weeks: betamethasone × 48h for lung maturation, then deliver. Delay delivery only if haemodynamically stable after steroids." },
+        ],
+        "Gastroenterology": [
+            { q: "An alcoholic has acute severe epigastric pain, vomiting, ileus. Lipase 8× ULN. CT: 40% pancreatic necrosis. Most important early intervention?", options: {A:"IV antibiotics prophylactically",B:"Aggressive IV fluid resuscitation (Ringer's lactate 250-500 mL/hr)",C:"Urgent ERCP",D:"Surgical debridement"}, correct:"B", explanation:"Acute severe pancreatitis: aggressive early IV fluids (Ringer's lactate preferred over NS — reduces SIRS). Target UO ≥0.5 mL/kg/hr. Prophylactic antibiotics not recommended for sterile necrosis. ERCP only for gallstone pancreatitis with cholangitis. Surgery deferred for infected necrosis." },
+        ],
+        "Nephrology": [
+            { q: "A 60-year-old with CKD4 (eGFR 22) has K 5.8 and pH 7.30, bicarbonate 18 on ABG. Cause of his acidosis?", options: {A:"Lactic acidosis",B:"Type 4 RTA from hyporeninism",C:"Metabolic alkalosis with respiratory compensation",D:"Respiratory acidosis"}, correct:"B", explanation:"CKD + hyperkalemia + normal anion gap metabolic acidosis = Type 4 RTA (hyperkalemic distal RTA). Caused by hyporeninism-hypoaldosteronism (common in diabetic nephropathy). Reduced aldosterone → impaired H+ and K+ secretion. Treatment: dietary K restriction, loop diuretics, fludrocortisone, correct acidosis with bicarb." },
+        ],
+        "Dermatology": [
+            { q: "A 70-year-old man has an irregular pigmented lesion on his back: asymmetric, border irregular, colour variegated (brown/black/red), diameter 9 mm. Next step?", options: {A:"Reassure, review in 6 months",B:"Topical steroid",C:"Excision biopsy with 2 mm margin",D:"Punch biopsy central darkest area"}, correct:"C", explanation:"ABCDE criteria (Asymmetry, Border, Colour, Diameter >6mm, Evolution) — suspicious for melanoma. Excision biopsy with 2 mm margins is the investigation of choice (provides Breslow thickness for staging). Punch biopsy risks sampling error. Sentinel lymph node biopsy for >1 mm depth." },
+        ],
+    };
+
+    // Merge extra questions into QUIZ_BANK
+    (function() {
+        for (const spec in QUIZ_BANK_EXTRA) {
+            if (QUIZ_BANK[spec]) QUIZ_BANK[spec].push(...QUIZ_BANK_EXTRA[spec]);
+            else QUIZ_BANK[spec] = QUIZ_BANK_EXTRA[spec];
+        }
+    })();
+
+// Return a set of N random questions for a given specialty
+function getQuizQuestions(specName, n = 4) {
+    // Try exact match, then fuzzy match
+    let pool = QUIZ_BANK[specName];
+    if (!pool) {
+        // Try partial match
+        const key = Object.keys(QUIZ_BANK).find(k =>
+            k.toLowerCase().includes(specName.toLowerCase()) ||
+            specName.toLowerCase().includes(k.toLowerCase())
+        );
+        pool = key ? QUIZ_BANK[key] : null;
+    }
+    // Fallback to Internal Medicine if no match
+    if (!pool || pool.length === 0) pool = QUIZ_BANK["Internal Medicine"];
+    // Fisher-Yates shuffle + take n
+    const arr = [...pool];
+    for (let i = arr.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [arr[i], arr[j]] = [arr[j], arr[i]];
+    }
+    return arr.slice(0, Math.min(n, arr.length));
+}
+
+    function launchAIQuiz(spec, disease) {
         if (quizInProgress) return;
         quizInProgress = true;
 
-        // Show loading modal immediately
+        const questions = getQuizQuestions(spec, 4);
+
         const modal = document.createElement('div');
         modal.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.85);z-index:4000;display:flex;align-items:center;justify-content:center;backdrop-filter:blur(6px)';
         modal.innerHTML = `
-          <div id="quiz-card" style="background:var(--bg-card);border:1px solid var(--border-gold);border-radius:16px;padding:32px;max-width:620px;width:94%;box-shadow:0 8px 40px rgba(0,0,0,0.6);max-height:92vh;overflow-y:auto">
+          <div id="quiz-card" style="background:var(--bg-2,#1a1d22);border:1px solid rgba(244,196,48,0.3);border-radius:16px;padding:28px;max-width:620px;width:94%;box-shadow:0 8px 40px rgba(0,0,0,0.6);max-height:92vh;overflow-y:auto">
             <div style="display:flex;align-items:center;gap:10px;margin-bottom:4px">
-              <span style="font-family:var(--font-header);color:var(--gold);font-size:1.1em">🧠 USMLE-Style Quiz</span>
+              <span style="font-family:var(--font-header,serif);color:var(--gold,#f4c430);font-size:1.1em">USMLE-Style Quiz</span>
               <span style="font-size:0.72em;background:linear-gradient(135deg,#7c3aed,#a855f7);color:#fff;padding:2px 10px;border-radius:10px;font-weight:700">Step 1/2 Level</span>
             </div>
-            <p style="color:var(--text-muted);font-size:0.82em;margin-bottom:20px">${spec} — <strong style="color:var(--text)">${disease}</strong></p>
-            <div id="quiz-body" style="text-align:center;padding:30px 0;color:var(--text-muted)">
-              <div style="font-size:2.5em;margin-bottom:14px;animation:pulse 1.5s infinite">⚕️</div>
-              <div style="font-weight:600;margin-bottom:6px">Generating clinical vignettes...</div>
-              <div style="font-size:0.82em;opacity:0.7">Powered by Claude AI · Based on Harrison's, First Aid & UpToDate</div>
-            </div>
+            <p style="color:var(--text-muted-color,#888);font-size:0.82em;margin-bottom:20px">${spec} — <strong style="color:var(--text-color,#eee)">${disease}</strong></p>
+            <div id="quiz-body"></div>
           </div>`;
         document.body.appendChild(modal);
 
-        try {
-            const prompt = `You are an expert USMLE question writer with deep knowledge of First Aid for the USMLE, Harrison's Principles of Internal Medicine, Robbins & Cotran Pathologic Basis of Disease, Kaplan Medical, and UpToDate clinical guidelines.
-
-Generate exactly 4 USMLE Step 1/2 style multiple-choice questions about: "${disease}" (specialty: ${spec}).
-
-STRICT USMLE FORMATTING RULES:
-1. Every question MUST be a clinical vignette — start with a patient (age, sex, relevant history, presenting complaint, vitals, labs, imaging, PE findings as appropriate). Never ask abstract "what is X" questions.
-2. Question stems ask ONE of: most likely diagnosis, next best step in management, most appropriate initial test, underlying mechanism/pathophysiology, most likely causative organism/drug/gene, expected finding on labs/imaging, most serious complication, best pharmacologic treatment.
-3. All 4 answer choices (A–D) must be plausible differentials or treatments — NOT obviously wrong. Classic USMLE trap: one answer is what you'd do second, one is what you'd do if you misdiagnose, one tests a common misconception.
-4. Base all answers strictly on evidence-based medicine: AHA/ACC, USPSTF, UpToDate, Harrison's, and USMLE-tested facts.
-5. Difficulty: attending-physician level. Test the mechanism behind the right answer, not just recall.
-6. The explanation MUST state: (a) why the correct answer is right citing a specific fact/mechanism, (b) why the top distractor is wrong in ONE sentence.
-
-Respond ONLY with valid JSON — no markdown, no preamble:
-{
-  "questions": [
-    {
-      "q": "A [age]-year-old [sex] presents with [vignette]... Which of the following is the [question stem]?",
-      "options": {"A": "...", "B": "...", "C": "...", "D": "..."},
-      "correct": "A",
-      "explanation": "Correct: [mechanism/fact]. Distractor: [why top wrong answer fails]."
-    }
-  ]
-}`;
-
-            const data = await anthropicFetch({
-                    model: 'claude-sonnet-4-20250514',
-                    max_tokens: 2400,
-                    system: 'You are a world-class USMLE question writer. Every question must be a clinical vignette. Questions must be USMLE Step 1/2 difficulty — not general knowledge. All facts must be evidence-based. Return ONLY valid JSON.',
-                    messages: [{ role: 'user', content: prompt }]
-            });
-            const text = data.content?.[0]?.text || '';
-            const parsed = JSON.parse(text.replace(/```json|```/g, '').trim());
-            const questions = parsed.questions;
-            if (!Array.isArray(questions) || questions.length === 0) throw new Error('No questions returned');
-
-            renderQuizQuestions(modal, questions, spec, disease);
-
-        } catch (err) {
-            const qb = document.getElementById('quiz-body');
-            if (qb) qb.innerHTML = `
-              <div style="color:var(--error);margin-bottom:16px">⚠️ Could not load quiz: ${err.message}</div>
-              <p style="font-size:0.85em;color:var(--text-muted)">Make sure you're connected to the internet. The quiz uses Claude AI to generate questions.</p>
-              <button onclick="this.closest('[style]').remove()" style="margin-top:16px;background:var(--bg-raised);color:var(--text);border:1px solid var(--border)">Close</button>`;
-            quizInProgress = false;
-        }
-    }
-
-    function renderQuizQuestions(modal, questions, spec, disease) {
         let currentQ = 0;
-        let score = 0;
+        let score    = 0;
         let answered = false;
 
-        function showQuestion() {
+        function showQ() {
             const q = questions[currentQ];
-            const qb = document.getElementById('quiz-body');
-            if (!qb) return;
             answered = false;
+            const qb = document.getElementById('quiz-body');
             qb.innerHTML = `
-              <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px">
-                <span style="font-size:0.82em;color:var(--text-muted)">Question ${currentQ+1} of ${questions.length}</span>
-                <span style="font-size:0.72em;background:var(--bg-raised);border:1px solid var(--border);padding:2px 10px;border-radius:10px;color:var(--text-muted)">USMLE Style</span>
+              <div style="font-size:0.72em;color:var(--text-muted-color,#888);margin-bottom:12px;font-weight:700">
+                Question ${currentQ+1} of ${questions.length}
+                <span style="float:right">Score: ${score}/${currentQ}</span>
               </div>
-              <div style="background:var(--bg-raised);border:1px solid var(--border);border-radius:10px;padding:16px 18px;margin-bottom:18px;font-size:0.93em;line-height:1.75;color:var(--text);text-align:left;border-left:3px solid var(--gold)">${q.q}</div>
-              <div id="options-grid" style="display:flex;flex-direction:column;gap:9px">
-                ${Object.entries(q.options).map(([key,val]) => `
-                  <button data-key="${key}" onclick="window._quizAnswer('${key}')"
-                    style="text-align:left;padding:13px 16px;background:var(--bg-raised);color:var(--text);border:1px solid var(--border);border-radius:10px;font-size:0.88em;line-height:1.5;cursor:pointer;transition:border-color 0.15s,background 0.15s;margin:0;display:flex;gap:10px;align-items:flex-start">
-                    <strong style="color:var(--gold);flex-shrink:0;font-size:1.05em">${key}</strong><span>${val}</span>
+              <div style="background:var(--bg-1,#141618);border-radius:10px;padding:16px;margin-bottom:16px;font-size:0.9em;line-height:1.6;color:var(--text-color,#eee)">${q.q}</div>
+              <div id="options-wrap" style="display:flex;flex-direction:column;gap:8px;margin-bottom:16px">
+                ${['A','B','C','D'].map(letter => `
+                  <button data-letter="${letter}" onclick="window._quizAnswer('${letter}')"
+                    style="text-align:left;background:var(--bg-3,#20242b);border:1px solid var(--border-color,#252930);color:var(--text-color,#eee);padding:11px 16px;border-radius:9px;cursor:pointer;font-size:0.86em;transition:background 0.15s;width:100%">
+                    <strong>${letter}.</strong> ${q.options[letter]}
                   </button>`).join('')}
-              </div>`;
+              </div>
+              <div id="quiz-explanation" style="display:none"></div>`;
+
+            window._quizAnswer = function(chosen) {
+                if (answered) return;
+                answered = true;
+                const isCorrect = chosen === q.correct;
+                if (isCorrect) score++;
+                // Colour all buttons
+                document.querySelectorAll('#options-wrap button').forEach(btn => {
+                    const l = btn.dataset.letter;
+                    if (l === q.correct) btn.style.background = 'rgba(52,196,98,0.2)';
+                    else if (l === chosen && !isCorrect) btn.style.background = 'rgba(240,68,68,0.2)';
+                    btn.style.cursor = 'default';
+                    btn.onclick = null;
+                });
+                // Show explanation
+                const exp = document.getElementById('quiz-explanation');
+                exp.style.display = 'block';
+                exp.innerHTML = `
+                  <div style="background:${isCorrect?'rgba(52,196,98,0.1)':'rgba(240,68,68,0.1)'};border-radius:8px;padding:14px;font-size:0.84em;line-height:1.6;color:var(--text-color,#eee);margin-bottom:14px">
+                    <strong style="color:${isCorrect?'#34c462':'#f04444'}">${isCorrect?'✓ Correct!':'✗ Incorrect — answer is '+q.correct}</strong><br><br>
+                    ${q.explanation}
+                  </div>
+                  <button onclick="${currentQ+1 < questions.length ? 'window._quizNext()' : 'window._quizDone()'}"
+                    style="background:linear-gradient(135deg,rgba(244,196,48,0.8),#f4c430);color:#111;border:none;padding:10px 24px;border-radius:20px;font-weight:700;cursor:pointer;font-size:0.9em">
+                    ${currentQ+1 < questions.length ? 'Next Question →' : 'See Results'}
+                  </button>`;
+            };
+
+            window._quizNext = function() { currentQ++; showQ(); };
         }
 
-        window._quizAnswer = (chosen) => {
-            if (answered) return;
-            answered = true;
-            const q = questions[currentQ];
-            const correct = q.correct.toUpperCase();
-            const isRight = chosen === correct;
-            if (isRight) score++;
-
-            // Color feedback
-            document.querySelectorAll('#options-grid button').forEach(btn => {
-                const k = btn.dataset.key;
-                if (k === correct) { btn.style.background = 'var(--success-dim)'; btn.style.borderColor = 'var(--success)'; btn.style.color = 'var(--success)'; }
-                else if (k === chosen && !isRight) { btn.style.background = 'var(--error-dim)'; btn.style.borderColor = 'var(--error)'; btn.style.color = 'var(--error)'; }
-                btn.disabled = true;
-            });
-
-            // Show explanation
+        window._quizDone = function() {
+            const pct = Math.round((score/questions.length)*100);
+            const stars = pct===100?'★★★':pct>=75?'★★':pct>=50?'★':'';
             const qb = document.getElementById('quiz-body');
-            const exp = document.createElement('div');
-            exp.style.cssText = 'margin-top:14px;padding:14px 16px;background:var(--bg);border-radius:10px;font-size:0.86em;color:var(--text);line-height:1.65;border-left:3px solid '+(isRight?'var(--success)':'var(--error)');
-            exp.innerHTML = `
-              <div style="font-weight:700;color:${isRight?'var(--success)':'var(--error)'};margin-bottom:6px">${isRight ? '✅ Correct!' : `❌ Incorrect — Answer is ${correct}`}</div>
-              <div>${q.explanation}</div>`;
-            qb.appendChild(exp);
+            qb.innerHTML = `
+              <div style="text-align:center;padding:10px 0">
+                <div style="font-size:2.5em;margin-bottom:8px">${stars||'+'}</div>
+                <p style="font-family:var(--font-header,serif);color:var(--gold,#f4c430);font-size:1.4em;margin-bottom:4px">${score}/${questions.length} Correct</p>
+                <p style="color:var(--text-muted-color,#888);font-size:0.9em;margin-bottom:16px">${pct}% · ${pct>=75?'Solid understanding':'Keep reviewing'}</p>
+                ${score*10>0?`<p style="color:var(--gold,#f4c430);font-weight:700;font-size:1.05em;margin-bottom:16px">+${score*10} XP earned</p>`:''}
+                <button onclick="document.body.removeChild(this.closest('[style*=fixed]'));window._quizAnswer=null;window._quizNext=null;window._quizDone=null" style="background:linear-gradient(135deg,rgba(244,196,48,0.8),#f4c430);color:#111;padding:12px 28px;border-radius:20px;font-weight:700;border:none;cursor:pointer;font-size:1em">Done ✓</button>
+              </div>`;
 
-            // Next button
-            const nextBtn = document.createElement('button');
-            const isLast = currentQ >= questions.length - 1;
-            nextBtn.textContent = isLast ? `See Results →` : `Next Question →`;
-            nextBtn.style.cssText = 'margin-top:16px;background:linear-gradient(135deg,var(--gold-deep),var(--gold));color:#111;padding:10px 22px;border-radius:20px;font-weight:700;border:none;cursor:pointer';
-            nextBtn.onclick = () => {
-                if (isLast) { showResults(); }
-                else { currentQ++; showQuestion(); }
-            };
-            qb.appendChild(nextBtn);
-        };
-
-        function showResults() {
-            const pct = Math.round((score / questions.length) * 100);
+            // Award XP and record
             const xpEarned = score * 10;
             if (xpEarned > 0) gainXP(xpEarned);
-
-            // Track quiz history
             const histKey = `${spec}||${disease}`;
             if (!quizHistory[histKey]) quizHistory[histKey] = { attempts: 0, correct: 0, lastDate: null };
             quizHistory[histKey].attempts += questions.length;
             quizHistory[histKey].correct  += score;
             quizHistory[histKey].lastDate  = getTodayDateString();
-            updateTaskProgress(TASK_TYPES.QUIZ, 1);
             if (getYearMonthString() === lastMonthlyTasksGeneratedDate) {
                 monthlyTaskProgress.quizSessionsThisMonthCount = (monthlyTaskProgress.quizSessionsThisMonthCount||0) + 1;
                 updateActiveMonthlyTasksProgress();
             }
-
-            // Quiz achievements
+            updateTaskProgress(TASK_TYPES.QUIZ, 1);
             const totalQuizzesDone = Object.values(quizHistory).reduce((a,v) => a + Math.ceil(v.attempts/4), 0);
             if (pct === 100) checkAchievement('Quiz Ace');
             if (totalQuizzesDone >= 20) checkAchievement('Quiz Veteran');
-
-            // Adjust confidence based on quiz performance
+            // Adjust confidence
             if (studied[spec]?.[disease]) {
                 const newConf = pct >= 75 ? 3 : pct >= 50 ? 2 : 1;
                 studied[spec][disease].confidence = newConf;
-                const intervalMult = newConf === 1 ? 0.4 : newConf === 3 ? 1.8 : 1.0;
-                const baseInterval = REVIEW_INTERVALS_DAYS[studied[spec][disease].reviewIntervalIndex] * MS_PER_DAY;
-                studied[spec][disease].nextReview = Date.now() + baseInterval * intervalMult * getCurrentReviewIntervalMultiplier();
             }
-
-            const hist = quizHistory[histKey];
-            const allTimeAccuracy = hist.attempts > 0 ? Math.round((hist.correct/hist.attempts)*100) : pct;
-            const stars = pct === 100 ? '⭐⭐⭐' : pct >= 75 ? '⭐⭐' : pct >= 50 ? '⭐' : '';
-            const confLabel = pct >= 75 ? '🟢 Solid' : pct >= 50 ? '🟡 OK' : '🔴 Shaky — review soon';
-
-            const qb = document.getElementById('quiz-body');
-            qb.innerHTML = `
-              <div style="text-align:center;padding:10px 0">
-                <div style="font-size:3em;margin-bottom:8px">${stars || '📚'}</div>
-                <p style="font-family:var(--font-header);color:var(--gold);font-size:1.4em;margin-bottom:4px">${score}/${questions.length} Correct</p>
-                <p style="color:var(--text-muted);font-size:0.9em;margin-bottom:6px">This session: ${pct}% · Confidence → ${confLabel}</p>
-                <p style="color:var(--text-muted);font-size:0.82em;margin-bottom:16px">All-time accuracy on this topic: <strong style="color:var(--text)">${allTimeAccuracy}%</strong> (${hist.attempts} questions)</p>
-                ${xpEarned > 0 ? `<p style="color:var(--gold);font-weight:700;font-size:1.05em;margin-bottom:16px">+${xpEarned} XP earned</p>` : ''}
-                <button onclick="document.body.removeChild(this.closest('[style*=fixed]'));window._quizAnswer=null" style="margin-top:8px;background:linear-gradient(135deg,var(--gold-deep),var(--gold));color:#111;padding:12px 28px;border-radius:20px;font-weight:700;border:none;cursor:pointer;font-size:1em">Done ✓</button>
-              </div>`;
-
-            saveProgress();
-            updateAndSave();
+            saveProgress(); updateAndSave();
             quizInProgress = false;
-        }
+        };
 
-        showQuestion();
+        showQ();
     }
+
 
     // ============================================================
     // ===== FEATURE: Browser Notifications ======================
@@ -8623,68 +9166,7 @@ Respond ONLY with valid JSON — no markdown, no preamble:
     // ============================================================
     // ===== FEATURE: AI Study Planner ===========================
     // ============================================================
-    async function generateStudyPlan() {
-        const btn = document.getElementById('generatePlanBtn');
-        const output = document.getElementById('study-plan-output');
-        if (!output) return;
-        if (btn) { btn.disabled = true; btn.textContent = '⏳ Generating...'; }
-        output.innerHTML = '<p style="color:var(--text-muted);text-align:center;padding:20px">Analysing your progress and creating a personalised plan...</p>';
 
-        // Gather weak specialties from radar
-        const weakSpecs = [];
-        for (const spec in specialties) {
-            if (level < specialties[spec].requiredLevel) continue;
-            const total = specialties[spec].diseases.length + (customTopics[spec]?.length || 0);
-            const done  = Object.keys(studied[spec] || {}).length;
-            const pct   = total > 0 ? done/total : 1;
-            const shakyCnt = Object.values(studied[spec] || {}).filter(r => r.confidence === 1).length;
-            weakSpecs.push({ spec, pct, done, total, shakyCnt });
-        }
-        weakSpecs.sort((a,b) => (a.pct - b.pct) || (b.shakyCnt - a.shakyCnt));
-        const top5weak = weakSpecs.slice(0, 5).map(s => `${s.spec} (${Math.round(s.pct*100)}% done, ${s.shakyCnt} shaky)`).join(', ');
-        const daysLeft  = examDate ? Math.ceil((new Date(examDate) - Date.now()) / MS_PER_DAY) : null;
-        const examInfo  = examDate ? `Exam: ${examName || 'Board Exam'} in ${daysLeft} days` : 'No exam date set';
-        const reviewDue = getSortedReviewItems().length;
-
-        try {
-            const data = await anthropicFetch({
-                    model: 'claude-sonnet-4-20250514',
-                    max_tokens: 1000,
-                    system: 'You are a USMLE study coach. Generate concise, actionable weekly plans. Return ONLY valid JSON.',
-                    messages: [{ role: 'user', content:
-                        `Student profile:
-- Level: ${level} | Prestige: ${prestigeLevel}
-- ${examInfo}
-- Reviews due NOW: ${reviewDue}
-- Weakest unlocked specialties: ${top5weak}
-- Total topics studied: ${Object.values(studied).reduce((a,s)=>a+Object.keys(s).length,0)}
-
-Generate a 7-day study plan. Each day: 1-2 specific focus areas, a target (topics/reviews/questions), and a motivational tip.
-
-JSON format (ONLY — no markdown):
-{"plan": [{"day": "Monday", "focus": "...", "target": "...", "tip": "..."}]}`
-                    }]
-            });
-            const text = data.content?.[0]?.text || '';
-            const parsed = JSON.parse(text.replace(/```json|```/g,'').trim());
-            const days = parsed.plan;
-
-            output.innerHTML = `
-              <div class="plan-grid">
-                ${days.map(d => `
-                  <div class="plan-day-card">
-                    <div class="plan-day-name">${d.day}</div>
-                    <div class="plan-focus">📚 ${d.focus}</div>
-                    <div class="plan-target">🎯 ${d.target}</div>
-                    <div class="plan-tip">💡 ${d.tip}</div>
-                  </div>`).join('')}
-              </div>`;
-            lastPlanGeneratedDate = getTodayDateString();
-        } catch(e) {
-            output.innerHTML = `<p style="color:var(--error)">⚠️ Could not generate plan: ${e.message}. Check your internet connection.</p>`;
-        }
-        if (btn) { btn.disabled = false; btn.textContent = '🤖 Generate My Plan'; }
-    }
 
     // ============================================================
     // ===== FEATURE: AnkiConnect Integration ====================
@@ -8821,87 +9303,6 @@ JSON format (ONLY — no markdown):
         }
     }
 
-
-    // ══════════════════════════════════════════════════════════════
-    // ===== FEATURE: Anthropic API Key + Proxy (for GitHub Pages) =
-    // ══════════════════════════════════════════════════════════════
-    let anthropicApiKey  = localStorage.getItem('healers_anthropic_key')   || '';
-    let anthropicProxyUrl = localStorage.getItem('healers_anthropic_proxy') || '';
-
-    function loadApiKeyUI() {
-        const keyInput   = document.getElementById('anthropicApiKeyInput');
-        const proxyInput = document.getElementById('anthropicProxyInput');
-        if (keyInput   && anthropicApiKey)   keyInput.value   = anthropicApiKey;
-        if (proxyInput && anthropicProxyUrl) proxyInput.value = anthropicProxyUrl;
-        updateApiKeyStatus();
-    }
-
-    function saveApiKey() {
-        const key   = (document.getElementById('anthropicApiKeyInput')?.value  || '').trim();
-        const proxy = (document.getElementById('anthropicProxyInput')?.value   || '').trim();
-        anthropicApiKey   = key;
-        anthropicProxyUrl = proxy;
-        if (key)   localStorage.setItem('healers_anthropic_key',   key);
-        else       localStorage.removeItem('healers_anthropic_key');
-        if (proxy) localStorage.setItem('healers_anthropic_proxy', proxy);
-        else       localStorage.removeItem('healers_anthropic_proxy');
-        updateApiKeyStatus();
-        showToast('💾 AI settings saved!', 'success', 2000);
-    }
-
-    function updateApiKeyStatus() {
-        const status = document.getElementById('apiKeyStatus');
-        if (!status) return;
-        const hasKey   = !!anthropicApiKey;
-        const hasProxy = !!anthropicProxyUrl;
-        if (hasKey && hasProxy) {
-            status.textContent = `✅ Ready — proxy set, key active (${anthropicApiKey.slice(0,8)}...)`;
-            status.style.color = 'var(--success)';
-        } else if (hasKey && !hasProxy) {
-            status.textContent = `⚠️ API key set but no proxy URL — AI will fail on GitHub Pages. Add your Worker URL above.`;
-            status.style.color = 'var(--warning)';
-        } else {
-            status.innerHTML = `❌ Not configured — AI features disabled. Follow the setup steps above.`;
-            status.style.color = 'var(--error)';
-        }
-    }
-
-    async function testAiConnection() {
-        const btn    = document.getElementById('testAiBtn');
-        const status = document.getElementById('apiKeyStatus');
-        if (btn) { btn.disabled = true; btn.textContent = '⏳ Testing...'; }
-        try {
-            const data = await anthropicFetch({
-                model: 'claude-sonnet-4-20250514',
-                max_tokens: 10,
-                messages: [{ role: 'user', content: 'Say "OK"' }]
-            });
-            const reply = data.content?.[0]?.text || '';
-            if (status) { status.textContent = `✅ Connected! Claude replied: "${reply.trim()}"`;  status.style.color = 'var(--success)'; }
-            showToast('🤖 AI connection works!', 'success', 3000);
-        } catch(e) {
-            if (status) { status.textContent = `❌ Test failed: ${e.message}`; status.style.color = 'var(--error)'; }
-            showToast('❌ AI test failed — ' + e.message, 'error', 5000);
-        }
-        if (btn) { btn.disabled = false; btn.textContent = '🧪 Test AI'; }
-    }
-
-    async function anthropicFetch(body) {
-        if (!anthropicApiKey)  throw new Error('No API key. Add yours in Settings → AI / API Key.');
-        if (!anthropicProxyUrl) throw new Error('No proxy URL. Deploy a Cloudflare Worker and add its URL in Settings → AI / API Key.');
-        // Route through proxy so CORS doesn't block GitHub Pages
-        const url    = anthropicProxyUrl.replace(/\/$/, '');
-        const resp   = await fetch(url, {
-            method:  'POST',
-            headers: { 'Content-Type': 'application/json', 'X-Api-Key': anthropicApiKey },
-            body:    JSON.stringify(body)
-        });
-        if (!resp.ok) {
-            const err = await resp.json().catch(() => ({}));
-            throw new Error(err?.error?.message || `API error ${resp.status}`);
-        }
-        return resp.json();
-    }
 
     // ============================================================
     // ===== FEATURE: Cloud Sync (JSONBin.io) ====================
@@ -9102,7 +9503,6 @@ updateActiveMonthlyTasksProgress(); // Ensure initial progress syncs from loaded
         updateComboDisplay();
         loadCloudCredentials();
         updateCloudUI();
-        loadApiKeyUI();
         renderExamCountdown();
         updateStreakFreezeDisplay();
         checkAndResetWeeklyStats();
@@ -9154,8 +9554,7 @@ updateActiveMonthlyTasksProgress(); // Ensure initial progress syncs from loaded
         updateNotificationSettingsUI();
         if (granted) { showToast('🔔 Notifications enabled! You\'ll be reminded when reviews are due.', 'success', 4000); sendReviewReminder(); }
     });
-    document.getElementById('generatePlanBtn')?.addEventListener('click', () => { generateStudyPlan(); checkAchievement('Strategist'); });
-    document.getElementById('flashcard-shaky-btn')?.addEventListener('click', () => initFlashcards(true));
+    document.getElementById('flashcard-shaky-btn')?.addEventListener('click', () => { initFlashcards(true); checkAchievement("Flashcard Rookie"); });
     document.getElementById('flashcard-all-btn')?.addEventListener('click', () => initFlashcards(false));
     document.getElementById('flashcard-next-btn')?.addEventListener('click', () => {
         flashcardCurrentIndex = (flashcardCurrentIndex + 1) % Math.max(flashcardDeck.length, 1);
@@ -9194,15 +9593,6 @@ updateActiveMonthlyTasksProgress(); // Ensure initial progress syncs from loaded
         const idx = parseInt(e.target.value);
         loadTrack(idx);
         if (bgmAudioElement?.paused) { bgmAudioElement.play().then(() => { updateMusicButton(true); checkAchievement('Music Lover'); }).catch(()=>{}); }
-    });
-    document.getElementById('saveApiKeyBtn')?.addEventListener('click', saveApiKey);
-    document.getElementById('testAiBtn')?.addEventListener('click', testAiConnection);
-    document.getElementById('clearApiKeyBtn')?.addEventListener('click', () => {
-        const ki = document.getElementById('anthropicApiKeyInput');
-        const pi = document.getElementById('anthropicProxyInput');
-        if (ki) ki.value = '';
-        if (pi) pi.value = '';
-        saveApiKey();
     });
     document.getElementById('ankiTestBtn')?.addEventListener('click', testAnkiConnection);
     document.getElementById('ankiSyncBtn')?.addEventListener('click', syncAnkiReviews);
