@@ -4829,8 +4829,8 @@ const achievementIcons = {
     "XP Boost Master": "⬆️",
     "Review Mastery Master": "💡",
     "Accelerated Recall Master": "⏱️",
-    "Study Burst Master": "💥",
-    "Efficient Learner Master": "⚡",
+    "Streak Lord": "🔥",
+    "The Honest Scholar": "💡",
     "All Skills Maxed": "🏅",
 
     // Specialty — Individual Mastery
@@ -4915,8 +4915,7 @@ const achievementIcons = {
     "Early Bird": "🐦",
     "Speed Learner": "⚡",
     "Daily Triple": "🎳",
-    "Burst User": "💥",
-    // Focus Timer
+        // Focus Timer
     "First Focus": "⏱️",
     "Focus Warrior": "🏃",
     "Deep Work Master": "🔬",
@@ -4957,20 +4956,20 @@ const achievementDescriptions = {
     "Clinical Apprentice": "Reach Level 1 — Welcome, Healer. Your journey begins.",
     "Medical Intern": "Reach Level 3 — Physiology unlocks. You are learning the language.",
     "Adept Healer": "Reach Level 6 — Biochemistry unlocks. The chemistry beneath all disease.",
-    "Resident of Remedies": "Reach Level 8 — Pathology unlocks. The bridge between science and clinical.",
-    "Senior Resident": "Reach Level 12 — Internal Medicine unlocks. The trunk of the clinical tree.",
-    "Attending Physician": "Reach Level 15 — You're now operating in clinical territory.",
-    "Grand Healer": "Reach Level 20 — Pediatrics unlocks. A significant milestone.",
-    "World-Class Diagnostician": "Reach Level 25 — General Surgery unlocks. Knowledge becomes craft.",
+    "Resident of Remedies": "Reach Level 9 — Pharmacology unlocks. The Foundational Five are complete.",
+    "Senior Resident": "Reach Level 12 — Pathology unlocks. The bridge between science and clinical medicine.",
+    "Attending Physician": "Reach Level 16 — Internal Medicine unlocks. The trunk of the entire clinical tree.",
+    "Grand Healer": "Reach Level 20 — Pediatrics unlocks. Children are not small adults.",
+    "World-Class Diagnostician": "Reach Level 25 — Halfway through the foundational curriculum.",
     "Epic Healer": "Reach Level 30 — OB/GYN unlocks. Half the core curriculum done.",
     "Chief of Medicine": "Reach Level 35 — Cardiology unlocks. The organ systems begin.",
-    "Legendary Scholar": "Reach Level 42 — Pulmonology unlocks. Deep systems expertise forming.",
-    "Supreme Healer": "Reach Level 56 — Nephrology unlocks. Most physicians stop specializing here.",
-    "Mythical Medic": "Reach Level 70 — Neurology unlocks. The most complex system awaits.",
-    "Timeless Scholar": "Reach Level 85 — Hematology & Oncology unlocks. Entering advanced territory.",
-    "Divine Insight": "Reach Level 100 — You have outlasted 99% of learners. The craft deepens.",
-    "Transcendent Healer": "Reach Level 132 — Critical Care unlocks. The last line of medicine is yours.",
-    "Cosmic Physician": "Reach Level 150 — PM&R unlocks. You are in the top tier of medical mastery.",
+    "Legendary Scholar": "Reach Level 40 — The major organ systems are opening up.",
+    "Supreme Healer": "Reach Level 50 — You have outlasted most medical learners.",
+    "Mythical Medic": "Reach Level 60 — Deep specialty territory. Fewer and fewer have reached this.",
+    "Timeless Scholar": "Reach Level 70 — You are in the realm of specialists.",
+    "Divine Insight": "Reach Level 80 — Advanced specialty territory. A lifetime of knowledge behind you.",
+    "Transcendent Healer": "Reach Level 90 — The final specialties approach. You are near the summit.",
+    "Cosmic Physician": "Reach Level 102 — Every specialty unlocked. The complete physician.",
 
     // Question Milestones
     "Quiz Knight": "Answer 50 questions.",
@@ -5006,14 +5005,14 @@ const achievementDescriptions = {
     "Peak Performance": "Reach the maximum level in any skill.",
     "Total Skill Enthusiast": "Accumulate 10 total skill levels across all skills.",
     "Skill Collector": "Accumulate 25 total skill levels.",
-    "Master of Many Skills": "Accumulate 50 total skill levels.",
-    "Ultimate Skill Mastery": "Accumulate 25 total skill levels — serious investment in your toolkit.",
+    "Master of Many Skills": "Accumulate all 45 skill levels across every skill — a fully upgraded healer.",
+    "Ultimate Skill Mastery": "Accumulate 30 total skill levels — serious investment in your toolkit.",
     "Skill Grandmaster": "Accumulate 35 total skill levels — a formidable set of abilities.",
     "Skill Omniscient": "Accumulate 40 total skill levels — almost everything upgraded.",
     "Skill Sage": "Max out every single skill — all 45 levels purchased. Your skills are complete.",
     "Review Adept": "Upgrade the 'Review Mastery' skill at least once.",
     "Recall Expert": "Upgrade the 'Accelerated Recall' skill at least once.",
-    "Burst Believer": "Upgrade the 'Study Burst' skill at least once.",
+    "Burst Believer": "Invest your first Skill Point into Momentum — your streak starts earning you more XP.",
     "Efficient Expert": "Invest in Deep Understanding — your first step toward mastering honest self-reflection.",
     "XP Boost Master": "Reach the maximum level in the XP Boost skill.",
     "Review Mastery Master": "Reach the maximum level in the Review Mastery skill.",
@@ -5102,9 +5101,8 @@ const achievementDescriptions = {
     "Skill Point Hoarder": "Accumulate 20 unspent Skill Points at once.",
     "Night Owl": "Study a topic after midnight — burning the midnight oil.",
     "Early Bird": "Study a topic before 6 AM — rise and grind.",
-    "Speed Learner": "Study 10 or more topics in a single session.",
+    "Speed Learner": "Study 10 topics in a single day — a productive day of learning.",
     "Daily Triple": "Answer questions, study a topic, AND complete a review all in one day.",
-    "Burst User": "Invest your first Skill Point into Momentum — your streak is now worth more.",
     // Focus Timer
     "First Focus": "Complete your very first 25-minute Focus Session — deep work begins here.",
     "Focus Warrior": "Complete 10 Focus Sessions — you have claimed 250 minutes of undivided attention.",
@@ -5119,7 +5117,7 @@ const achievementDescriptions = {
     // Custom Topics
     "Curator": "Add your first Custom Topic to a specialty — personalise your curriculum.",
     // Study Planner
-    "Strategist": "Use the Flashcard mode and rate at least 10 topics — you study actively, not passively.",
+    "Strategist": "Rate 10 topics in Flashcard mode — active recall is the most powerful study method.",
     // Prestige
     "First Prestige": "Reach Level 102 and Prestige for the first time.",
     "Triple Prestige": "Prestige 3 times — a true master.",
@@ -6277,6 +6275,86 @@ if (getYearMonthString() === lastMonthlyTasksGeneratedDate) {
         "Max Prestige": {xp:5000,sp:10},
         "Quiz Ace": {xp:300,sp:1},
         "Quiz Veteran": {xp:500,sp:2},
+        "First SP Spent": {xp:50,sp:0},
+        "Burst Believer": {xp:75,sp:0},
+        "Efficient Expert": {xp:75,sp:0},
+        "Review Adept": {xp:75,sp:0},
+        "Recall Expert": {xp:75,sp:0},
+        "Skill Master": {xp:200,sp:1},
+        "Peak Performance": {xp:500,sp:2},
+        "Total Skill Enthusiast": {xp:150,sp:1},
+        "Skill Collector": {xp:300,sp:1},
+        "Ultimate Skill Mastery": {xp:600,sp:2},
+        "Skill Grandmaster": {xp:800,sp:3},
+        "Skill Omniscient": {xp:1000,sp:3},
+        "Skill Sage": {xp:2000,sp:5},
+        "Master of Many Skills": {xp:2500,sp:8},
+        "XP Boost Master": {xp:750,sp:2},
+        "Review Mastery Master": {xp:750,sp:2},
+        "Accelerated Recall Master": {xp:750,sp:2},
+        "Streak Lord": {xp:1000,sp:3},
+        "The Honest Scholar": {xp:1000,sp:3},
+        "All Skills Maxed": {xp:3000,sp:8},
+        "Anatomy Expert": {xp:300,sp:1},
+        "Physiology Pro": {xp:300,sp:1},
+        "Biochem Buff": {xp:300,sp:1},
+        "Micro Mastermind": {xp:300,sp:1},
+        "Pharm Fanatic": {xp:350,sp:1},
+        "Pathology Pioneer": {xp:350,sp:1},
+        "ER Enthusiast": {xp:400,sp:1},
+        "Surgical Samurai": {xp:400,sp:1},
+        "OB/GYN Oracle": {xp:400,sp:1},
+        "Psychiatry Prodigy": {xp:400,sp:1},
+        "Dermatology Dynamo": {xp:450,sp:1},
+        "Radiology Rockstar": {xp:450,sp:1},
+        "Cardiology Conqueror": {xp:500,sp:2},
+        "Pulmonology Pro": {xp:500,sp:2},
+        "GI Guru": {xp:500,sp:2},
+        "Nephron Master": {xp:500,sp:2},
+        "Endocrine Expert": {xp:500,sp:2},
+        "Neurology Ninja": {xp:550,sp:2},
+        "Infectious Intellect": {xp:500,sp:2},
+        "Rheum Ruler": {xp:550,sp:2},
+        "Heme/Onc Hero": {xp:600,sp:2},
+        "Ortho Overlord": {xp:500,sp:2},
+        "Urology Virtuoso": {xp:500,sp:2},
+        "Ophthalmology Oracle": {xp:500,sp:2},
+        "ENT Expert": {xp:500,sp:2},
+        "Critical Care Commander": {xp:700,sp:3},
+        "Anesthesia Ace": {xp:700,sp:3},
+        "PM&R Pro": {xp:600,sp:2},
+        "Allergy Alleviator": {xp:600,sp:2},
+        "Geriatric Guru": {xp:600,sp:2},
+        "Prev Med Pro": {xp:600,sp:2},
+        "Palliative Pro": {xp:700,sp:3},
+        "Ethics Expert": {xp:700,sp:3},
+        "Genetics Genius": {xp:750,sp:3},
+        "Global Health Guru": {xp:700,sp:3},
+        "Medical Educator": {xp:1000,sp:5},
+        "Foundational Five": {xp:1000,sp:3},
+        "Core Clinical Quartet": {xp:1000,sp:3},
+        "Organ System Savant": {xp:1500,sp:4},
+        "Infection Fighter": {xp:500,sp:2},
+        "Mind & Body Master": {xp:500,sp:2},
+        "Sensory Specialists": {xp:500,sp:2},
+        "Surgical Suite Star": {xp:750,sp:2},
+        "All Specialties Unlocked": {xp:2000,sp:5},
+        "Ultimate Healer": {xp:5000,sp:10},
+        "Flashcard Rookie": {xp:50,sp:0},
+        "Memory Builder": {xp:200,sp:1},
+        "Curator": {xp:100,sp:0},
+        "Strategist": {xp:150,sp:1},
+        "Daily Triple": {xp:150,sp:1},
+        "Night Owl": {xp:75,sp:0},
+        "Early Bird": {xp:75,sp:0},
+        "Speed Learner": {xp:200,sp:1},
+        "Night Cram": {xp:100,sp:0},
+        "Skill Point Hoarder": {xp:100,sp:0},
+        "Music Lover": {xp:50,sp:0},
+        "Theme Thinker": {xp:50,sp:0},
+        "Data Exporter": {xp:50,sp:0},
+        "Data Importer": {xp:50,sp:0},
+        "Fallen Hero": {xp:100,sp:0},
     };
     function checkAchievement(name) {
         if (!achievementDescriptions[name]) {
@@ -6318,8 +6396,8 @@ if (getYearMonthString() === lastMonthlyTasksGeneratedDate) {
     }
     function checkLevelAchievements() {
         const levelMilestones = {
-            102: "Transcendent Healer",
-            90:  "Cosmic Physician",
+            102: "Cosmic Physician",
+            90:  "Transcendent Healer",
             80:  "Divine Insight",
             70:  "Timeless Scholar",
             60:  "Mythical Medic",
@@ -6358,6 +6436,8 @@ if (getYearMonthString() === lastMonthlyTasksGeneratedDate) {
         if (count >= 25)   checkAchievement("Persistent Scholar");
         if (count >= 5)    checkAchievement("Novice Diagnostician");
         if (count >= 1)    checkAchievement("First Blood");
+        // Speed Learner: 10 topics studied today
+        if (todayRecordTracking.topics >= 10) checkAchievement("Speed Learner");
 
         // Check all topics studied
         let totalPossible = 0;
@@ -6437,11 +6517,12 @@ if (getYearMonthString() === lastMonthlyTasksGeneratedDate) {
         }
     }
      function checkSkillAchievements() {
+         if (totalSkillLevelsPurchased >= 1)  checkAchievement("First SP Spent");
          if (totalSkillLevelsPurchased >= 45) checkAchievement("Skill Sage");
     if (totalSkillLevelsPurchased >= 40) checkAchievement("Skill Omniscient");
     if (totalSkillLevelsPurchased >= 35) checkAchievement("Skill Grandmaster");
     if (totalSkillLevelsPurchased >= 25) checkAchievement("Ultimate Skill Mastery");
-    if (totalSkillLevelsPurchased >= 50) checkAchievement("Master of Many Skills");
+    if (totalSkillLevelsPurchased >= 45) checkAchievement("Master of Many Skills");
     if (totalSkillLevelsPurchased >= 25) checkAchievement("Skill Collector");
     if (totalSkillLevelsPurchased >= 10) checkAchievement("Total Skill Enthusiast");
 
@@ -6571,7 +6652,7 @@ if (getYearMonthString() === lastMonthlyTasksGeneratedDate) {
                 names: ['First Focus','Focus Warrior','Deep Work Master','Night Cram']
             },
             {
-                label: '💡 AI Quiz',
+                label: '📝 USMLE Quiz',
                 names: ['Quiz Ace','Quiz Veteran']
             },
             {
@@ -6584,8 +6665,8 @@ if (getYearMonthString() === lastMonthlyTasksGeneratedDate) {
             },
             {
                 label: '🎉 Special & Secrets',
-                names: ['Boss Slayer','Music Lover','Theme Thinker','Data Exporter','Data Importer',
-                        'Skill Point Hoarder','Burst User','Speed Learner','Night Owl','Early Bird','Daily Triple']
+                names: ['Music Lover','Theme Thinker','Data Exporter','Data Importer',
+                        'Skill Point Hoarder','Speed Learner','Night Owl','Early Bird','Daily Triple']
             }
         ];
 
@@ -9164,8 +9245,11 @@ function getQuizQuestions(specName, n = 4) {
             }
             // Flashcard achievements
             const totalRatings = (flashcardCurrentIndex + 1);
+            // All-time rated count across all studied topics
+            const allTimeRated = Object.values(studied).reduce((n,s) => n + Object.values(s).filter(r => r.confidence).length, 0);
             checkAchievement('Flashcard Rookie');
-            if (totalRatings >= 50) checkAchievement('Memory Builder');
+            if (allTimeRated >= 10) checkAchievement('Strategist');
+            if (allTimeRated >= 50) checkAchievement('Memory Builder');
             flashcardCurrentIndex = (flashcardCurrentIndex + 1) % flashcardDeck.length;
             flashcardFlipped = false;
             renderFlashcard();
