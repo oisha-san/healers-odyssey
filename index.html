@@ -553,6 +553,7 @@ body.light-mode .main-header { background: #fff; }
 .skill-item[data-skill-type="recall"]   { border-left:3px solid var(--info); }
 .skill-item[data-skill-type="burst"]    { border-left:3px solid var(--warning); }
 .skill-item[data-skill-type="efficient"]{ border-left:3px solid var(--purple); }
+.skill-item[data-skill-type="focus"]    { border-left:3px solid #14b8a6; }
 .skill-icon-wrap {
   width:40px; height:40px; display:flex; align-items:center; justify-content:center;
   background:var(--bg-3); border-radius:10px; font-size:1.3em; flex-shrink:0;
@@ -1025,6 +1026,7 @@ body.light-mode .heat-4 { background: var(--gold); }
 .skill-item[data-skill-type="burst"]::before      { background: var(--warning); }
 .skill-item[data-skill-type="efficient"]::before  { background: var(--purple); }
 .skill-item[data-skill-type="recall"]::before     { background: var(--info); }
+.skill-item[data-skill-type="focus"]::before      { background: #14b8a6; }
 
 /* Icon wraps */
 .skill-icon-wrap {
@@ -1688,6 +1690,108 @@ h2 .section-emoji,
     -webkit-background-clip: initial;
 }
 
+/* ═══════════════════════════════════════════════════════════════ */
+/* ═══ SETTINGS — CARD GRID LAYOUT ══════════════════════════ */
+/* ═══════════════════════════════════════════════════════════════ */
+.settings-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 14px;
+    margin-bottom: 14px;
+}
+.setting-card {
+    background: var(--bg-2);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+.setting-card:hover {
+    border-color: var(--border-gold);
+    box-shadow: 0 4px 16px rgba(0,0,0,0.2);
+}
+.setting-card-full {
+    grid-column: 1 / -1;
+}
+.setting-card-prestige {
+    border-color: rgba(161,85,247,0.25);
+}
+.setting-card-prestige:hover {
+    border-color: rgba(161,85,247,0.6);
+    box-shadow: 0 4px 16px rgba(161,85,247,0.15);
+}
+.setting-card-danger {
+    border-color: rgba(240,68,68,0.2);
+}
+.setting-card-danger:hover {
+    border-color: rgba(240,68,68,0.45);
+    box-shadow: 0 4px 16px rgba(240,68,68,0.1);
+}
+.setting-card-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 16px 12px;
+    border-bottom: 1px solid var(--border);
+    background: var(--bg-3);
+}
+.setting-card-icon {
+    font-size: 1.5em;
+    line-height: 1;
+    flex-shrink: 0;
+}
+.setting-card-title {
+    font-family: var(--font-header);
+    font-size: 0.9em;
+    font-weight: 700;
+    color: var(--text);
+}
+.setting-card-sub {
+    font-size: 0.75em;
+    color: var(--text-3);
+    margin-top: 1px;
+    line-height: 1.3;
+}
+.setting-card-body {
+    padding: 14px 16px;
+}
+.setting-field-row {
+    margin-bottom: 8px;
+}
+.setting-field-row input {
+    width: 100%;
+    box-sizing: border-box;
+    margin: 0;
+}
+.setting-btn-row {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    align-items: center;
+}
+.setting-btn-row button,
+.setting-btn-row select {
+    flex-shrink: 0;
+}
+.setting-details summary {
+    cursor: pointer;
+    font-size: 0.83em;
+    color: var(--text-3);
+    padding: 4px 0;
+    user-select: none;
+}
+.setting-details summary:hover { color: var(--gold); }
+.setting-details[open] summary { color: var(--gold); margin-bottom: 4px; }
+
+/* ═══ Flow State skill — teal variant ═══════════════════════ */
+.skill-icon-teal { background: rgba(20,184,166,0.15); color: #14b8a6; border-color: rgba(20,184,166,0.3); }
+[data-skill-type="focus"] .skill-level-badge { border-color: rgba(20,184,166,0.4); color: #14b8a6; }
+[data-skill-type="focus"] button { background: linear-gradient(135deg,rgba(20,184,166,0.12),rgba(20,184,166,0.06)); border-color: rgba(20,184,166,0.3); color: #14b8a6; }
+[data-skill-type="focus"] button:hover:not(:disabled) { background: rgba(20,184,166,0.2); box-shadow: 0 4px 12px rgba(20,184,166,0.2); }
+
+/* Legacy .setting-group kept for smooth transition */
+.setting-group { display: none; }
+
 </style>
     <!-- Tone.js SFX -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.49/Tone.min.js"></script>
@@ -1989,6 +2093,22 @@ h2 .section-emoji,
                     </button>
                 </div>
 
+                <!-- Flow State (Focus Mastery) -->
+                <div class="skill-item" data-skill-type="focus">
+                    <div class="skill-icon-wrap skill-icon-teal">⏱</div>
+                    <div class="skill-desc">
+                        <div class="skill-name-row">
+                            <strong>Flow State</strong>
+                            <span class="skill-level-badge">Lv <span class="skill-level" id="focus-mastery-level">0</span>/8</span>
+                        </div>
+                        <span class="skill-flavor">"Deep focus is not just concentration — it's entering another state of mind entirely."</span>
+                        <span class="skill-effect" id="focus-mastery-effect">+0 XP per Focus Session completed</span>
+                    </div>
+                    <button id="buy-focus-mastery-btn" data-skill="focusMastery" data-base-cost="2" data-max-level="8">
+                        ↑ Upgrade <span class="skill-cost">(2 SP)</span>
+                    </button>
+                </div>
+
             </div>
 
             <div class="skill-sp-display">
@@ -2047,103 +2167,166 @@ h2 .section-emoji,
         <section id="settings-section" class="content-section settings">
             <h2>⚙️ Settings</h2>
 
-            <div class="setting-group">
-                <h3>☁️ Cloud Sync</h3>
-                <p class="setting-desc">Sync your save across devices using a free <strong><a href="https://jsonbin.io" target="_blank">JSONBin.io</a></strong> account.</p>
-                <div class="cloud-sync-row">
-                    <label>API Key (Master Key):</label>
-                    <input type="password" id="cloudApiKeyInput" placeholder="Paste your JSONBin Master Key..." autocomplete="off">
+            <!-- ── Row 1: Study & Progress ───────────────── -->
+            <div class="settings-grid">
+
+                <!-- Exam Countdown -->
+                <div class="setting-card">
+                    <div class="setting-card-header">
+                        <span class="setting-card-icon">📅</span>
+                        <div>
+                            <div class="setting-card-title">Exam Countdown</div>
+                            <div class="setting-card-sub">Displays a countdown in the header</div>
+                        </div>
+                    </div>
+                    <div class="setting-card-body">
+                        <div class="setting-field-row">
+                            <input type="text"  id="examNameInput" placeholder="Exam name (e.g. USMLE Step 1)">
+                        </div>
+                        <div class="setting-field-row">
+                            <input type="date"  id="examDateInput">
+                        </div>
+                        <div class="setting-btn-row">
+                            <button id="setExamBtn"   class="btn-info">Set</button>
+                            <button id="clearExamBtn" class="btn-ghost">Clear</button>
+                        </div>
+                    </div>
                 </div>
-                <div class="cloud-sync-row" id="cloud-bin-row" style="display:none">
-                    <label>Bin ID:</label>
-                    <span id="cloudBinIdDisplay" class="cloud-bin-id-display">—</span>
-                    <button id="copyBinIdBtn" class="cloud-small-btn">📋 Copy</button>
+
+                <!-- Streak Freezes -->
+                <div class="setting-card">
+                    <div class="setting-card-header">
+                        <span class="setting-card-icon">❄️</span>
+                        <div>
+                            <div class="setting-card-title">Streak Freezes</div>
+                            <div class="setting-card-sub">Auto-protects your streak on missed days · Max 3</div>
+                        </div>
+                    </div>
+                    <div class="setting-card-body">
+                        <div style="font-size:1.8em;margin-bottom:10px" id="streak-freeze-display">—</div>
+                        <div class="setting-btn-row">
+                            <button id="buyStreakFreezeBtn" class="btn-info">Buy Freeze · 10 SP</button>
+                        </div>
+                    </div>
                 </div>
-                <div class="cloud-sync-buttons">
-                    <button id="cloudSaveBtn" disabled>☁️ Save to Cloud</button>
-                    <button id="cloudLoadBtn" disabled>📥 Load from Cloud</button>
-                    <button id="cloudSetupBtn">🔑 Connect</button>
+
+                <!-- Review Reminders -->
+                <div class="setting-card">
+                    <div class="setting-card-header">
+                        <span class="setting-card-icon">🔔</span>
+                        <div>
+                            <div class="setting-card-title">Review Reminders</div>
+                            <div class="setting-card-sub">Browser notification when reviews are due</div>
+                        </div>
+                    </div>
+                    <div class="setting-card-body">
+                        <div class="setting-btn-row">
+                            <button id="enableNotificationsBtn" class="btn-info">Enable Reminders</button>
+                        </div>
+                        <p id="notification-status" class="setting-status" style="margin-top:8px"></p>
+                    </div>
                 </div>
-                <p id="cloud-sync-status" class="cloud-sync-status"></p>
+
+                <!-- Prestige -->
+                <div class="setting-card setting-card-prestige">
+                    <div class="setting-card-header">
+                        <span class="setting-card-icon">⚜</span>
+                        <div>
+                            <div class="setting-card-title">Prestige</div>
+                            <div class="setting-card-sub">Reach Level 102 · +15% XP forever · Max 5</div>
+                        </div>
+                    </div>
+                    <div class="setting-card-body">
+                        <p style="font-size:0.82em;color:var(--text-3);margin-bottom:10px;line-height:1.5">Keep topics, notes, achievements & streak. Reset level &amp; skills.</p>
+                        <span id="prestige-status" class="setting-status" style="display:block;margin-bottom:8px"></span>
+                        <div class="setting-btn-row">
+                            <button id="prestigeBtn" class="btn-purple">⚜ Prestige Now</button>
+                        </div>
+                    </div>
+                </div>
+
             </div>
 
-            <div class="setting-group">
-                <h3>📅 Exam Countdown</h3>
-                <p class="setting-desc">Set your board exam date. The countdown stays visible at the top of every session.</p>
-                <div class="cloud-sync-row">
-                    <label>Exam Name:</label>
-                    <input type="text" id="examNameInput" placeholder="e.g. USMLE Step 1">
+            <!-- ── Anki Integration (full-width) ─────────── -->
+            <div class="setting-card setting-card-full">
+                <div class="setting-card-header">
+                    <span class="setting-card-icon">📇</span>
+                    <div>
+                        <div class="setting-card-title">Anki Integration</div>
+                        <div class="setting-card-sub">Sync Anki reviews as questions &amp; XP · Requires AnkiConnect plugin</div>
+                    </div>
                 </div>
-                <div class="cloud-sync-row">
-                    <label>Exam Date:</label>
-                    <input type="date" id="examDateInput">
-                </div>
-                <div style="display:flex;gap:8px;flex-wrap:wrap">
-                    <button id="setExamBtn" class="btn-info">📅 Set Countdown</button>
-                    <button id="clearExamBtn" class="btn-ghost">✕ Clear</button>
-                </div>
-            </div>
-
-            <div class="setting-group">
-                <h3>❄️ Streak Freezes</h3>
-                <p class="setting-desc">Miss a day? A Streak Freeze auto-applies to protect your streak. Max 3 at a time.</p>
-                <div style="display:flex;align-items:center;gap:16px;flex-wrap:wrap">
-                    <span id="streak-freeze-display" class="freeze-display">—</span>
-                    <button id="buyStreakFreezeBtn">❄️ Buy Freeze (10 SP)</button>
-                </div>
-            </div>
-
-            <div class="setting-group">
-                <h3>📇 Anki Integration</h3>
-                <p class="setting-desc">Connect to <strong>Anki desktop</strong> via the free <a href="https://ankiweb.net/shared/info/2055492159" target="_blank">AnkiConnect plugin</a>. Completed reviews sync as XP automatically.</p>
-                <div class="anki-requirements">
-                    <strong>Setup (3 steps):</strong>
-                    <ol style="margin:6px 0 0 16px;line-height:1.9;font-size:0.95em">
-                        <li>Install <a href="https://ankiweb.net/shared/info/2055492159" target="_blank">AnkiConnect plugin</a> in Anki (code: 2055492159)</li>
-                        <li>In Anki → Tools → Add-ons → AnkiConnect → <strong>Config</strong>, add <code style="font-size:0.85em">"webCorsOriginList": ["*"]</code> (or your site's URL) → restart Anki</li>
-                        <li>Keep Anki open on the same computer, then click Test Connection below</li>
-                    </ol>
-                </div>
-                <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:10px">
-                    <button id="ankiTestBtn" class="btn-purple">🔌 Test Connection</button>
-                    <button id="ankiSyncBtn" disabled class="btn-success">📥 Sync Now</button>
-                </div>
-                <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;flex-wrap:wrap">
-                    <label style="font-size:0.88em;font-weight:600">Auto-sync every:</label>
-                    <select id="ankiSyncInterval" style="margin:0;width:auto">
-                        <option value="0">Off</option>
-                        <option value="5">5 minutes</option>
-                        <option value="15" selected>15 minutes</option>
-                        <option value="30">30 minutes</option>
-                    </select>
-                </div>
-                <p id="anki-status" class="setting-status"></p>
-            </div>
-
-            <div class="setting-group">
-                <h3>🔔 Review Reminders</h3>
-                <p class="setting-desc">Get a browser notification when reviews are due — even when the tab is closed.</p>
-                <button id="enableNotificationsBtn">🔔 Enable Reminders</button>
-                <p id="notification-status" class="setting-status"></p>
-            </div>
-
-            <div class="setting-group">
-                <h3>⚜ Prestige</h3>
-                <p class="setting-desc">Reach <strong>Level 102</strong> to Prestige. Keep topics, notes, achievements, streak. Reset level & skills. Gain <strong>+15% XP forever</strong>. Max 5.</p>
-                <div style="display:flex;align-items:center;gap:16px;flex-wrap:wrap">
-                    <span id="prestige-status" class="setting-status">No prestige yet</span>
-                    <button id="prestigeBtn" class="btn-purple">⚜ Prestige Now</button>
+                <div class="setting-card-body">
+                    <details class="setting-details">
+                        <summary>Setup instructions</summary>
+                        <ol style="margin:8px 0 0 18px;line-height:2;font-size:0.85em;color:var(--text-2)">
+                            <li>Install <a href="https://ankiweb.net/shared/info/2055492159" target="_blank">AnkiConnect plugin</a> (code: <strong>2055492159</strong>)</li>
+                            <li>Anki → Tools → Add-ons → AnkiConnect → Config → add your site URL to <code>webCorsOriginList</code> → restart Anki</li>
+                            <li>Keep Anki open, then click Test Connection</li>
+                        </ol>
+                    </details>
+                    <div class="setting-btn-row" style="margin-top:12px">
+                        <button id="ankiTestBtn" class="btn-purple">🔌 Test Connection</button>
+                        <button id="ankiSyncBtn" disabled class="btn-success">📥 Sync Now</button>
+                        <select id="ankiSyncInterval" style="margin:0;width:auto;font-size:0.85em">
+                            <option value="0">No auto-sync</option>
+                            <option value="5">Every 5 min</option>
+                            <option value="15" selected>Every 15 min</option>
+                            <option value="30">Every 30 min</option>
+                        </select>
+                    </div>
+                    <p id="anki-status" class="setting-status" style="margin-top:8px"></p>
                 </div>
             </div>
 
-            <div class="setting-group setting-group-danger">
-                <button id="importExportBtn">📤 Import / Export Progress</button>
-                <button id="resetBtn" class="danger-button">🗑 Reset Progress</button>
-                <p class="music-credit">
-                    Music: <a href="https://www.scottbuckley.com.au" target="_blank">Scott Buckley</a> (CC BY 4.0) ·
-                    <a href="https://incompetech.com" target="_blank">Kevin MacLeod</a> (CC BY 3.0)
-                </p>
+            <!-- ── Cloud Sync (full-width) ────────────────── -->
+            <div class="setting-card setting-card-full">
+                <div class="setting-card-header">
+                    <span class="setting-card-icon">☁️</span>
+                    <div>
+                        <div class="setting-card-title">Cloud Sync</div>
+                        <div class="setting-card-sub">Sync save across devices via <a href="https://jsonbin.io" target="_blank">JSONBin.io</a> (free)</div>
+                    </div>
+                </div>
+                <div class="setting-card-body">
+                    <div class="setting-field-row">
+                        <input type="password" id="cloudApiKeyInput" placeholder="JSONBin Master Key…" autocomplete="off" style="flex:1">
+                    </div>
+                    <div class="cloud-sync-row" id="cloud-bin-row" style="display:none;margin-bottom:8px">
+                        <label style="font-size:0.82em;color:var(--text-3);white-space:nowrap">Bin ID:</label>
+                        <span id="cloudBinIdDisplay" class="cloud-bin-id-display">—</span>
+                        <button id="copyBinIdBtn" class="cloud-small-btn">📋</button>
+                    </div>
+                    <div class="setting-btn-row">
+                        <button id="cloudSetupBtn">🔑 Connect</button>
+                        <button id="cloudSaveBtn" disabled>☁️ Save</button>
+                        <button id="cloudLoadBtn" disabled>📥 Load</button>
+                    </div>
+                    <p id="cloud-sync-status" class="cloud-sync-status" style="margin-top:8px"></p>
+                </div>
             </div>
+
+            <!-- ── Danger zone ───────────────────────────── -->
+            <div class="setting-card setting-card-full setting-card-danger">
+                <div class="setting-card-header">
+                    <span class="setting-card-icon">🗄️</span>
+                    <div>
+                        <div class="setting-card-title">Data &amp; Reset</div>
+                        <div class="setting-card-sub">Export your save or wipe all progress</div>
+                    </div>
+                </div>
+                <div class="setting-card-body">
+                    <div class="setting-btn-row">
+                        <button id="importExportBtn">📤 Import / Export</button>
+                        <button id="resetBtn" class="danger-button">🗑 Reset All Progress</button>
+                    </div>
+                    <p class="music-credit" style="margin-top:14px;font-size:0.75em;color:var(--text-3)">
+                        Music: <a href="https://www.scottbuckley.com.au" target="_blank">Scott Buckley</a> (CC BY 4.0) ·
+                        <a href="https://incompetech.com" target="_blank">Kevin MacLeod</a> (CC BY 3.0)
+                    </p>
+                </div>
+            </div>
+
         </section>
 
     </main>
@@ -2222,7 +2405,8 @@ document.addEventListener('DOMContentLoaded', () => {
         reviewMastery: 0,
         acceleratedRecall: 0,
         studyBurst: 0,
-        efficientLearner: 0
+        efficientLearner: 0,
+        focusMastery: 0
     };
     let totalSkillLevelsPurchased = 0;
     let masteredSpecialtyCount = 0;
@@ -2311,7 +2495,7 @@ document.addEventListener('DOMContentLoaded', () => {
     };
     let todayRecordTracking = { topics: 0, questions: 0, xp: 0, date: null };
 
-    // === Feature: AI Quiz ===
+    // === Feature: USMLE Quiz ===
     let quizInProgress = false;
 
     // === Feature: Quiz Performance History ===
@@ -2416,6 +2600,7 @@ let monthlyTaskProgress = {
     const MOMENTUM_XP_PER_STREAK_DAY = 0.005;  // per skill level: 0.5% per streak day
     const DEEP_UNDERSTANDING_XP_MULT = 0.30;    // per skill level: +30% XP for Solid ratings
     // Efficient Learner replaced by Deep Understanding — no constant needed
+    const FOCUS_MASTERY_XP_PER_POINT = 15; // +15 XP per focus session per skill level
     const REVIEW_INTERVALS_DAYS = [1, 3, 7, 14, 30, 60, 120, 180];
     const MS_PER_DAY = 24 * 60 * 60 * 1000;
     const SAVE_KEY = 'healersOdysseySave_v11';
@@ -2503,7 +2688,7 @@ let monthlyTaskProgress = {
           targets: [2, 4, 6], rewardsXP: [75, 130, 190] },
         { type: TASK_TYPES.QUIZ,
           name: '💡 Test Yourself', flavor: 'You cannot improve what you never measure.',
-          desc: 'Complete {target} AI USMLE quiz session(s)',
+          desc: 'Complete {target} USMLE quiz session(s)',
           diffLabels: ['Standard','Standard','Double'],
           targets: [1, 1, 2], rewardsXP: [120, 120, 220], rewardSP: 1 },
         { type: TASK_TYPES.FOCUS,
@@ -2574,7 +2759,7 @@ const MONTHLY_TASK_CONFIG = [
       metric: 'focusSessionsThisMonthCount' },
     { id: 'quiz_sessions_monthly',
       name: '💡 The Clinical Examiner', flavor: 'Test yourself until the test no longer scares you.',
-      desc: 'Complete {target} AI quiz sessions this month',
+      desc: 'Complete {target} USMLE quiz sessions this month',
       targets: [3, 6, 12], rewardsXP: [600, 1200, 2200], rewardsSP: [2, 3, 5],
       metric: 'quizSessionsThisMonthCount' },
 ];
@@ -2638,6 +2823,8 @@ const NUM_MONTHLY_TASKS_TO_OFFER = 3; // How many monthly tasks to show at a tim
     const studyBurstLevelEl = document.getElementById('study-burst-level');
     const buyStudyBurstBtnEl = document.getElementById('buy-study-burst-btn');
     const efficientLearnerLevelEl = document.getElementById('efficient-learner-level');
+    const focusMasteryLevelEl = document.getElementById('focus-mastery-level');
+    const buyFocusMasteryBtnEl = document.getElementById('buy-focus-mastery-btn');
     const buyEfficientLearnerBtnEl = document.getElementById('buy-efficient-learner-btn');
     const dailyTasksDateEl = document.getElementById('dailyTasksDate');
     const dailyTaskListEl = document.getElementById('dailyTaskList');
@@ -4831,6 +5018,8 @@ const achievementIcons = {
     "Accelerated Recall Master": "⏱️",
     "Streak Lord": "🔥",
     "The Honest Scholar": "💡",
+    "Flow Initiator": "⏱",
+    "Flow State Master": "🌊",
     "All Skills Maxed": "🏅",
 
     // Specialty — Individual Mastery
@@ -5004,12 +5193,12 @@ const achievementDescriptions = {
     "Skill Master": "Reach Level 5 in any single skill.",
     "Peak Performance": "Reach the maximum level in any skill.",
     "Total Skill Enthusiast": "Accumulate 10 total skill levels across all skills.",
-    "Skill Collector": "Accumulate 25 total skill levels.",
-    "Master of Many Skills": "Accumulate all 45 skill levels across every skill — a fully upgraded healer.",
-    "Ultimate Skill Mastery": "Accumulate 30 total skill levels — serious investment in your toolkit.",
+    "Skill Collector": "Accumulate 20 total skill levels.",
+    "Master of Many Skills": "Accumulate 48 total skill levels — nearly every skill fully upgraded.",
+    "Ultimate Skill Mastery": "Accumulate 30 total skill levels — a serious commitment to your toolkit.",
     "Skill Grandmaster": "Accumulate 35 total skill levels — a formidable set of abilities.",
     "Skill Omniscient": "Accumulate 40 total skill levels — almost everything upgraded.",
-    "Skill Sage": "Max out every single skill — all 45 levels purchased. Your skills are complete.",
+    "Skill Sage": "Reach all 53 skill levels — every skill maxed across all six trees. You are complete.",
     "Review Adept": "Upgrade the 'Review Mastery' skill at least once.",
     "Recall Expert": "Upgrade the 'Accelerated Recall' skill at least once.",
     "Burst Believer": "Invest your first Skill Point into Momentum — your streak starts earning you more XP.",
@@ -5019,6 +5208,8 @@ const achievementDescriptions = {
     "Accelerated Recall Master": "Reach the maximum level in the Accelerated Recall skill.",
     "Streak Lord": "Max out Momentum — your streak now adds up to +50% XP on everything you do.",
     "The Honest Scholar": "Max out Deep Understanding — your Solid ratings now reward true mastery.",
+    "Flow Initiator": "Invest your first Skill Point into Flow State — deep work now pays dividends.",
+    "Flow State Master": "Max out Flow State — each Focus Session now earns serious XP.",
     "All Skills Maxed": "Reach the maximum level in every single skill.",
 
     // Specialty — Individual Mastery
@@ -5458,6 +5649,9 @@ function getYearMonthString() {
     function getDeepUnderstandingMultiplier() {
         return skills.efficientLearner * DEEP_UNDERSTANDING_XP_MULT;
     }
+    function getFocusMasteryBonus() {
+        return skills.focusMastery * FOCUS_MASTERY_XP_PER_POINT;
+    }
     function gainXP(baseAmount) {
          if (baseAmount <= 0) return 0;
          const momentumMult = 1 + getMomentumBonus();
@@ -5537,6 +5731,10 @@ function getYearMonthString() {
          if (acceleratedRecallLevelEl && buyAcceleratedRecallBtnEl) updateSkillUI('acceleratedRecall', acceleratedRecallLevelEl, buyAcceleratedRecallBtnEl, (skills.acceleratedRecall * ACCELERATED_RECALL_PERCENT_PER_POINT * 100).toFixed(0));
          if (studyBurstLevelEl && buyStudyBurstBtnEl) updateSkillUI('studyBurst', studyBurstLevelEl, buyStudyBurstBtnEl, (getMomentumBonus()*100).toFixed(0));
          if (efficientLearnerLevelEl && buyEfficientLearnerBtnEl) updateSkillUI('efficientLearner', efficientLearnerLevelEl, buyEfficientLearnerBtnEl, (getDeepUnderstandingMultiplier()*100).toFixed(0));
+         if (focusMasteryLevelEl && buyFocusMasteryBtnEl) updateSkillUI('focusMastery', focusMasteryLevelEl, buyFocusMasteryBtnEl, skills.focusMastery * FOCUS_MASTERY_XP_PER_POINT);
+         // Update focus mastery effect text
+         const fmEffect = document.getElementById('focus-mastery-effect');
+         if (fmEffect) fmEffect.textContent = `+${skills.focusMastery * FOCUS_MASTERY_XP_PER_POINT} XP per Focus Session completed`;
 
          // Live skill effect text
          const eff = document.getElementById('xp-boost-effect');
@@ -5669,7 +5867,8 @@ function getYearMonthString() {
                      reviewMastery: data.skills?.reviewMastery || 0,
                      acceleratedRecall: data.skills?.acceleratedRecall || 0,
                      studyBurst: data.skills?.studyBurst || 0,
-                     efficientLearner: data.skills?.efficientLearner || 0
+                     efficientLearner: data.skills?.efficientLearner || 0,
+                     focusMastery: data.skills?.focusMastery || 0
                  };
                  totalSkillLevelsPurchased = data.totalSkillLevelsPurchased || 0;
                  masteredSpecialtyCount = data.masteredSpecialtyCount || 0;
@@ -5707,7 +5906,7 @@ if (!monthlyTaskProgress.levelAtMonthStart && data.level) {
                  xp = 0; level = 1; achievements = []; studied = {}; totalQuestions = 0;
                  totalReviewsCompleted = 0; questLog = []; dailyStreak = 0; longestStreak = 0;
                  lastStudyDate = null; lastStudyBurstDate = null; skillPoints = 0;
-                 skills = { xpBoost: 0, reviewMastery: 0, acceleratedRecall: 0, studyBurst: 0, efficientLearner: 0 };
+                 skills = { xpBoost: 0, reviewMastery: 0, acceleratedRecall: 0, studyBurst: 0, efficientLearner: 0, focusMastery: 0 };
                  totalSkillLevelsPurchased = 0; masteredSpecialtyCount = 0; currentTheme = 'dark';
                  dailyTasks = []; lastTasksGeneratedDate = null;
 monthlyTasks = []; lastMonthlyTasksGeneratedDate = null; monthlyTaskProgress = { topicsStudiedThisMonthCount:0, reviewsCompletedThisMonthCount:0, questionsAnsweredThisMonthCount:0, levelsGainedThisMonthCount:0, solidRatingsThisMonthCount:0, focusSessionsThisMonthCount:0, quizSessionsThisMonthCount:0, levelAtMonthStart:1 };
@@ -5719,7 +5918,7 @@ monthlyTasks = []; lastMonthlyTasksGeneratedDate = null; monthlyTaskProgress = {
              xp = 0; level = 1; achievements = []; studied = {}; totalQuestions = 0;
              totalReviewsCompleted = 0; questLog = []; dailyStreak = 0; longestStreak = 0;
              lastStudyDate = null; lastStudyBurstDate = null; skillPoints = 0;
-             skills = { xpBoost: 0, reviewMastery: 0, acceleratedRecall: 0, studyBurst: 0, efficientLearner: 0 };
+             skills = { xpBoost: 0, reviewMastery: 0, acceleratedRecall: 0, studyBurst: 0, efficientLearner: 0, focusMastery: 0 };
              totalSkillLevelsPurchased = 0; masteredSpecialtyCount = 0; currentTheme = 'dark';
              dailyTasks = []; lastTasksGeneratedDate = null;
 monthlyTasks = []; lastMonthlyTasksGeneratedDate = null; monthlyTaskProgress = { topicsStudiedThisMonthCount:0, reviewsCompletedThisMonthCount:0, questionsAnsweredThisMonthCount:0, levelsGainedThisMonthCount:0, solidRatingsThisMonthCount:0, focusSessionsThisMonthCount:0, quizSessionsThisMonthCount:0, levelAtMonthStart:1 };
@@ -6294,6 +6493,8 @@ if (getYearMonthString() === lastMonthlyTasksGeneratedDate) {
         "Accelerated Recall Master": {xp:750,sp:2},
         "Streak Lord": {xp:1000,sp:3},
         "The Honest Scholar": {xp:1000,sp:3},
+        "Flow Initiator": {xp:75,sp:0},
+        "Flow State Master": {xp:1000,sp:3},
         "All Skills Maxed": {xp:3000,sp:8},
         "Anatomy Expert": {xp:300,sp:1},
         "Physiology Pro": {xp:300,sp:1},
@@ -6518,12 +6719,12 @@ if (getYearMonthString() === lastMonthlyTasksGeneratedDate) {
     }
      function checkSkillAchievements() {
          if (totalSkillLevelsPurchased >= 1)  checkAchievement("First SP Spent");
-         if (totalSkillLevelsPurchased >= 45) checkAchievement("Skill Sage");
+         if (totalSkillLevelsPurchased >= 53) checkAchievement("Skill Sage");
     if (totalSkillLevelsPurchased >= 40) checkAchievement("Skill Omniscient");
     if (totalSkillLevelsPurchased >= 35) checkAchievement("Skill Grandmaster");
-    if (totalSkillLevelsPurchased >= 25) checkAchievement("Ultimate Skill Mastery");
-    if (totalSkillLevelsPurchased >= 45) checkAchievement("Master of Many Skills");
-    if (totalSkillLevelsPurchased >= 25) checkAchievement("Skill Collector");
+    if (totalSkillLevelsPurchased >= 30) checkAchievement("Ultimate Skill Mastery");
+    if (totalSkillLevelsPurchased >= 48) checkAchievement("Master of Many Skills");
+    if (totalSkillLevelsPurchased >= 20) checkAchievement("Skill Collector");
     if (totalSkillLevelsPurchased >= 10) checkAchievement("Total Skill Enthusiast");
 
          // Check for upgrading specific skills at least once
@@ -6532,6 +6733,8 @@ if (getYearMonthString() === lastMonthlyTasksGeneratedDate) {
     if (skills.acceleratedRecall >= 1) checkAchievement("Recall Expert");
     if (skills.studyBurst >= 1) checkAchievement("Burst Believer"); // Already called when skill used
     if (skills.efficientLearner >= 1) checkAchievement("Efficient Expert");
+    if (skills.focusMastery >= 1) checkAchievement("Flow Initiator");
+    if (skills.focusMastery >= parseInt(buyFocusMasteryBtnEl?.dataset?.maxLevel || '99')) checkAchievement("Flow State Master");
 
     // Check for reaching Level 5 in any single skill
     if (Object.values(skills).some(level => level >= 5)) checkAchievement("Skill Master");
@@ -6613,7 +6816,7 @@ if (getYearMonthString() === lastMonthlyTasksGeneratedDate) {
                         'Master of Many Skills','Ultimate Skill Mastery','Skill Grandmaster',
                         'Skill Omniscient','Skill Sage',
                         'XP Boost Master','Review Mastery Master','Accelerated Recall Master',
-                        'Streak Lord','The Honest Scholar','All Skills Maxed']
+                        'Streak Lord','The Honest Scholar','Flow Initiator','Flow State Master','All Skills Maxed']
             },
             {
                 label: '✅ Daily Tasks',
@@ -6703,7 +6906,8 @@ if (getYearMonthString() === lastMonthlyTasksGeneratedDate) {
             const catEarned = validNames.filter(n => achievements.includes(n)).length;
             const catKey = `ach-cat-${catIdx}`;
             // Collapsed state persists per session via dataset
-            const isCollapsed = achievementListEl.dataset[catKey] === 'collapsed';
+            // Start collapsed unless user has explicitly opened this category
+            const isCollapsed = achievementListEl.dataset[catKey] !== 'open';
 
             // Category header — clickable
             const catHeader = document.createElement('li');
@@ -6747,7 +6951,7 @@ if (getYearMonthString() === lastMonthlyTasksGeneratedDate) {
             catHeader.addEventListener('click', () => {
                 const nowCollapsed = itemsContainer.style.display !== 'none';
                 itemsContainer.style.display = nowCollapsed ? 'none' : 'block';
-                achievementListEl.dataset[catKey] = nowCollapsed ? 'collapsed' : 'open';
+                achievementListEl.dataset[catKey] = nowCollapsed ? 'collapsed' : 'open';  // persist
                 catHeader.querySelector('.ach-cat-toggle').textContent = nowCollapsed ? '►' : '▼';
             });
         });
@@ -6942,11 +7146,11 @@ if (getYearMonthString() === lastMonthlyTasksGeneratedDate) {
                          noteBtn.onclick = (e) => { e.stopPropagation(); openNoteForDisease(specName, diseaseName); };
                          wrapper.appendChild(noteBtn);
 
-                         // AI Quiz button
+                         // USMLE Quiz button
                          const quizBtnSpec = document.createElement('button');
                          quizBtnSpec.className = 'note-btn quiz-btn-spec';
                          quizBtnSpec.textContent = '💡';
-                         quizBtnSpec.title = 'AI Quiz — test yourself on this topic';
+                         quizBtnSpec.title = 'USMLE Quiz — test yourself on this topic';
                          quizBtnSpec.onclick = (e) => { e.stopPropagation(); launchAIQuiz(specName, diseaseName); };
                          wrapper.appendChild(quizBtnSpec);
                      } else {
@@ -7092,7 +7296,7 @@ function showXpToast(xpAmount, sourceText = '') {
 
                   const quizBtn = document.createElement('button');
                   quizBtn.textContent = '💡 Quiz';
-                  quizBtn.title = 'Test yourself with AI-generated MCQ questions';
+                  quizBtn.title = 'Test yourself with USMLE clinical questions';
                   quizBtn.style.cssText = 'font-size:0.8em;padding:5px 12px;margin:0 0 0 4px;flex-shrink:0;background:linear-gradient(135deg,#7c3aed,#a855f7);color:#fff;border-radius:8px;border:none;cursor:pointer';
                   quizBtn.onclick = () => launchAIQuiz(item.spec, item.dis);
                   li.appendChild(quizBtn);
@@ -8271,7 +8475,7 @@ function renderMonthlyTasksUI() {
         focusTimerActive = false; focusTimerPaused = false;
         clearInterval(focusTimerInterval); focusTimerInterval = null;
         if (completed) {
-            const bonusXP = gainXP(FOCUS_TIMER_BONUS_XP);
+            const bonusXP = gainXP(FOCUS_TIMER_BONUS_XP + getFocusMasteryBonus());
             totalStudyMinutes += 25; focusSessionsCompleted++;
             playSound('levelUp');
             triggerCelebration(`🎉 Focus Session Complete!<br><span style="font-size:0.55em">+${bonusXP} XP · ${formatStudyTime(totalStudyMinutes)} total</span>`);
@@ -9716,6 +9920,7 @@ updateActiveMonthlyTasksProgress(); // Ensure initial progress syncs from loaded
     buyAcceleratedRecallBtnEl?.addEventListener('click', () => handleBuySkill(buyAcceleratedRecallBtnEl));
     buyStudyBurstBtnEl?.addEventListener('click', () => handleBuySkill(buyStudyBurstBtnEl));
     buyEfficientLearnerBtnEl?.addEventListener('click', () => handleBuySkill(buyEfficientLearnerBtnEl));
+    buyFocusMasteryBtnEl?.addEventListener('click', () => handleBuySkill(buyFocusMasteryBtnEl));
 
 // --- Modal Close Button Listeners ---
 closeResetModalBtnEl?.addEventListener('click', closeResetModal);
