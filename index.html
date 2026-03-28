@@ -1383,18 +1383,13 @@ body.light-mode .sidebar-nav li a:hover {
     box-shadow: 0 4px 24px rgba(0,0,0,0.5), -2px 0 0 var(--gold-dim);
 }
 
-/* Section headings — stronger gold gradient */
+/* Section headings — solid gold, emoji-safe */
 h2 {
-    background: linear-gradient(90deg, var(--gold) 0%, var(--gold-bright) 60%, var(--gold-deep) 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
+    color: var(--gold);
     border-bottom-color: var(--border-gold);
 }
 body.light-mode h2 {
-    background: linear-gradient(90deg, var(--gold-deep) 0%, var(--gold) 100%);
-    -webkit-background-clip: text;
-    background-clip: text;
+    color: var(--gold-deep);
 }
 
 /* Sidebar nav — active highlight */
@@ -1456,12 +1451,9 @@ body.light-mode h2 {
     100% { transform: scale(1.08); filter: drop-shadow(0 0 20px rgba(244,196,48,0.8)); }
 }
 
-/* Music player — track name gradient */
+/* Music player — track name, emoji-safe */
 .current-track-name {
-    background: linear-gradient(90deg, var(--gold), var(--text-2));
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
+    color: var(--text-2);
     font-style: normal;
     font-weight: 500;
 }
@@ -1579,15 +1571,12 @@ body.light-mode h2 {
 /* ═══ FINAL UI POLISH ════════════════════════════════════════ */
 /* ═══════════════════════════════════════════════════════════════ */
 
-/* Section titles — gold gradient */
+/* Section titles — solid gold, emoji-safe */
 .content-section h2 {
-    background: linear-gradient(90deg, var(--gold), var(--gold-bright));
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
+    color: var(--gold);
 }
 body.light-mode .content-section h2 {
-    -webkit-text-fill-color: var(--gold);
+    color: var(--gold-deep);
 }
 
 /* Skill badges — clean level number */
@@ -1671,6 +1660,32 @@ body.light-mode .content-section h2 {
 .profile-actions {
     gap: 8px;
     margin-top: 10px;
+}
+
+/* ═══ Emoji reset — prevent gradient text-fill coloring emoji ═══ */
+/* Force all emoji in gradient-text elements back to normal rendering */
+h1, h2, h3,
+.content-section h2,
+.main-header h1,
+.nav-icon,
+.qs-icon,
+.ach-cat-label,
+.achievement-name,
+.task-name,
+.skill-icon-wrap,
+.combo-display,
+#earned-title,
+.profile-level-title {
+    font-variant-emoji: emoji;
+}
+/* Emoji within gradient text elements render normally via this override */
+h2 .section-emoji,
+.nav-icon,
+.qs-icon {
+    -webkit-text-fill-color: initial;
+    background: none;
+    background-clip: initial;
+    -webkit-background-clip: initial;
 }
 
 </style>
