@@ -2464,26 +2464,39 @@ document.addEventListener('DOMContentLoaded', () => {
     // === Feature: Earned Titles ===
     let activeTitle = '';
     const TITLE_DEFINITIONS = [
-        // [condition_fn, title_string]  — ordered by prestige (best first)
-        { check: () => prestigeLevel >= 5,                           title: '👑 The Legendary Healer' },
-        { check: () => prestigeLevel >= 3,                           title: '⚜ The Elite Physician' },
-        { check: () => prestigeLevel >= 1,                           title: '✦ The Initiated' },
-        { check: () => masteredSpecialtyCount >= 38,                 title: '🌌 Omniscient Physician' },
-        { check: () => masteredSpecialtyCount >= 20,                 title: '🌟 Master of Medicine' },
-        { check: () => masteredSpecialtyCount >= 10,                 title: '⭐ Specialist' },
-        { check: () => achievements.includes('Foundational Five'),   title: '🏛️ Master of the Foundations' },
-        { check: () => achievements.includes('Organ System Savant'), title: '⚙️ The Systems Thinker' },
-        { check: () => achievements.includes('Infection Fighter'),   title: '🛡️ Infection Fighter' },
-        { check: () => dailyStreak >= 365,                           title: '🔥 The Relentless' },
-        { check: () => dailyStreak >= 100,                           title: '🔥 The Consistent' },
-        { check: () => dailyStreak >= 30,                            title: '🔥 The Dedicated' },
-        { check: () => totalQuestions >= 10000,                      title: '🎯 Question Conqueror' },
-        { check: () => totalReviewsCompleted >= 1000,                title: '💡 Memory Titan' },
-        { check: () => level >= 100,                                 title: '🌌 Cosmic Physician' },
-        { check: () => level >= 50,                                  title: '🐉 Mythical Medic' },
-        { check: () => level >= 20,                                  title: '🏅 Grand Healer' },
-        { check: () => level >= 5,                                   title: '⚕️ Adept Healer' },
-        { check: () => true,                                         title: '⚕️ Healer in Training' },
+        // Ordered best-first — first match wins
+        // ── Prestige titles ──────────────────────────────────────────
+        { check: () => prestigeLevel >= 5,                           title: '👑 Immortal Physician'       },
+        { check: () => prestigeLevel >= 3,                           title: '⚜ Veteran of Medicine'       },
+        { check: () => prestigeLevel >= 1,                           title: '✦ The Reborn'                },
+        // ── Mastery titles ───────────────────────────────────────────
+        { check: () => masteredSpecialtyCount >= 38,                 title: '🌌 The Complete Physician'   },
+        { check: () => masteredSpecialtyCount >= 25,                 title: '🌟 Polymath of Medicine'     },
+        { check: () => masteredSpecialtyCount >= 15,                 title: '⭐ Board-Certified Specialist'},
+        { check: () => masteredSpecialtyCount >= 5,                  title: '📚 Clinical Scholar'         },
+        // ── Combination achievement titles ───────────────────────────
+        { check: () => achievements.includes('Surgical Suite Star'), title: '🔪 The Surgeon'             },
+        { check: () => achievements.includes('Foundational Five'),   title: '🏛️ Foundation Builder'      },
+        { check: () => achievements.includes('Organ System Savant'), title: '⚙️ Systems Physician'        },
+        { check: () => achievements.includes('Infection Fighter'),   title: '🛡️ Infection Specialist'     },
+        { check: () => achievements.includes('Mind & Body Master'),  title: '🧘 The Holistic Healer'      },
+        // ── Streak titles ────────────────────────────────────────────
+        { check: () => dailyStreak >= 365,                           title: '🔥 The Relentless'           },
+        { check: () => dailyStreak >= 100,                           title: '🔥 The Consistent'           },
+        { check: () => dailyStreak >= 30,                            title: '🔥 The Dedicated'            },
+        // ── Volume titles ────────────────────────────────────────────
+        { check: () => focusSessionsCompleted >= 100,                title: '⏱ The Deep Worker'          },
+        { check: () => totalQuestions >= 10000,                      title: '🎯 The Question Master'      },
+        { check: () => totalReviewsCompleted >= 1000,                title: '🔗 The Iron Scholar'         },
+        // ── Level titles ─────────────────────────────────────────────
+        { check: () => level >= 90,                                  title: '🌠 The Transcendent'         },
+        { check: () => level >= 70,                                  title: '🐉 The Mythical'             },
+        { check: () => level >= 50,                                  title: '🏆 The Elite'                },
+        { check: () => level >= 30,                                  title: '🏅 Senior Physician'         },
+        { check: () => level >= 16,                                  title: '⚕️ Attending Physician'      },
+        { check: () => level >= 9,                                   title: '🩺 Resident Physician'       },
+        { check: () => level >= 3,                                   title: '📋 Medical Intern'           },
+        { check: () => true,                                         title: '⚕️ Healer in Training'       },
     ];
 
     // === Feature: Personal Records ===
@@ -2712,17 +2725,17 @@ let monthlyTaskProgress = {
 
     // Profile Picture Progression Map (User updated)
     const PROFILE_PICTURES = {
-         1: { src: 'https://i.imgur.com/KaLxLtB.png', title: 'Level 1 Healer' },
-         3: { src: 'https://i.imgur.com/JTzVsSt.png', title: 'Level 3 Apprentice' },
-         5: { src: 'https://i.imgur.com/UObkqeL.png', title: 'Level 5 Adept' },
-         7: { src: 'https://i.imgur.com/V5tMYFB.png', title: 'Level 7 Adept II' },
-         10: { src: 'https://i.imgur.com/1MlNYow.png', title: 'Level 10 Resident' },
-         15: { src: 'https://i.imgur.com/zbbggVS.png', title: 'Level 15 Senior Resident' },
-         20: { src: 'https://i.imgur.com/J7XxWsA.png', title: 'Level 20 Specialist' },
-         30: { src: 'https://i.imgur.com/sdBffnQ.png', title: 'Level 30 Attending' },
-         50: { src: 'https://i.imgur.com/9J0UFd2.png', title: 'Level 50 Chief' },
-         75: { src: 'https://i.imgur.com/n1Bpdoq.png', title: 'Level 75 Legend' },
-         100: { src: 'https://i.imgur.com/RzGkeGM.png', title: 'Level 100 Divine' }
+         1:   { src: 'https://i.imgur.com/KaLxLtB.png', title: 'Pre-Med Student'       },
+         3:   { src: 'https://i.imgur.com/JTzVsSt.png', title: 'Medical Student'        },
+         5:   { src: 'https://i.imgur.com/UObkqeL.png', title: 'Clinical Clerk'         },
+         7:   { src: 'https://i.imgur.com/V5tMYFB.png', title: 'Junior Intern'          },
+         10:  { src: 'https://i.imgur.com/1MlNYow.png', title: 'Medical Intern'         },
+         15:  { src: 'https://i.imgur.com/zbbggVS.png', title: 'Junior Resident'        },
+         20:  { src: 'https://i.imgur.com/J7XxWsA.png', title: 'Senior Resident'        },
+         30:  { src: 'https://i.imgur.com/sdBffnQ.png', title: 'Chief Resident'         },
+         50:  { src: 'https://i.imgur.com/9J0UFd2.png', title: 'Attending Physician'    },
+         75:  { src: 'https://i.imgur.com/n1Bpdoq.png', title: 'Consultant Specialist'  },
+         100: { src: 'https://i.imgur.com/RzGkeGM.png', title: 'Professor of Medicine'  }
      };
 
 // Monthly Challenge Configuration
@@ -5105,10 +5118,17 @@ const achievementIcons = {
     "Speed Learner": "⚡",
     "Daily Triple": "🎳",
         // Focus Timer
-    "First Focus": "⏱️",
-    "Focus Warrior": "🏃",
-    "Deep Work Master": "🔬",
-    "Night Cram": "🌙",
+    "First Focus":          "⏱️",
+    "Focus Adept":          "🎯",
+    "Focus Warrior":        "🏃",
+    "Deep Work Master":     "💪",
+    "Focus Centurion":      "🏅",
+    "Relentless Focuser":   "🔥",
+    "The Pomodoro Sage":    "⏳",
+    "Focus Legend":         "👑",
+    "Night Cram":           "🌙",
+    "Dawn Session":         "🌅",
+    "Weekend Scholar":      "📖",
     // Quiz Performance
     "Quiz Ace": "🎯",
     "Quiz Veteran": "📋",
@@ -5142,23 +5162,23 @@ const achievementDescriptions = {
     "All Topics Studied": "Study every single topic in the game — the ultimate completionist.",
 
     // Level Milestones
-    "Clinical Apprentice": "Reach Level 1 — Welcome, Healer. Your journey begins.",
-    "Medical Intern": "Reach Level 3 — Physiology unlocks. You are learning the language.",
-    "Adept Healer": "Reach Level 6 — Biochemistry unlocks. The chemistry beneath all disease.",
-    "Resident of Remedies": "Reach Level 9 — Pharmacology unlocks. The Foundational Five are complete.",
-    "Senior Resident": "Reach Level 12 — Pathology unlocks. The bridge between science and clinical medicine.",
-    "Attending Physician": "Reach Level 16 — Internal Medicine unlocks. The trunk of the entire clinical tree.",
-    "Grand Healer": "Reach Level 20 — Pediatrics unlocks. Children are not small adults.",
-    "World-Class Diagnostician": "Reach Level 25 — Halfway through the foundational curriculum.",
-    "Epic Healer": "Reach Level 30 — OB/GYN unlocks. Half the core curriculum done.",
-    "Chief of Medicine": "Reach Level 35 — Cardiology unlocks. The organ systems begin.",
-    "Legendary Scholar": "Reach Level 40 — The major organ systems are opening up.",
-    "Supreme Healer": "Reach Level 50 — You have outlasted most medical learners.",
-    "Mythical Medic": "Reach Level 60 — Deep specialty territory. Fewer and fewer have reached this.",
-    "Timeless Scholar": "Reach Level 70 — You are in the realm of specialists.",
-    "Divine Insight": "Reach Level 80 — Advanced specialty territory. A lifetime of knowledge behind you.",
-    "Transcendent Healer": "Reach Level 90 — The final specialties approach. You are near the summit.",
-    "Cosmic Physician": "Reach Level 102 — Every specialty unlocked. The complete physician.",
+    "Clinical Apprentice": "Reach Level 1 — You have taken the first step. Every physician starts here.",
+    "Medical Intern": "Reach Level 3 — Physiology unlocks. The body's language is starting to make sense.",
+    "Adept Healer": "Reach Level 6 — Biochemistry unlocks. You are reading disease at the molecular level.",
+    "Resident of Remedies": "Reach Level 9 — Pharmacology unlocks. You now understand how to treat, not just diagnose.",
+    "Senior Resident": "Reach Level 12 — Pathology unlocks. You can see disease at the cellular level.",
+    "Attending Physician": "Reach Level 16 — Internal Medicine unlocks. The backbone of clinical practice is yours.",
+    "Grand Healer": "Reach Level 20 — Pediatrics unlocks. Two decades of dedication. A significant milestone.",
+    "World-Class Diagnostician": "Reach Level 25 — Emergency Medicine and Surgery await. The clinical world is opening up.",
+    "Epic Healer": "Reach Level 30 — The major organ system specialties begin. You have outpaced most learners.",
+    "Chief of Medicine": "Reach Level 35 — Deep systems territory. Cardiology, Pulmonology, Neurology await.",
+    "Legendary Scholar": "Reach Level 40 — You have studied more medicine than most physicians ever will.",
+    "Supreme Healer": "Reach Level 50 — Half a century of levels. The surgical and procedural specialties open up.",
+    "Mythical Medic": "Reach Level 60 — Fewer than 1% of learners reach here. You are extraordinary.",
+    "Timeless Scholar": "Reach Level 70 — You have mastered more medicine than most subspecialists know.",
+    "Divine Insight": "Reach Level 80 — You can see connections across specialties that most physicians miss.",
+    "Transcendent Healer": "Reach Level 90 — The summit is visible. Only a handful of people in the world study this deeply.",
+    "Cosmic Physician": "Reach Level 102 — Every specialty unlocked. You have done what takes most physicians a lifetime.",
 
     // Question Milestones
     "Quiz Knight": "Answer 50 questions.",
@@ -5295,10 +5315,17 @@ const achievementDescriptions = {
     "Speed Learner": "Study 10 topics in a single day — a productive day of learning.",
     "Daily Triple": "Answer questions, study a topic, AND complete a review all in one day.",
     // Focus Timer
-    "First Focus": "Complete your very first 25-minute Focus Session — deep work begins here.",
-    "Focus Warrior": "Complete 10 Focus Sessions — you have claimed 250 minutes of undivided attention.",
-    "Deep Work Master": "Complete 50 Focus Sessions — 20+ hours of pure, uninterrupted study.",
-    "Night Cram": "Complete a Focus Session after 10 PM — burning the midnight oil properly.",
+    "First Focus":          "Complete your very first 25-minute Focus Session — deep work begins here.",
+    "Focus Adept":          "Complete 5 Focus Sessions — the habit of deep work is forming.",
+    "Focus Warrior":        "Complete 25 Focus Sessions — over 10 hours of undivided study time.",
+    "Deep Work Master":     "Complete 50 Focus Sessions — 20+ hours of pure, uninterrupted study.",
+    "Focus Centurion":      "Complete 100 Focus Sessions — you have given medicine 40+ hours of your deepest attention.",
+    "Relentless Focuser":   "Complete 250 Focus Sessions — over 100 hours of flow state. This is who you are.",
+    "The Pomodoro Sage":    "Complete 500 Focus Sessions — 200+ hours of deep work. A rare discipline.",
+    "Focus Legend":         "Complete 1,000 Focus Sessions — 400+ hours of focused study across your lifetime. Legendary.",
+    "Night Cram":           "Complete a Focus Session after 10 PM — burning the midnight oil properly.",
+    "Dawn Session":         "Complete a Focus Session before 6 AM — the world is quiet, and you are already working.",
+    "Weekend Scholar":      "Complete a Focus Session on both Saturday and Sunday in the same weekend.",
     // Quiz Performance
     "Quiz Ace": "Score 100% on a USMLE quiz session — perfect clinical reasoning.",
     "Quiz Veteran": "Complete 20 quiz sessions — you test yourself, not just study.",
@@ -6462,6 +6489,13 @@ if (getYearMonthString() === lastMonthlyTasksGeneratedDate) {
         "Boss Slayer": {xp:2000,sp:5},
         "First Focus": {xp:50,sp:0},
         "Focus Warrior": {xp:300,sp:1},
+        "Focus Adept":          {xp:100,  sp:0},
+        "Focus Centurion":      {xp:500,  sp:2},
+        "Relentless Focuser":   {xp:1000, sp:3},
+        "The Pomodoro Sage":    {xp:2000, sp:5},
+        "Focus Legend":         {xp:5000, sp:8},
+        "Dawn Session":         {xp:150,  sp:0},
+        "Weekend Scholar":      {xp:200,  sp:1},
         "Deep Work Master": {xp:1000,sp:3},
         "Task Taker": {xp:50,sp:0},
         "Task Master": {xp:100,sp:0},
@@ -6852,7 +6886,7 @@ if (getYearMonthString() === lastMonthlyTasksGeneratedDate) {
             },
             {
                 label: '⏱ Focus Sessions',
-                names: ['First Focus','Focus Warrior','Deep Work Master','Night Cram']
+                names: ['First Focus','Focus Adept','Focus Warrior','Deep Work Master','Focus Centurion','Relentless Focuser','The Pomodoro Sage','Focus Legend','Night Cram','Dawn Session','Weekend Scholar']
             },
             {
                 label: '📝 USMLE Quiz',
@@ -8485,9 +8519,31 @@ function renderMonthlyTasksUI() {
             if (getYearMonthString() === lastMonthlyTasksGeneratedDate)
                 monthlyTaskProgress.focusSessionsThisMonthCount = (monthlyTaskProgress.focusSessionsThisMonthCount||0) + 1;
             checkAchievement('First Focus');
-            if (focusSessionsCompleted >= 10) checkAchievement('Focus Warrior');
-            if (focusSessionsCompleted >= 50) checkAchievement('Deep Work Master');
-            if (new Date().getHours() >= 22)  checkAchievement('Night Cram');
+            if (focusSessionsCompleted >= 5)    checkAchievement('Focus Adept');
+            if (focusSessionsCompleted >= 25)   checkAchievement('Focus Warrior');
+            if (focusSessionsCompleted >= 50)   checkAchievement('Deep Work Master');
+            if (focusSessionsCompleted >= 100)  checkAchievement('Focus Centurion');
+            if (focusSessionsCompleted >= 250)  checkAchievement('Relentless Focuser');
+            if (focusSessionsCompleted >= 500)  checkAchievement('The Pomodoro Sage');
+            if (focusSessionsCompleted >= 1000) checkAchievement('Focus Legend');
+            const nowHour = new Date().getHours();
+            if (nowHour >= 22 || nowHour < 0)   checkAchievement('Night Cram');
+            if (nowHour >= 4 && nowHour < 6)    checkAchievement('Dawn Session');
+            // Weekend Scholar: completed a session on both days this weekend
+            const today = new Date();
+            const dayOfWeek = today.getDay(); // 0=Sun, 6=Sat
+            if (dayOfWeek === 0 || dayOfWeek === 6) {
+                const todayStr = getTodayDateString();
+                const weekendKey = `weekend_focus_${todayStr.slice(0,7)}`; // YYYY-MM
+                const otherDay = dayOfWeek === 6 ? 0 : 6;
+                // Check if we already did a session on the other weekend day this week
+                const weekStart = new Date(today); weekStart.setDate(today.getDate() - dayOfWeek);
+                const sat = new Date(weekStart); sat.setDate(weekStart.getDate() + 6);
+                const sun = new Date(weekStart); sun.setDate(weekStart.getDate() + 7);
+                const satStr = `${sat.getFullYear()}-${String(sat.getMonth()+1).padStart(2,'0')}-${String(sat.getDate()).padStart(2,'0')}`;
+                const sunStr = `${sun.getFullYear()}-${String(sun.getMonth()+1).padStart(2,'0')}-${String(sun.getDate()).padStart(2,'0')}`;
+                if (studyHeatmap[satStr]?.focus && studyHeatmap[sunStr]?.focus) checkAchievement('Weekend Scholar');
+            }
             updateActiveMonthlyTasksProgress();
             renderHeatmap(); updateAndSave();
         }
