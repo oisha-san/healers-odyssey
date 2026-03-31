@@ -1783,29 +1783,9 @@ h2 .section-emoji,
 .setting-details summary:hover { color: var(--gold); }
 .setting-details[open] summary { color: var(--gold); margin-bottom: 4px; }
 
-/* ═══ Flow State skill — teal variant ═══════════════════════ */
+/* ═══ Flow State skill — teal left border + icon only ═══════ */
+/* Badge and button match all other skills (gold badge, blue button) */
 .skill-icon-teal { background: rgba(20,184,166,0.15); color: #14b8a6; border-color: rgba(20,184,166,0.3); }
-
-/* Use higher specificity to override the default gold badge */
-.skill-item[data-skill-type="focus"] .skill-level-badge {
-    background: rgba(20,184,166,0.12) !important;
-    border-color: rgba(20,184,166,0.4) !important;
-    color: #14b8a6 !important;
-}
-/* Override the blue default button for focus skill */
-.skill-item[data-skill-type="focus"] button {
-    background: linear-gradient(135deg, rgba(20,184,166,0.15), rgba(20,184,166,0.08)) !important;
-    border: 1px solid rgba(20,184,166,0.35) !important;
-    color: #14b8a6 !important;
-}
-.skill-item[data-skill-type="focus"] button:hover:not(:disabled) {
-    background: rgba(20,184,166,0.25) !important;
-    box-shadow: 0 4px 12px rgba(20,184,166,0.25) !important;
-    border-color: rgba(20,184,166,0.6) !important;
-}
-.skill-item[data-skill-type="focus"] button:disabled {
-    opacity: 0.5;
-}
 
 /* Legacy .setting-group kept for smooth transition */
 .setting-group { display: none; }
@@ -5279,22 +5259,18 @@ const achievementIcons = {
 
     // Level Milestones
     "Clinical Apprentice": "⚕️",
+    "Medical Student": "🎓",
     "Medical Intern": "👨‍⚕️",
+    "Junior Resident": "🧑‍⚕️",
+    "Resident Physician": "🩺",
+    "Senior Physician": "🏅",
+    "The Elite": "🏆",
+    "The Mythical": "🐉",
+    "The Transcendent": "🌠",
     "Adept Healer": "⚗️",
     "Resident of Remedies": "🏥",
     "Senior Resident": "🧑‍⚕️",
     "Attending Physician": "👩‍⚕️",
-    "Grand Healer": "🏅",
-    "World-Class Diagnostician": "🔍",
-    "Epic Healer": "🔥",
-    "Chief of Medicine": "🥇",
-    "Legendary Scholar": "🏆",
-    "Supreme Healer": "🌟",
-    "Mythical Medic": "🐉",
-    "Timeless Scholar": "⏳",
-    "Divine Insight": "💡",
-    "Transcendent Healer": "✨",
-    "Cosmic Physician": "🌌",
 
     // Question Milestones
     "Quiz Knight": "🛡️",
@@ -5475,23 +5451,19 @@ const achievementDescriptions = {
     "All Topics Studied": "Study every single topic in the game — the ultimate completionist.",
 
     // Level Milestones
-    "Clinical Apprentice": "Reach Level 1 — You have taken the first step. Every physician starts here.",
-    "Medical Intern": "Reach Level 3 — Physiology unlocks. The body's language is starting to make sense.",
-    "Adept Healer": "Reach Level 6 — Biochemistry unlocks. You are reading disease at the molecular level.",
+    "Clinical Apprentice": "Reach Level 1 — Welcome. Every great physician started here.",
+    "Junior Resident": "Reach Level 30 — Clinical Clerk. Your first real taste of independent medicine.",
+    "Medical Intern": "Reach Level 20 — Medical Intern. The foundations are complete. Clinical medicine begins.",
+    "Resident Physician": "Reach Level 40 — You have earned the rank of Resident Physician.",
+    "Senior Physician": "Reach Level 60 — Senior Resident level. Deep clinical expertise earned.",
+    "The Elite": "Reach Level 75 — Chief Resident. You are in the top tier of learners.",
+    "The Mythical": "Reach Level 85 — Approaching the summit of medical mastery. Almost no one reaches this.",
+    "The Transcendent": "Reach Level 102 — Every specialty unlocked. You are The Transcendent.",
+    "Medical Student": "Reach Level 3 — Physiology unlocks. The body's language begins to make sense.",
+    "Adept Healer": "Reach Level 6 — Biochemistry unlocks. Reading disease at the molecular level.",
     "Resident of Remedies": "Reach Level 9 — Pharmacology unlocks. You now understand how to treat, not just diagnose.",
     "Senior Resident": "Reach Level 12 — Pathology unlocks. You can see disease at the cellular level.",
-    "Attending Physician": "Reach Level 16 — Internal Medicine unlocks. The backbone of clinical practice is yours.",
-    "Grand Healer": "Reach Level 20 — Pediatrics unlocks. Two decades of dedication. A significant milestone.",
-    "World-Class Diagnostician": "Reach Level 25 — Emergency Medicine and Surgery await. The clinical world is opening up.",
-    "Epic Healer": "Reach Level 30 — The major organ system specialties begin. You have outpaced most learners.",
-    "Chief of Medicine": "Reach Level 35 — Deep systems territory. Cardiology, Pulmonology, Neurology await.",
-    "Legendary Scholar": "Reach Level 40 — You have studied more medicine than most physicians ever will.",
-    "Supreme Healer": "Reach Level 50 — Half a century of levels. The surgical and procedural specialties open up.",
-    "Mythical Medic": "Reach Level 60 — Fewer than 1% of learners reach here. You are extraordinary.",
-    "Timeless Scholar": "Reach Level 70 — You have mastered more medicine than most subspecialists know.",
-    "Divine Insight": "Reach Level 80 — You can see connections across specialties that most physicians miss.",
-    "Transcendent Healer": "Reach Level 90 — The summit is visible. Only a handful of people in the world study this deeply.",
-    "Cosmic Physician": "Reach Level 102 — Every specialty unlocked. You have done what takes most physicians a lifetime.",
+    "Attending Physician": "Reach Level 50 — You have earned the title of Attending Physician.",
 
     // Question Milestones
     "Quiz Knight": "Answer 50 questions.",
@@ -6536,7 +6508,7 @@ if (getYearMonthString() === lastMonthlyTasksGeneratedDate) {
             lastStudyDate = today;
             if (dailyStreak > longestStreak) longestStreak = dailyStreak;
 
-            recordHeatmapActivity('questions', 1); // daily login counts as activity
+            // Daily check-in doesn't add heatmap activity — only real study does
             addQuest(`Daily Study Recorded. Streak: ${dailyStreak} day(s). Longest: ${longestStreak} day(s).`);
             checkAndResetWeeklyStats();
 
@@ -6766,22 +6738,18 @@ if (getYearMonthString() === lastMonthlyTasksGeneratedDate) {
 
     const ACHIEVEMENT_REWARDS = {
         "Clinical Apprentice": {xp:50,sp:0},
-        "Medical Intern": {xp:100,sp:1},
+        "Medical Student": {xp:100,sp:1},
+        "Medical Intern": {xp:200,sp:1},
+        "Junior Resident": {xp:400,sp:2},
+        "Resident Physician": {xp:600,sp:2},
+        "Senior Physician": {xp:900,sp:3},
+        "The Elite": {xp:1500,sp:5},
+        "The Mythical": {xp:2500,sp:7},
+        "The Transcendent": {xp:3000,sp:10},
         "Adept Healer": {xp:150,sp:1},
         "Resident of Remedies": {xp:200,sp:1},
         "Senior Resident": {xp:250,sp:1},
         "Attending Physician": {xp:300,sp:2},
-        "World-Class Diagnostician": {xp:400,sp:2},
-        "Grand Healer": {xp:500,sp:2},
-        "Epic Healer": {xp:600,sp:3},
-        "Chief of Medicine": {xp:750,sp:3},
-        "Legendary Scholar": {xp:900,sp:3},
-        "Supreme Healer": {xp:1000,sp:4},
-        "Mythical Medic": {xp:1200,sp:4},
-        "Timeless Scholar": {xp:1500,sp:5},
-        "Divine Insight": {xp:2000,sp:5},
-        "Cosmic Physician": {xp:2500,sp:7},
-        "Transcendent Healer": {xp:3000,sp:10},
         "First Blood": {xp:25,sp:0},
         "Novice Diagnostician": {xp:75,sp:0},
         "Persistent Scholar": {xp:100,sp:0},
@@ -6972,22 +6940,18 @@ if (getYearMonthString() === lastMonthlyTasksGeneratedDate) {
     }
     function checkLevelAchievements() {
         const levelMilestones = {
-            102: "Cosmic Physician",
-            90:  "Transcendent Healer",
-            80:  "Divine Insight",
-            70:  "Timeless Scholar",
-            60:  "Mythical Medic",
-            50:  "Supreme Healer",
-            40:  "Legendary Scholar",
-            35:  "Chief of Medicine",
-            30:  "Epic Healer",
-            25:  "Grand Healer",
-            20:  "World-Class Diagnostician",
-            16:  "Attending Physician",
+            102: "The Transcendent",
+            85:  "The Mythical",
+            75:  "The Elite",
+            60:  "Senior Physician",
+            50:  "Attending Physician",
+            40:  "Resident Physician",
+            30:  "Junior Resident",
+            20:  "Medical Intern",
             12:  "Senior Resident",
             9:   "Resident of Remedies",
             6:   "Adept Healer",
-            3:   "Medical Intern",
+            3:   "Medical Student",
             1:   "Clinical Apprentice"
         };
         for (const milestoneLevel in levelMilestones) {
@@ -7157,10 +7121,9 @@ if (getYearMonthString() === lastMonthlyTasksGeneratedDate) {
         const categories = [
             {
                 label: '🏥 Level Milestones',
-                names: ['Clinical Apprentice','Medical Intern','Adept Healer','Resident of Remedies',
-                        'Senior Resident','Attending Physician','Grand Healer','World-Class Diagnostician',
-                        'Epic Healer','Chief of Medicine','Legendary Scholar','Supreme Healer',
-                        'Mythical Medic','Timeless Scholar','Divine Insight','Transcendent Healer','Cosmic Physician']
+                names: ['Clinical Apprentice','Medical Student','Adept Healer','Resident of Remedies',
+                        'Senior Resident','Medical Intern','Junior Resident','Resident Physician',
+                        'Attending Physician','Senior Physician','The Elite','The Mythical','The Transcendent']
             },
             {
                 label: '📚 Topics Studied',
