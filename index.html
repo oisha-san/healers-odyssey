@@ -1785,12 +1785,244 @@ h2 .section-emoji,
 
 /* ═══ Flow State skill — teal variant ═══════════════════════ */
 .skill-icon-teal { background: rgba(20,184,166,0.15); color: #14b8a6; border-color: rgba(20,184,166,0.3); }
-[data-skill-type="focus"] .skill-level-badge { border-color: rgba(20,184,166,0.4); color: #14b8a6; }
-[data-skill-type="focus"] button { background: linear-gradient(135deg,rgba(20,184,166,0.12),rgba(20,184,166,0.06)); border-color: rgba(20,184,166,0.3); color: #14b8a6; }
-[data-skill-type="focus"] button:hover:not(:disabled) { background: rgba(20,184,166,0.2); box-shadow: 0 4px 12px rgba(20,184,166,0.2); }
+
+/* Use higher specificity to override the default gold badge */
+.skill-item[data-skill-type="focus"] .skill-level-badge {
+    background: rgba(20,184,166,0.12) !important;
+    border-color: rgba(20,184,166,0.4) !important;
+    color: #14b8a6 !important;
+}
+/* Override the blue default button for focus skill */
+.skill-item[data-skill-type="focus"] button {
+    background: linear-gradient(135deg, rgba(20,184,166,0.15), rgba(20,184,166,0.08)) !important;
+    border: 1px solid rgba(20,184,166,0.35) !important;
+    color: #14b8a6 !important;
+}
+.skill-item[data-skill-type="focus"] button:hover:not(:disabled) {
+    background: rgba(20,184,166,0.25) !important;
+    box-shadow: 0 4px 12px rgba(20,184,166,0.25) !important;
+    border-color: rgba(20,184,166,0.6) !important;
+}
+.skill-item[data-skill-type="focus"] button:disabled {
+    opacity: 0.5;
+}
 
 /* Legacy .setting-group kept for smooth transition */
 .setting-group { display: none; }
+
+/* ═══════════════════════════════════════════════════════════════ */
+/* ═══ DAILY CASE — VIGNETTE CARD ═══════════════════════════ */
+/* ═══════════════════════════════════════════════════════════════ */
+.daily-case-vignette {
+    background: var(--bg-2);
+    border: 1px solid var(--border-gold);
+    border-radius: 10px;
+    padding: 16px;
+    margin: 12px 0;
+}
+.daily-case-vignette-label {
+    font-size: 0.75em;
+    font-weight: 700;
+    color: var(--gold-deep);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+}
+.daily-case-vignette-text {
+    font-size: 0.88em;
+    line-height: 1.7;
+    color: var(--text-2);
+    margin-bottom: 14px;
+}
+.daily-case-choices {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+    margin-bottom: 10px;
+}
+.daily-case-choice {
+    display: flex;
+    gap: 10px;
+    text-align: left;
+    background: var(--bg-3);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 10px 14px;
+    font-size: 0.85em;
+    color: var(--text-2);
+    cursor: pointer;
+    transition: border-color 0.15s, background 0.15s;
+    width: 100%;
+    align-items: flex-start;
+}
+.daily-case-choice:hover:not(:disabled) {
+    border-color: var(--gold);
+    background: var(--bg-raised);
+}
+.daily-case-choice strong {
+    color: var(--gold);
+    flex-shrink: 0;
+    min-width: 18px;
+}
+.daily-case-choice.correct { background: rgba(52,196,98,0.12); border-color: var(--success); color: var(--success); }
+.daily-case-choice.wrong   { background: rgba(240,68,68,0.12); border-color: var(--error);   color: var(--error);   }
+.daily-case-explanation {
+    margin-top: 12px;
+    padding: 12px 14px;
+    background: var(--bg-1);
+    border-radius: 8px;
+    font-size: 0.83em;
+    line-height: 1.65;
+    color: var(--text-2);
+}
+
+/* ═══════════════════════════════════════════════════════════════ */
+/* ═══ MY NOTES SECTION ══════════════════════════════════════ */
+/* ═══════════════════════════════════════════════════════════════ */
+.notes-controls {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 14px;
+}
+.notes-count-badge {
+    font-size: 0.78em;
+    color: var(--text-3);
+    white-space: nowrap;
+}
+.notes-empty {
+    color: var(--text-3);
+    font-size: 0.88em;
+    text-align: center;
+    padding: 32px 16px;
+    font-style: italic;
+}
+.notes-group {
+    margin-bottom: 12px;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    overflow: hidden;
+}
+.notes-group-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 14px;
+    background: var(--bg-2);
+    font-weight: 700;
+    font-size: 0.88em;
+    color: var(--gold);
+    border-bottom: 1px solid var(--border);
+}
+.notes-group-count {
+    font-size: 0.75em;
+    background: var(--gold-dim);
+    color: var(--gold);
+    border-radius: 10px;
+    padding: 1px 8px;
+    font-weight: 700;
+}
+.note-item {
+    padding: 10px 14px;
+    border-bottom: 1px solid var(--border);
+    cursor: pointer;
+    transition: background 0.15s;
+    position: relative;
+}
+.note-item:last-child { border-bottom: none; }
+.note-item:hover { background: var(--bg-3); }
+.note-item:hover .note-item-edit { opacity: 1; }
+.note-item-title {
+    font-size: 0.85em;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 3px;
+}
+.note-item-text {
+    font-size: 0.8em;
+    color: var(--text-3);
+    line-height: 1.45;
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+}
+.note-item-edit {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 0.75em;
+    color: var(--gold);
+    opacity: 0;
+    transition: opacity 0.15s;
+}
+
+/* ═══════════════════════════════════════════════════════════════ */
+/* ═══ BOSS BATTLES SECTION ══════════════════════════════════ */
+/* ═══════════════════════════════════════════════════════════════ */
+.boss-card-row {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 16px;
+    margin-bottom: 10px;
+    background: var(--bg-2);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+.boss-card-row.boss-beaten  { border-color: rgba(52,196,98,0.3);  background: rgba(52,196,98,0.04); }
+.boss-card-row.boss-lost    { border-color: rgba(240,68,68,0.3);   background: rgba(240,68,68,0.04); }
+.boss-card-row.boss-pending { border-color: rgba(244,196,48,0.35); }
+.boss-card-row.boss-locked  { opacity: 0.5; filter: grayscale(0.4); }
+.boss-card-row.boss-pending:hover { border-color: var(--gold); box-shadow: 0 4px 18px rgba(244,196,48,0.15); }
+
+.boss-card-emoji {
+    font-size: 2em;
+    width: 50px;
+    text-align: center;
+    flex-shrink: 0;
+}
+.boss-card-info { flex: 1; min-width: 0; }
+.boss-card-name {
+    font-family: var(--font-header);
+    font-size: 0.95em;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 2px;
+}
+.boss-card-sub {
+    font-size: 0.78em;
+    color: var(--text-3);
+    margin-bottom: 5px;
+}
+.boss-card-status {
+    font-size: 0.8em;
+    font-weight: 600;
+}
+.boss-card-row.boss-beaten  .boss-card-status { color: var(--success); }
+.boss-card-row.boss-lost    .boss-card-status { color: var(--error); }
+.boss-card-row.boss-pending .boss-card-status { color: var(--gold); }
+.boss-card-row.boss-locked  .boss-card-status { color: var(--text-3); }
+
+.boss-challenge-btn {
+    flex-shrink: 0;
+    background: linear-gradient(135deg, rgba(244,196,48,0.15), rgba(244,196,48,0.08));
+    border: 1px solid rgba(244,196,48,0.4);
+    color: var(--gold);
+    font-weight: 700;
+    font-size: 0.82em;
+    padding: 8px 16px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.15s, box-shadow 0.15s;
+    white-space: nowrap;
+}
+.boss-challenge-btn:hover {
+    background: rgba(244,196,48,0.25);
+    box-shadow: 0 0 12px rgba(244,196,48,0.25);
+}
 
 </style>
     <!-- Tone.js SFX -->
@@ -1906,11 +2138,13 @@ h2 .section-emoji,
                 <li><a href="#specialties-section"><span class="nav-icon">🏥</span>Specialties</a></li>
                 <li><a href="#reviews-section"><span class="nav-icon">🔄</span>Reviews <span id="reviews-nav-badge" class="nav-badge" style="display:none"></span></a></li>
                 <li><a href="#flashcard-section"><span class="nav-icon">🃏</span>Flashcards</a></li>
+                <li><a href="#notes-section"><span class="nav-icon">📝</span>My Notes</a></li>
             </ul>
             <p class="nav-section-label">PROGRESS</p>
             <ul>
                 <li><a href="#skills-section"><span class="nav-icon">✨</span>Skills</a></li>
                 <li><a href="#achievements-section"><span class="nav-icon">🏆</span>Achievements</a></li>
+                <li><a href="#boss-section"><span class="nav-icon">⚔️</span>Boss Battles</a></li>
                 <li><a href="#heatmap-section"><span class="nav-icon">📅</span>Heatmap</a></li>
                 <li><a href="#quests-section"><span class="nav-icon">📜</span>Quest Log</a></li>
                 <li><a href="#settings-section"><span class="nav-icon">⚙️</span>Settings</a></li>
@@ -2140,6 +2374,13 @@ h2 .section-emoji,
             <ul id="achievementList"></ul>
         </section>
 
+        <!-- Boss Battles -->
+        <section id="boss-section" class="content-section">
+            <h2>⚔️ Boss Battles</h2>
+            <p class="section-desc">Five legendary examinations unlock automatically as you level up. Each is a one-time permanent challenge — win or lose, it's recorded forever.</p>
+            <div id="boss-battles-list"></div>
+        </section>
+
         <!-- Reviews -->
         <section id="reviews-section" class="content-section review-checklist">
             <h2>🔄 Review Checklist</h2>
@@ -2161,6 +2402,17 @@ h2 .section-emoji,
                 <span id="flashcard-counter" class="fc-counter"></span>
                 <button id="flashcard-next-btn" class="fc-nav-btn">Next →</button>
             </div>
+        </section>
+
+        <!-- My Notes -->
+        <section id="notes-section" class="content-section">
+            <h2>📝 My Notes</h2>
+            <p class="section-desc">All your study notes in one place. Click any note to edit it.</p>
+            <div class="notes-controls">
+                <input type="text" id="notes-search" placeholder="Search notes…" style="flex:1;margin:0">
+                <span id="notes-count" class="notes-count-badge"></span>
+            </div>
+            <div id="notes-list"></div>
         </section>
 
         <!-- Settings -->
@@ -2489,13 +2741,15 @@ document.addEventListener('DOMContentLoaded', () => {
         { check: () => totalQuestions >= 10000,                      title: '🎯 The Question Master'      },
         { check: () => totalReviewsCompleted >= 1000,                title: '🔗 The Iron Scholar'         },
         // ── Level titles ─────────────────────────────────────────────
-        { check: () => level >= 90,                                  title: '🌠 The Transcendent'         },
-        { check: () => level >= 70,                                  title: '🐉 The Mythical'             },
-        { check: () => level >= 50,                                  title: '🏆 The Elite'                },
-        { check: () => level >= 30,                                  title: '🏅 Senior Physician'         },
-        { check: () => level >= 16,                                  title: '⚕️ Attending Physician'      },
-        { check: () => level >= 9,                                   title: '🩺 Resident Physician'       },
-        { check: () => level >= 3,                                   title: '📋 Medical Intern'           },
+        { check: () => level >= 102,                                 title: '🌠 The Transcendent'         },
+        { check: () => level >= 85,                                  title: '🐉 The Mythical'             },
+        { check: () => level >= 75,                                  title: '🏆 The Elite'                },
+        { check: () => level >= 60,                                  title: '🏅 Senior Physician'         },
+        { check: () => level >= 50,                                  title: '⚕️ Attending Physician'      },
+        { check: () => level >= 40,                                  title: '🩺 Resident Physician'       },
+        { check: () => level >= 30,                                  title: '🧑‍⚕️ Junior Resident'        },
+        { check: () => level >= 20,                                  title: '📋 Medical Intern'           },
+        { check: () => level >= 10,                                  title: '🎓 Medical Student'          },
         { check: () => true,                                         title: '⚕️ Healer in Training'       },
     ];
 
@@ -2627,7 +2881,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let lastStreakFreezeUsedDate = null;
 
     // === Feature: Study Notes ===
-    let studyNotes = {}; // { "SpecName||DiseaseName": "note text" }
+    let studyNotes = {}; // { "SpecName|||DiseaseName": "note text" }
 
     // === Feature: Weekly Digest ===
     let weeklyStats = { topics: 0, questions: 0, reviews: 0, xpEarned: 0, lastResetDate: null };
@@ -2782,18 +3036,19 @@ let monthlyTaskProgress = {
     const PERFECT_DAY_BONUS_SP = 2;
 
     // Profile Picture Progression Map (User updated)
+    // Profile picture milestones — spread over the full 1→102 level arc
     const PROFILE_PICTURES = {
-         1:   { src: 'https://i.imgur.com/KaLxLtB.png', title: 'Pre-Med Student'       },
-         3:   { src: 'https://i.imgur.com/JTzVsSt.png', title: 'Medical Student'        },
-         5:   { src: 'https://i.imgur.com/UObkqeL.png', title: 'Clinical Clerk'         },
-         7:   { src: 'https://i.imgur.com/V5tMYFB.png', title: 'Junior Intern'          },
-         10:  { src: 'https://i.imgur.com/1MlNYow.png', title: 'Medical Intern'         },
-         15:  { src: 'https://i.imgur.com/zbbggVS.png', title: 'Junior Resident'        },
-         20:  { src: 'https://i.imgur.com/J7XxWsA.png', title: 'Senior Resident'        },
-         30:  { src: 'https://i.imgur.com/sdBffnQ.png', title: 'Chief Resident'         },
-         50:  { src: 'https://i.imgur.com/9J0UFd2.png', title: 'Attending Physician'    },
-         75:  { src: 'https://i.imgur.com/n1Bpdoq.png', title: 'Consultant Specialist'  },
-         100: { src: 'https://i.imgur.com/RzGkeGM.png', title: 'Professor of Medicine'  }
+         1:   { src: 'https://i.imgur.com/KaLxLtB.png', title: 'Pre-Med Student'         },
+         10:  { src: 'https://i.imgur.com/JTzVsSt.png', title: 'Medical Student (Year 1)' },
+         20:  { src: 'https://i.imgur.com/UObkqeL.png', title: 'Medical Student (Year 3)' },
+         30:  { src: 'https://i.imgur.com/V5tMYFB.png', title: 'Clinical Clerk'           },
+         40:  { src: 'https://i.imgur.com/1MlNYow.png', title: 'Medical Intern'           },
+         50:  { src: 'https://i.imgur.com/zbbggVS.png', title: 'Junior Resident'          },
+         60:  { src: 'https://i.imgur.com/J7XxWsA.png', title: 'Senior Resident'          },
+         75:  { src: 'https://i.imgur.com/sdBffnQ.png', title: 'Chief Resident'           },
+         85:  { src: 'https://i.imgur.com/9J0UFd2.png', title: 'Attending Physician'      },
+         95:  { src: 'https://i.imgur.com/n1Bpdoq.png', title: 'Consultant Specialist'    },
+         102: { src: 'https://i.imgur.com/RzGkeGM.png', title: 'Professor of Medicine'    }
      };
 
 // Monthly Challenge Configuration
@@ -2829,7 +3084,7 @@ const MONTHLY_TASK_CONFIG = [
       targets: [4, 8, 15], rewardsXP: [400, 800, 1400], rewardsSP: [1, 2, 3],
       metric: 'focusSessionsThisMonthCount' },
     { id: 'quiz_sessions_monthly',
-      name: '💡 The Clinical Examiner', flavor: 'Test yourself until the test no longer scares you.',
+      name: '📝 The Clinical Examiner', flavor: 'Test yourself until the test no longer scares you.',
       desc: 'Complete {target} USMLE quiz sessions this month',
       targets: [3, 6, 12], rewardsXP: [600, 1200, 2200], rewardsSP: [2, 3, 5],
       metric: 'quizSessionsThisMonthCount' },
@@ -5993,6 +6248,11 @@ function getYearMonthString() {
                  customTopics = data.customTopics || {};
                  bossBattleResults = data.bossBattleResults || {};
 monthlyTasks = data.monthlyTasks || [];
+// Patch any saved tasks that still reference "AI" from old versions
+monthlyTasks.forEach(t => {
+    if (t.description) t.description = t.description.replace(/AI quiz/gi, 'USMLE quiz').replace(/AI USMLE/gi, 'USMLE');
+    if (t.name)        t.name        = t.name.replace(/💡 The Clinical Examiner/, '📝 The Clinical Examiner');
+});
 lastMonthlyTasksGeneratedDate = data.lastMonthlyTasksGeneratedDate || null;
 monthlyTaskProgress = { topicsStudiedThisMonthCount:0, reviewsCompletedThisMonthCount:0, questionsAnsweredThisMonthCount:0, levelsGainedThisMonthCount:0, solidRatingsThisMonthCount:0, focusSessionsThisMonthCount:0, quizSessionsThisMonthCount:0, levelAtMonthStart: data.level||1, ...(data.monthlyTaskProgress||{}) };
 // Ensure levelAtMonthStart is reasonable if loading old save
@@ -6008,6 +6268,7 @@ if (!monthlyTaskProgress.levelAtMonthStart && data.level) {
                  totalReviewsCompleted = 0; questLog = []; dailyStreak = 0; longestStreak = 0;
                  lastStudyDate = null; lastStudyBurstDate = null; skillPoints = 0;
                  skills = { xpBoost: 0, reviewMastery: 0, acceleratedRecall: 0, studyBurst: 0, efficientLearner: 0, focusMastery: 0 };
+                 studyNotes = {}; customTopics = {}; quizHistory = {};
                  totalSkillLevelsPurchased = 0; masteredSpecialtyCount = 0; currentTheme = 'dark';
                  dailyTasks = []; lastTasksGeneratedDate = null;
 monthlyTasks = []; lastMonthlyTasksGeneratedDate = null; monthlyTaskProgress = { topicsStudiedThisMonthCount:0, reviewsCompletedThisMonthCount:0, questionsAnsweredThisMonthCount:0, levelsGainedThisMonthCount:0, solidRatingsThisMonthCount:0, focusSessionsThisMonthCount:0, quizSessionsThisMonthCount:0, levelAtMonthStart:1 };
@@ -6026,6 +6287,10 @@ monthlyTasks = []; lastMonthlyTasksGeneratedDate = null; monthlyTaskProgress = {
          }
 
          applyTheme(currentTheme);
+         // Backfill focus field on old heatmap entries that predate the focus tracker
+         for (const dateKey in studyHeatmap) {
+             if (studyHeatmap[dateKey].focus === undefined) studyHeatmap[dateKey].focus = 0;
+         }
 
          for (const spec in studied) {
              if (studied.hasOwnProperty(spec) && typeof studied[spec] !== 'object') {
@@ -6251,6 +6516,8 @@ if (getYearMonthString() === lastMonthlyTasksGeneratedDate) {
     function handleRecordDailyStudy() {
         const today = getTodayDateString();
         if (lastStudyDate !== today) {
+            // New day — break any leftover combo from yesterday
+            if (comboCount > 0) breakCombo();
             const now = new Date();
             const yesterday = new Date(now.getFullYear(), now.getMonth(), now.getDate() - 1);
             const yesterdayString = `${yesterday.getFullYear()}-${String(yesterday.getMonth() + 1).padStart(2, '0')}-${String(yesterday.getDate()).padStart(2, '0')}`;
@@ -7245,7 +7512,7 @@ if (getYearMonthString() === lastMonthlyTasksGeneratedDate) {
                          }
 
                          // Note button
-                         const noteKey = `${specName}||${diseaseName}`;
+                         const noteKey = `${specName}|||${diseaseName}`;
                          const hasNote = !!studyNotes[noteKey];
                          const noteBtn = document.createElement('button');
                          noteBtn.className = 'note-btn' + (hasNote ? ' has-note' : '');
@@ -7917,7 +8184,9 @@ if (!sfxAudioInitialized && toneJsLoaded) {
     function handleConfirmReset() {
         try {
             localStorage.removeItem(SAVE_KEY);
-            addQuest("Game progress has been reset."); // Add quest log entry
+            // Also clear any keys that live outside the main save
+            localStorage.removeItem('ankiLastSyncDate');
+            localStorage.removeItem('ankiLastSyncCount');
             showNotification("Game Reset! Reloading...", 2000);
             setTimeout(() => location.reload(), 2000);
         } catch (e) {
@@ -7927,6 +8196,57 @@ if (!sfxAudioInitialized && toneJsLoaded) {
         }
     }
 
+    function renderBossSection() {
+        const el = document.getElementById('boss-battles-list');
+        if (!el) return;
+        const bossDefs = [
+            { key:'boss_20',  level:20,  name:'The Hospital Entrance Exam',  emoji:'🏥', subtitle:'Internal Medicine & Core Clinical',  reward:'500 XP · 3 SP' },
+            { key:'boss_36',  level:36,  name:'The Cardiovascular Gauntlet', emoji:'❤️', subtitle:'Cardiology & Pulmonology',           reward:'750 XP · 4 SP' },
+            { key:'boss_51',  level:51,  name:'The Neuroscience Trial',      emoji:'💡', subtitle:'Neurology & Psychiatry',             reward:'1,000 XP · 5 SP' },
+            { key:'boss_80',  level:80,  name:'The Surgical Theatre Test',   emoji:'⚔️', subtitle:'Surgical Specialties',              reward:'1,500 XP · 6 SP' },
+            { key:'boss_102', level:102, name:'THE GRAND FINAL EXAM',        emoji:'👑', subtitle:'All of Medicine',                   reward:'3,000 XP · 10 SP' },
+        ];
+        el.innerHTML = bossDefs.map(b => {
+            const result  = bossBattleResults[b.key];
+            const unlocked = level >= b.level;
+            const beaten   = result?.beaten;
+            const lost     = result && !result.beaten;
+            const score    = result?.score !== undefined ? `${result.score}/5` : '';
+            const date     = result?.date ? ` · ${result.date}` : '';
+            let statusBadge, statusClass;
+            if (!unlocked)    { statusBadge = `🔒 Unlocks at Level ${b.level}`; statusClass = 'boss-locked'; }
+            else if (beaten)  { statusBadge = `✅ Defeated${score?' · '+score+date:''}`; statusClass = 'boss-beaten'; }
+            else if (lost)    { statusBadge = `💀 Fallen${score?' · '+score+date:''}`; statusClass = 'boss-lost'; }
+            else              { statusBadge = `⚔️ Not yet faced`; statusClass = 'boss-pending'; }
+            return `
+              <div class="boss-card-row ${statusClass}">
+                <div class="boss-card-emoji">${b.emoji}</div>
+                <div class="boss-card-info">
+                  <div class="boss-card-name">${b.name}</div>
+                  <div class="boss-card-sub">${b.subtitle} · Reward: ${b.reward}</div>
+                  <div class="boss-card-status">${statusBadge}</div>
+                </div>
+                ${unlocked && !result ? `<button class="boss-challenge-btn" onclick="window.triggerBossBattleFromUI(${b.level})">⚔️ Challenge</button>` : ''}
+              </div>`;
+        }).join('');
+    }
+
+    window.triggerBossBattleFromUI = function(bossLevel) {
+        const defs = {
+            20:  {name:'The Hospital Entrance Exam',  emoji:'🏥',subtitle:'Internal Medicine & Core Clinical',topic:'Internal Medicine, Emergency Medicine, and core clinical reasoning',reward:{xp:500,sp:3}},
+            36:  {name:'The Cardiovascular Gauntlet', emoji:'❤️',subtitle:'Cardiology & Pulmonology',         topic:'Cardiology, Pulmonology, and cardiopulmonary physiology',           reward:{xp:750,sp:4}},
+            51:  {name:'The Neuroscience Trial',      emoji:'💡',subtitle:'Neurology & Psychiatry',           topic:'Neurology, Psychiatry, and neurophysiology',                        reward:{xp:1000,sp:5}},
+            80:  {name:'The Surgical Theatre Test',   emoji:'⚔️',subtitle:'Surgical Specialties',            topic:'Orthopedics, Anesthesiology, Urology, and perioperative care',      reward:{xp:1500,sp:6}},
+            102: {name:'THE GRAND FINAL EXAM',        emoji:'👑',subtitle:'All of Medicine',                 topic:'broad clinical medicine across all major specialties',               reward:{xp:3000,sp:10}},
+        };
+        const def = defs[bossLevel];
+        if (!def) return;
+        if (bossBattleResults[`boss_${bossLevel}`]) {
+            showToast('This boss has already been faced. The record stands.', 'warning', 3000); return;
+        }
+        triggerBossBattle(bossLevel, def);
+    };
+
     function updateAndSave() {
         updateStatsUI();
         updateAchievementsListUI();
@@ -7935,6 +8255,7 @@ if (!sfxAudioInitialized && toneJsLoaded) {
         renderMonthlyTasksUI();
         renderHeatmap();
         renderDailyCase();
+        renderBossSection();
         saveProgress();
     }
 
@@ -8220,6 +8541,8 @@ function renderMonthlyTasksUI() {
     function recordHeatmapActivity(type, count = 1) {
         const today = getTodayDateString();
         if (!studyHeatmap[today]) studyHeatmap[today] = { topics: 0, questions: 0, reviews: 0, focus: 0 };
+        // Ensure focus field exists on any old entries
+        else if (studyHeatmap[today].focus === undefined) studyHeatmap[today].focus = 0;
         studyHeatmap[today][type] = (studyHeatmap[today][type] || 0) + count;
     }
     function renderHeatmap() {
@@ -8467,7 +8790,7 @@ function renderMonthlyTasksUI() {
                 for (const dis of specialties[specName].diseases) {
                     // Prefer unstudied diseases
                     if (!studied[specName]?.[dis]) {
-                        unlockedDiseases.push(`${specName}||${dis}`);
+                        unlockedDiseases.push(`${specName}|||${dis}`);
                     }
                 }
             }
@@ -8488,23 +8811,71 @@ function renderMonthlyTasksUI() {
         const key = getDailyCaseKey();
         if (!key) { section.style.display = 'none'; return; }
         dailyCaseKey = key;
-        const [spec, dis] = key.split('||');
-        titleEl.textContent = dis;
-        specEl.textContent = `${specialties[spec]?.icon || '🏥'} ${spec}`;
+        const [spec, dis] = key.split('|||');
         const alreadyDone = lastCaseBonusDate === getTodayDateString();
         const alreadyStudied = !!studied[spec]?.[dis];
+
+        // Try to find a matching question from the quiz bank for a vignette
+        const caseQ = getQuizQuestions(spec, 1)[0] || null;
+
+        specEl.textContent = `${specialties[spec]?.icon || '🏥'} ${spec}`;
+        titleEl.textContent = dis;
+
+        // Build vignette card if we have a question
+        let vignetteHtml = '';
+        if (caseQ && !alreadyDone && !alreadyStudied) {
+            vignetteHtml = `
+              <div class="daily-case-vignette">
+                <p class="daily-case-vignette-label">📋 Today's Clinical Scenario</p>
+                <p class="daily-case-vignette-text">${caseQ.q}</p>
+                <div class="daily-case-choices">
+                  ${Object.entries(caseQ.options).map(([k,v]) =>
+                    `<button class="daily-case-choice" onclick="window._caseReveal('${k}')">
+                       <strong>${k}</strong> <span>${v}</span>
+                     </button>`
+                  ).join('')}
+                </div>
+                <div id="daily-case-explanation" class="daily-case-explanation" style="display:none"></div>
+              </div>`;
+            window._caseReveal = function(chosen) {
+                const correct = caseQ.correct;
+                const isRight = chosen === correct;
+                document.querySelectorAll('.daily-case-choice').forEach(btn => {
+                    const k = btn.querySelector('strong').textContent;
+                    if (k === correct) btn.classList.add('correct');
+                    else if (k === chosen && !isRight) btn.classList.add('wrong');
+                    btn.disabled = true;
+                    btn.onclick = null;
+                });
+                const expEl = document.getElementById('daily-case-explanation');
+                if (expEl) {
+                    expEl.style.display = 'block';
+                    expEl.innerHTML = `<strong style="color:${isRight?'var(--success)':'var(--error)'}">${isRight?'✓ Correct!':'✗ Incorrect — '+correct+' is correct.'}</strong><br>${caseQ.explanation}`;
+                }
+            };
+        }
+
         if (btnEl) {
             btnEl.disabled = alreadyDone || alreadyStudied;
-            btnEl.textContent = alreadyStudied ? '✅ Already Studied' : (alreadyDone ? '✔ Bonus Claimed' : '📖 Study Now (3× XP)');
+            btnEl.textContent = alreadyStudied ? '✅ Already Studied' : (alreadyDone ? '✔ Bonus Claimed' : '📖 Study Now · +3× XP');
         }
         if (bonusEl) bonusEl.textContent = alreadyDone || alreadyStudied ? '' : '🎯 3× XP bonus today!';
+
+        // Inject vignette into section
+        let vigEl = section.querySelector('.daily-case-vignette');
+        if (vigEl) vigEl.remove();
+        if (vignetteHtml) {
+            const tmp = document.createElement('div');
+            tmp.innerHTML = vignetteHtml;
+            btnEl?.parentElement ? btnEl.parentElement.insertBefore(tmp.firstElementChild, btnEl) : section.appendChild(tmp.firstElementChild);
+        }
         section.style.display = 'block';
     }
     function handleDailyCase() {
         if (!dailyCaseKey) return;
         const today = getTodayDateString();
         if (lastCaseBonusDate === today) return;
-        const [spec, dis] = dailyCaseKey.split('||');
+        const [spec, dis] = dailyCaseKey.split('|||');
         if (!specialties[spec] || studied[spec]?.[dis]) { renderDailyCase(); return; }
         // Study the disease with 3x XP
         const now = Date.now();
@@ -8727,7 +9098,7 @@ function renderMonthlyTasksUI() {
     // ===== FEATURE: Study Notes ================================
     // ============================================================
     function openNoteForDisease(spec, disease) {
-        const key = `${spec}||${disease}`;
+        const key = `${spec}|||${disease}`;
         const existing = studyNotes[key] || '';
         const modal = document.createElement('div');
         modal.style.cssText = `position:fixed;inset:0;background:rgba(0,0,0,0.7);z-index:3000;display:flex;align-items:center;justify-content:center`;
@@ -8758,6 +9129,7 @@ function renderMonthlyTasksUI() {
             saveProgress();
             document.body.removeChild(modal);
             showToast(text ? '📝 Note saved!' : 'Note cleared.', 'success');
+            renderNotesSection();
             renderSpecialties(specialtySearchInputEl?.value || '');
         };
     }
@@ -8765,15 +9137,57 @@ function renderMonthlyTasksUI() {
     // ============================================================
     // ===== FEATURE: Weekly Digest ==============================
     // ============================================================
+    function renderNotesSection(filter = '') {
+        const listEl = document.getElementById('notes-list');
+        const countEl = document.getElementById('notes-count');
+        if (!listEl) return;
+
+        const entries = Object.entries(studyNotes)
+            .filter(([k, v]) => v && v.trim())
+            .map(([k, v]) => {
+                const parts = k.split('|||');
+                return { spec: parts[0] || '', dis: parts[1] || k, text: v, key: k };
+            })
+            .filter(e => !filter || e.spec.toLowerCase().includes(filter) || e.dis.toLowerCase().includes(filter) || e.text.toLowerCase().includes(filter))
+            .sort((a, b) => a.spec.localeCompare(b.spec) || a.dis.localeCompare(b.dis));
+
+        if (countEl) countEl.textContent = entries.length === 1 ? '1 note' : `${entries.length} notes`;
+
+        if (entries.length === 0) {
+            listEl.innerHTML = `<div class="notes-empty">${filter ? '🔍 No notes match your search.' : '✏️ No notes yet. Click the 📝 icon next to any studied topic to add one.'}</div>`;
+            return;
+        }
+
+        // Group by specialty
+        const bySpec = {};
+        entries.forEach(e => { (bySpec[e.spec] = bySpec[e.spec] || []).push(e); });
+
+        listEl.innerHTML = Object.entries(bySpec).map(([spec, notes]) => `
+          <div class="notes-group">
+            <div class="notes-group-header">
+              <span>${specialties[spec]?.icon || '📚'} ${spec}</span>
+              <span class="notes-group-count">${notes.length}</span>
+            </div>
+            ${notes.map(n => `
+              <div class="note-item" onclick="openNoteForDisease('${n.spec.replace(/'/g,"\\'")}','${n.dis.replace(/'/g,"\\'")}')">
+                <div class="note-item-title">${n.dis}</div>
+                <div class="note-item-text">${n.text.replace(/</g,'&lt;').replace(/\n/g,' ↵ ')}</div>
+                <div class="note-item-edit">✏️ Edit</div>
+              </div>`).join('')}
+          </div>`).join('');
+    }
+
+    // (notes-search listener wired in event listeners section below)
     function checkAndResetWeeklyStats() {
+        // Use local date string (not UTC) to avoid timezone-shift bugs
         const today = new Date();
-        const dayOfWeek = today.getDay(); // 0=Sun, 1=Mon
-        const thisMonday = new Date(today);
-        thisMonday.setDate(today.getDate() - (dayOfWeek === 0 ? 6 : dayOfWeek - 1));
+        const dayOfWeek = today.getDay(); // 0=Sun, 1=Mon…6=Sat
+        const daysFromMonday = dayOfWeek === 0 ? 6 : dayOfWeek - 1;
+        const thisMonday = new Date(today.getFullYear(), today.getMonth(), today.getDate() - daysFromMonday);
         const mondayStr = `${thisMonday.getFullYear()}-${String(thisMonday.getMonth()+1).padStart(2,'0')}-${String(thisMonday.getDate()).padStart(2,'0')}`;
         if (weeklyStats.lastResetDate !== mondayStr) {
-            // New week — show digest for last week if there was activity
-            if (weeklyStats.lastResetDate && (weeklyStats.topics > 0 || weeklyStats.questions > 0)) {
+            // New week — show digest for last week if there was any activity
+            if (weeklyStats.lastResetDate && (weeklyStats.topics > 0 || weeklyStats.questions > 0 || weeklyStats.reviews > 0)) {
                 showWeeklyDigest();
             }
             weeklyStats = { topics: 0, questions: 0, reviews: 0, xpEarned: 0, lastResetDate: mondayStr };
@@ -9255,6 +9669,75 @@ for (const [spec, qs] of Object.entries(extra)) {
         }
     })();
 
+
+// ── Extra specialty questions (specialties with no coverage) ─────────
+(function(){
+const extra2 = {
+"Radiology": [
+    { q:"A 55-year-old woman presents with acute chest pain. CT pulmonary angiography shows a filling defect in the right main pulmonary artery. What CT finding confirms the diagnosis of pulmonary embolism?", options:{A:"Ground-glass opacity",B:"Intraluminal filling defect in the pulmonary artery",C:"Pleural effusion",D:"Mediastinal widening"}, correct:"B", explanation:"PE on CTPA: intraluminal hypodense filling defect within the opacified pulmonary artery, classically a 'polo mint' sign on axial views or a 'railway track' sign on longitudinal views. Ground-glass is a non-specific finding; pleural effusion may accompany PE but does not confirm it." },
+    { q:"A 40-year-old man has sudden severe back pain. CT shows a hyperdense crescent along the aortic wall at the level of L2. The aorta measures 6.2 cm. What is the most likely diagnosis?", options:{A:"Aortic dissection",B:"Ruptured abdominal aortic aneurysm with contained haematoma",C:"Renal colic",D:"Mesenteric ischaemia"}, correct:"B", explanation:"Hyperdense crescent sign: fresh blood/haematoma within or adjacent to an AAA wall — indicates impending or contained rupture. Surgical emergency. The aortic diameter >5.5 cm in men already meets repair criteria. Aortic dissection shows intimal flap." },
+    { q:"A 30-year-old woman has bilateral hilar lymphadenopathy on chest X-ray. She is asymptomatic. CT shows non-calcified, bilateral symmetric hilar and mediastinal nodes. The most likely diagnosis is:", options:{A:"Lymphoma",B:"Primary tuberculosis",C:"Sarcoidosis",D:"Metastatic carcinoma"}, correct:"C", explanation:"Bilateral symmetric hilar lymphadenopathy in a young adult without systemic symptoms = classic sarcoidosis presentation ('Pawnbroker's sign' on CXR). Lymphoma tends to be asymmetric and massive. TB causes unilateral hilar adenopathy with constitutional symptoms." },
+    { q:"On plain abdominal X-ray, a 72-year-old woman has dilated small bowel loops with a central position, valvulae conniventes crossing the full bowel diameter, and an absence of gas in the rectum. This pattern is most consistent with:", options:{A:"Large bowel obstruction",B:"Small bowel obstruction",C:"Paralytic ileus",D:"Sigmoid volvulus"}, correct:"B", explanation:"SBO features on AXR: centrally placed dilated loops, valvulae conniventes (plicae circulares) crossing full width, step-ladder pattern, and absent distal gas. Large bowel has peripheral haustrae that don't cross full width. Paralytic ileus shows gas throughout including rectum." },
+],
+"Anesthesiology": [
+    { q:"A 45-year-old man (85 kg) is intubated. You calculate ideal body weight at 70 kg. What tidal volume should you set for lung-protective ventilation?", options:{A:"850 mL (10 mL/kg actual weight)",B:"420 mL (6 mL/kg ideal body weight)",C:"700 mL (10 mL/kg IBW)",D:"600 mL (8 mL/kg IBW)"}, correct:"B", explanation:"Lung-protective ventilation (ARDSnet): tidal volume 6 mL/kg of IDEAL body weight (height-based), not actual weight. In an obese patient using actual weight causes barotrauma/volutrauma. IBW for males: 50 + 2.3 × (height in inches above 60). Plateau pressure target ≤30 cmH2O." },
+    { q:"A patient receives succinylcholine for rapid sequence intubation. Three minutes later, he develops masseter spasm, hyperthermia (41°C), and muscle rigidity. The MOST important immediate intervention is:", options:{A:"IV dantrolene 2.5 mg/kg",B:"IV propofol to deepen anaesthesia",C:"Continue monitoring and cool",D:"IV rocuronium to relax muscles"}, correct:"A", explanation:"Malignant hyperthermia: triggered by volatile agents and succinylcholine in susceptible patients (RYR1 mutation). Signs: masseter spasm (early), hypercapnia, hyperthermia, rigidity, tachycardia. STOP trigger → 100% O2 → IV dantrolene (2.5 mg/kg, repeat to 10 mg/kg max) → cooling. Rhabdomyolysis and cardiac arrest follow if untreated." },
+    { q:"Before an elective laparoscopic cholecystectomy, a patient mentions she takes warfarin for AF. INR is 2.8. What is the preferred bridge anticoagulation strategy for a moderate-thromboembolism-risk patient?", options:{A:"Stop warfarin 5 days pre-op; bridge with therapeutic LMWH; stop LMWH 24h pre-op",B:"Stop warfarin 2 days pre-op with no bridging",C:"Continue warfarin at full dose throughout",D:"Switch to aspirin for 1 week"}, correct:"A", explanation:"Perioperative anticoagulation: for moderate-risk AF (CHADS2 2-4), stop warfarin 5 days before surgery and bridge with therapeutic-dose LMWH. Stop LMWH 24h before surgery. Restart warfarin post-op when haemostasis confirmed. High-risk (CHADS2 ≥5, mechanical valve): always bridge." },
+    { q:"A post-operative patient in PACU has SpO2 88%, RR 6, pinpoint pupils, and responds only to sternal rub. He received morphine intraoperatively. Next step?", options:{A:"Supplemental O2 and observation",B:"IV naloxone 0.4 mg titrated",C:"Immediate intubation",D:"IV flumazenil"}, correct:"B", explanation:"Opioid-induced respiratory depression: miosis, bradypnoea, decreased consciousness. Reverse with IV naloxone (0.1-0.4 mg titrated — avoid precipitating acute pain/hypertension). Duration of naloxone shorter than most opioids — may need repeat doses or infusion. Flumazenil reverses benzodiazepines, not opioids." },
+],
+"Physical Medicine & Rehabilitation": [
+    { q:"A 68-year-old man has a left middle cerebral artery stroke. He has right hemiplegia and expressive aphasia. 3 weeks post-stroke, what is the MOST important predictor of functional outcome?", options:{A:"Age at onset",B:"Degree of neurological deficit at 72 hours",C:"Pre-morbid functional status",D:"Lesion size on CT"}, correct:"B", explanation:"Neurological deficit severity at 72 hours (NIHSS score) is the strongest predictor of functional outcome after ischaemic stroke. Pre-morbid status matters but severity of acute deficit outweighs it. Lesion size correlates but is less predictive than clinical deficit. Age is a weak independent predictor." },
+    { q:"A 25-year-old has C5 complete SCI after a diving accident. His biceps are 4/5 but wrist extensors are 0/5. What is his ASIA level?", options:{A:"C4 complete",B:"C5 complete",C:"C6 complete",D:"C7 complete"}, correct:"B", explanation:"ASIA impairment scale: the neurological level is the LOWEST level with at least grade 3 motor function (against gravity). Key myotomes: C5 = elbow flexion, C6 = wrist extension, C7 = elbow extension. Wrist extensors (C6) are 0/5 so neurological level = C5. Complete (ASIA A) = no motor/sensory below injury level." },
+    { q:"A 55-year-old woman with rheumatoid arthritis has morning stiffness lasting >1 hour, MCP swelling, and grip weakness. Which splint is most appropriate?", options:{A:"Resting hand splint at night",B:"Dynamic extension splint",C:"Thumb spica splint",D:"Cylinder cast"}, correct:"A", explanation:"RA hand: resting hand splints (worn at night) place the wrist at 20-30° extension, MCPs at 45° flexion, and PIPs/DIPs at neutral — reducing synovitis and deformity progression. Dynamic extension splints are for extensor lag. Thumb spica is for CMC osteoarthritis or De Quervain's." },
+],
+"Allergy & Immunology": [
+    { q:"A 28-year-old woman develops urticaria, angioedema, and hypotension 10 minutes after her second dose of amoxicillin. She had similar hives with penicillin as a child. What mediates this reaction?", options:{A:"Type II cytotoxic reaction",B:"Type I IgE-mediated hypersensitivity",C:"Type III immune complex",D:"Type IV delayed hypersensitivity"}, correct:"B", explanation:"Type I (IgE-mediated): IgE cross-linking by antigen on mast cells and basophils → degranulation → histamine, tryptase, leukotrienes → urticaria, angioedema, bronchospasm, hypotension. Rapid onset (minutes). Prior sensitisation required. Treatment: IM epinephrine first-line. Penicillin allergy is the classic teaching case." },
+    { q:"A 6-year-old boy has recurrent sinopulmonary infections since infancy, including two episodes of pneumonia and recurrent otitis media. Serum immunoglobulins show very low IgG, IgA, and IgM. Flow cytometry shows absent B cells. Diagnosis?", options:{A:"Common variable immunodeficiency (CVID)",B:"X-linked agammaglobulinaemia (XLA)",C:"Selective IgA deficiency",D:"DiGeorge syndrome"}, correct:"B", explanation:"XLA (Bruton's): X-linked BTK gene mutation → failure of B-cell maturation → absent/severely reduced B cells and all immunoglobulins. Boys affected after 6 months (maternal IgG wanes). Recurrent encapsulated bacterial infections. Treatment: IVIG. CVID occurs in adults with normal B-cell numbers but impaired Ig production." },
+    { q:"A 35-year-old has a 5-year history of wheezing, dyspnoea, and eosinophilia despite high-dose ICS/LABA. Spirometry shows FEV1/FVC 0.62, bronchodilator reversibility +18%. Serum IgE is 450 IU/mL and skin prick test is positive to house dust mite. What add-on therapy is most appropriate?", options:{A:"Long-term oral prednisolone",B:"Omalizumab (anti-IgE monoclonal antibody)",C:"Mepolizumab (anti-IL-5)",D:"Azithromycin"}, correct:"B", explanation:"Severe allergic asthma uncontrolled on step 4: omalizumab (anti-IgE) targets free IgE, reducing mast cell activation. Indicated when: positive skin test/specific IgE to perennial allergen, serum IgE 30-1500 IU/mL, ≥2 exacerbations/year on high-dose ICS. Mepolizumab is for eosinophilic asthma (eosinophils >300/μL) regardless of IgE." },
+],
+"Geriatrics": [
+    { q:"A 78-year-old woman is admitted after a fall. She takes 11 medications including amlodipine, simvastatin, sertraline, zopiclone, metformin, and ramipril. Gait assessment shows a Timed Up and Go test of 18 seconds. What is the MOST modifiable risk factor for future falls?", options:{A:"Age",B:"Polypharmacy and inappropriate medications",C:"Female sex",D:"Osteoporosis"}, correct:"B", explanation:"Falls risk: polypharmacy (≥4 drugs) and psychoactive/antihypertensive medications are the most modifiable risk factor. Zopiclone (Z-drug) and SSRIs are high-risk. TUG >12 sec indicates high fall risk. Deprescribing, gait training, home hazard removal, and vitamin D/calcium are the evidence-based interventions." },
+    { q:"A 82-year-old man with mild dementia refuses IV antibiotics for his pneumonia, saying he wants to go home. He can state his diagnosis, understands the risks, and is consistent. His daughter requests you override him. What is correct?", options:{A:"His dementia removes decision-making capacity; defer to daughter",B:"Assess decision-making capacity formally; if intact, respect his refusal",C:"Override refusal as his life is at risk",D:"Defer to the medical team's judgment"}, correct:"B", explanation:"Mental capacity assessment (Mental Capacity Act 2005): dementia does NOT automatically remove capacity. Test: can he understand, retain, weigh information, and communicate a decision? If capacity is intact, a competent adult can refuse any treatment including life-saving treatment. Document the assessment. Involve an IMCA if lacking capacity with no family." },
+    { q:"An 80-year-old woman is discharged after hip fracture. DEXA shows T-score −2.8. She fell from standing height. Which pharmacological treatment reduces fragility fracture risk most effectively in this setting?", options:{A:"Calcium and vitamin D alone",B:"Oral bisphosphonate (e.g. alendronate) plus calcium and vitamin D",C:"HRT",D:"Calcitonin nasal spray"}, correct:"B", explanation:"Post-fracture osteoporosis: bisphosphonates (alendronate, risedronate, zoledronate) reduce vertebral fractures ~40-50% and hip fractures ~25-40%. Calcium + vitamin D are adjuncts, not sufficient alone. HRT reduces fracture risk but not recommended solely for osteoporosis in elderly. Zoledronate IV is used when oral bisphosphonates are contraindicated (post-hip-fracture)." },
+],
+"Palliative Care": [
+    { q:"A 72-year-old man with end-stage COPD has severe dyspnoea at rest despite maximal bronchodilator therapy. He is not on opioids. What is the most evidence-based pharmacological treatment for refractory dyspnoea?", options:{A:"High-flow oxygen",B:"Low-dose oral morphine",C:"Nebulised furosemide",D:"Midazolam"}, correct:"B", explanation:"Opioids for dyspnoea: low-dose oral morphine (2.5-5 mg 4-hourly in opioid-naive patients) reduces the sensation of breathlessness without significant respiratory depression in COPD. Multiple RCTs support this. Oxygen only helps if patient is hypoxic — high-flow O2 does not relieve dyspnoea in normoxic patients and may worsen hypercapnia." },
+    { q:"A 65-year-old woman with metastatic breast cancer reports pain 7/10 despite regular paracetamol and ibuprofen. She has no renal dysfunction. According to the WHO analgesic ladder, what is the appropriate next step?", options:{A:"Add codeine (weak opioid — step 2)",B:"Start strong opioid directly (morphine)",C:"Add gabapentin",D:"Increase paracetamol dose"}, correct:"A", explanation:"WHO analgesic ladder Step 2: weak opioids (codeine, tramadol, dihydrocodeine) plus non-opioids ± adjuvants. If pain is mild-moderate (3-6/10) and not controlled on step 1, move to step 2 before strong opioids. However, current guidelines increasingly support moving directly to low-dose strong opioids (step 3) if step 1 fails, particularly for cancer pain." },
+    { q:"A 55-year-old man with pancreatic cancer has continuous background pain controlled on morphine 30 mg oral twice daily. He reports 'breakthrough' pain 2-3 times per day, each lasting 20-30 minutes. What is the appropriate breakthrough dose?", options:{A:"5 mg (1/6 of total daily dose)",B:"15 mg (1/4 of total daily dose)",C:"30 mg (equal to one regular dose)",D:"2 mg (lowest available)"}, correct:"A", explanation:"Breakthrough (rescue) dose = 1/6 of total 24-hour opioid dose. Total 24h morphine = 60 mg. 60 ÷ 6 = 10 mg. The correct answer here is the closest — 1/6 of total daily dose. Available as immediate-release morphine. If needing >3-4 breakthrough doses/day, increase background dose." },
+],
+"Medical Ethics": [
+    { q:"A 16-year-old girl presents requesting the oral contraceptive pill without parental knowledge. She is in a consensual relationship, understands the risks, and does not want her parents involved. What is the most appropriate action?", options:{A:"Refuse without parental consent",B:"Contact parents for consent",C:"Prescribe under Gillick/Fraser competency if she demonstrates sufficient maturity",D:"Refer to a specialist"}, correct:"C", explanation:"Gillick competency (UK) / Mature minor doctrine (US): a minor can consent to medical treatment if they demonstrate sufficient understanding and maturity — specifically for contraception under the Fraser guidelines. Criteria: she understands advice, cannot be persuaded to involve parents, will likely have sex anyway, physical/mental health suffers without contraception. Confidentiality applies." },
+    { q:"A 45-year-old Jehovah's Witness requires urgent surgery for a ruptured spleen. She has a valid advance directive refusing blood products. She is now unconscious. Her husband insists surgeons should give blood. What should happen?", options:{A:"Give blood — saving life overrides refusal",B:"Follow the advance directive and operate without blood transfusion",C:"Wait for legal advice before operating",D:"Give blood because she is incapacitated"}, correct:"B", explanation:"Valid advance directive from a competent adult is legally binding (Mental Capacity Act 2005, US common law). A competent adult's refusal of treatment — even lifesaving treatment — must be respected. The husband has no legal authority to override. Operating without blood transfusion, using cell salvage and haemostatic techniques, is the correct approach. Document clearly." },
+    { q:"A drug company sponsors a clinical trial and retains the right to suppress publication of unfavourable results. From an ethics standpoint, which principle is PRIMARILY violated?", options:{A:"Beneficence",B:"Non-maleficence",C:"Justice — specifically distributive justice and research integrity",D:"Autonomy"}, correct:"C", explanation:"Publication bias violates justice: it distorts the evidence base that clinicians and patients rely on, unfairly advantages the sponsor, and wastes research participants' contribution. It also violates non-maleficence (harm from biased prescribing) and research ethics principle of transparency. The Declaration of Helsinki requires all clinical trials to be registered and results published." },
+],
+"Global Health": [
+    { q:"A 35-year-old man from rural Ghana presents with 5 days of fever, rigors, and jaundice. He took no malaria prophylaxis. Blood film: P. falciparum, 6% parasitaemia. He has mild confusion. What is the most appropriate treatment?", options:{A:"Oral artemether-lumefantrine",B:"IV artesunate",C:"Oral chloroquine",D:"IV quinine alone"}, correct:"B", explanation:"Severe/complicated falciparum malaria (parasitaemia >2% OR organ involvement): IV artesunate is first-line globally (WHO 2015), superior to IV quinine in mortality reduction. Oral therapy only for uncomplicated malaria. Chloroquine resistance widespread in Africa. Severe features: cerebral, >2% parasitaemia, renal failure, pulmonary oedema, severe anaemia, hypoglycaemia." },
+    { q:"The under-5 mortality rate in a sub-Saharan country falls from 120 to 48 per 1,000 live births over 10 years. The main interventions were insecticide-treated nets (ITNs), ORS for diarrhoea, and vitamin A supplementation. Which conclusion is most supported?", options:{A:"Surgical infrastructure was the key driver",B:"Cost-effective preventive interventions can dramatically reduce child mortality",C:"Economic development was the sole driver",D:"These interventions require advanced healthcare infrastructure"}, correct:"B", explanation:"The Child Health Epidemiology Reference Group found that ~50% of under-5 deaths are preventable with known low-cost interventions. ORS, ITNs, vitamin A, zinc, and breastfeeding promotion are among the most cost-effective health interventions known. This is the core message of global child health — prevention at scale beats treatment." },
+],
+"Genetics": [
+    { q:"A 32-year-old woman has a family history of BRCA1 mutation (her mother). She tests positive for the same BRCA1 mutation. Approximately what lifetime risk of breast cancer does this confer?", options:{A:"15-20% (similar to general population)",B:"30-40%",C:"60-80%",D:"100%"}, correct:"C", explanation:"BRCA1/2 pathogenic variants: BRCA1 confers ~72% lifetime breast cancer risk (vs ~12% population). BRCA2 ~69%. Risk is not 100% — penetrance is incomplete. Management: enhanced surveillance (annual MRI from age 25), risk-reducing salpingo-oophorectomy (RRSO) by age 40, and discussion of risk-reducing mastectomy. Chemoprevention with tamoxifen reduces risk ~38%." },
+    { q:"A newborn has hypotonia, poor feeding, small hands and feet, almond-shaped eyes, and hypogonadism. Karyotype is 46,XY. Methylation studies confirm absence of paternal 15q11-13. What is the diagnosis?", options:{A:"Down syndrome",B:"Angelman syndrome",C:"Prader-Willi syndrome",D:"Fragile X syndrome"}, correct:"C", explanation:"Prader-Willi syndrome: loss of paternally expressed genes on 15q11-13 (deletion, maternal uniparental disomy, or imprinting defect). Features: neonatal hypotonia/feeding difficulty → toddler hyperphagia/obesity, intellectual disability, hypogonadism, short stature. Angelman = loss of maternal 15q11-13 = happy demeanour, ataxia, seizures, absent speech." },
+],
+"Preventive Medicine": [
+    { q:"A 50-year-old woman has a 10-year cardiovascular risk of 14% calculated using Framingham. She is a non-smoker with a BP of 138/82 and total cholesterol of 5.8 mmol/L. Which intervention has the greatest absolute risk reduction?", options:{A:"Aspirin prophylaxis",B:"Moderate-intensity statin",C:"Antihypertensive therapy to target <130/80",D:"Dietary sodium restriction alone"}, correct:"B", explanation:"Statins in primary prevention at 10-year CVD risk ≥10% (ACC/AHA 2019, NICE 2014): moderate-intensity statin reduces major cardiovascular events by ~25% relative risk, giving ARR of ~2-4% over 5-10 years. At 14% baseline risk this is the most impactful single intervention. Aspirin is no longer recommended for primary prevention (bleeding risk outweighs benefit). Antihypertensive is reasonable but BP is only mildly elevated." },
+],
+"Hematology & Oncology": [
+    { q:"A 42-year-old woman presents with sudden severe headache, confusion, and purpura. Labs: Hb 7.2, platelets 18,000, creatinine 2.4, LDH 1200, normal coagulation. Blood film shows schistocytes. ADAMTS13 activity is 4%. What is the diagnosis and treatment?", options:{A:"HUS — eculizumab",B:"DIC — FFP and cryoprecipitate",C:"TTP — plasma exchange (PEX)",D:"ITP — IVIG and steroids"}, correct:"C", explanation:"TTP: microangiopathic haemolytic anaemia (MAHA) + thrombocytopenia + neurological symptoms + renal involvement + fever (pentad). ADAMTS13 <10% is diagnostic of immune-mediated TTP (anti-ADAMTS13 antibodies). Treatment: IMMEDIATE plasma exchange (removes antibodies + replaces ADAMTS13) + steroids + caplacizumab. Mortality without PEX is >90%." },
+    { q:"A 60-year-old man is found to have a monoclonal IgG kappa spike of 1.8 g/dL on SPEP. Bone marrow shows 7% plasma cells. Skeletal survey is normal. Haemoglobin is 13.2, calcium normal, creatinine normal. What is the diagnosis and management?", options:{A:"Multiple myeloma — start bortezomib",B:"Monoclonal gammopathy of undetermined significance (MGUS) — observation",C:"Smouldering myeloma — clinical trial",D:"Waldenström macroglobulinaemia — rituximab"}, correct:"B", explanation:"MGUS: M-protein <3 g/dL, <10% clonal plasma cells, no myeloma-defining events (CRAB: hyperCalcaemia, Renal, Anaemia, Bone). Risk of progression to myeloma: ~1%/year. Management: observation with repeat SPEP every 6-12 months. Smouldering myeloma: M-protein ≥3 g/dL OR plasma cells 10-60% — higher progression risk." },
+],
+"Endocrinology": [
+    { q:"A 28-year-old woman has intermittent headaches, diaphoresis, and hypertensive episodes reaching 200/110. Urinary catecholamines and metanephrines are elevated. CT shows a 4.5 cm right adrenal mass. What must be done BEFORE surgery?", options:{A:"Start beta-blocker immediately to control heart rate",B:"Alpha-blockade first (phenoxybenzamine or doxazosin) for 10-14 days, then add beta-blocker",C:"Emergency adrenalectomy",D:"Repeat CT in 6 weeks"}, correct:"B", explanation:"Phaeochromocytoma preoperative preparation: ALWAYS alpha-block first (phenoxybenzamine or selective alpha-1 blockers) for at least 10-14 days. Only THEN add beta-blocker if needed (tachycardia). Starting beta-blocker first causes unopposed alpha stimulation → hypertensive crisis. Adequate fluid loading is also essential. Surgery is then safer." },
+],
+"Orthopedics": [
+    { q:"A 22-year-old male rugby player twists his knee during a tackle. He hears a 'pop' and the knee swells immediately. McMurray test is negative. Anterior draw test: 2+ with a soft endpoint. Lachman test is positive. What structure is most likely injured?", options:{A:"Medial meniscus",B:"Posterior cruciate ligament",C:"Anterior cruciate ligament",D:"Lateral collateral ligament"}, correct:"C", explanation:"ACL injury: acute haemarthrosis (immediate swelling after pop), positive Lachman (most sensitive, 85%) and anterior draw test with soft endpoint. McMurray tests the meniscus (positive = click/pain on rotation). ACL rupture is common in pivoting sports. MRI confirms diagnosis. Treatment: physio ± surgical reconstruction depending on activity level." },
+],
+};
+for (const [spec, qs] of Object.entries(extra2)) {
+    if (!QUIZ_BANK[spec]) QUIZ_BANK[spec] = [];
+    QUIZ_BANK[spec].push(...qs);
+}
+})();
+
 // Return a set of N random questions for a given specialty
 function getQuizQuestions(specName, n = 4) {
     // Try exact match, then fuzzy match
@@ -9366,7 +9849,7 @@ function getQuizQuestions(specName, n = 4) {
             // Award XP and record
             const xpEarned = score * 10;
             if (xpEarned > 0) gainXP(xpEarned);
-            const histKey = `${spec}||${disease}`;
+            const histKey = `${spec}|||${disease}`;
             if (!quizHistory[histKey]) quizHistory[histKey] = { attempts: 0, correct: 0, lastDate: null };
             quizHistory[histKey].attempts += questions.length;
             quizHistory[histKey].correct  += score;
@@ -9518,8 +10001,8 @@ function getQuizQuestions(specName, n = 4) {
             for (const dis in studied[spec]) {
                 const rec = studied[spec][dis];
                 if (filterShaky && rec.confidence !== 1) continue;
-                const noteKey = `${spec}||${dis}`;
-                const histKey = noteKey;
+                const noteKey = `${spec}|||${dis}`;
+                const histKey = noteKey; // noteKey already uses ||| separator
                 const hist = quizHistory[histKey];
                 const accuracy = hist?.attempts > 0 ? Math.round((hist.correct/hist.attempts)*100) : null;
                 flashcardDeck.push({ spec, dis, rec, note: studyNotes[noteKey] || '', accuracy });
@@ -9907,6 +10390,11 @@ function getQuizQuestions(specName, n = 4) {
 
          // Load progress first
          loadProgress();
+         // Clear stale combo if the session wasn't today
+         if (lastStudyDate !== getTodayDateString()) {
+             comboCount = 0;
+             if (comboTimerId) { clearTimeout(comboTimerId); comboTimerId = null; }
+         }
          // Generate tasks if needed
          checkAndGenerateDailyTasks();
          checkAndGenerateMonthlyTasks(); // Check and generate monthly tasks
@@ -9933,6 +10421,8 @@ updateActiveMonthlyTasksProgress(); // Ensure initial progress syncs from loaded
         renderHeatmap();
         renderDailyCase();
         updateFocusTimerDisplay();
+        renderNotesSection();
+        renderBossSection();
         updateComboDisplay();
         loadCloudCredentials();
         updateCloudUI();
@@ -10073,6 +10563,11 @@ clearSearchBtnEl?.addEventListener('click', () => {
     if (specialtySearchInputEl) { specialtySearchInputEl.value = ''; specialtySearchInputEl.focus(); }
     if (clearSearchBtnEl) clearSearchBtnEl.style.display = 'none';
     renderSpecialties('');
+});
+
+// --- Notes Search Listener ---
+document.getElementById('notes-search')?.addEventListener('input', e => {
+    renderNotesSection(e.target.value.toLowerCase());
 });
 
     init();
