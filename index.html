@@ -2065,6 +2065,112 @@ h2 .section-emoji,
     text-shadow: 0 0 24px rgba(20,184,166,0.5) !important;
 }
 
+/* ═══════════════════════════════════════════════════════════════ */
+/* ═══ TODAY'S FOCUS WIDGET ══════════════════════════════════ */
+/* ═══════════════════════════════════════════════════════════════ */
+.todays-focus-widget {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    align-items: center;
+    background: var(--bg-2);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 10px 16px;
+    margin-bottom: 14px;
+}
+.tf-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1px;
+    flex: 1;
+    min-width: 52px;
+    text-align: center;
+}
+.tf-icon { font-size: 1em; line-height: 1; }
+.tf-item strong {
+    font-family: var(--font-header);
+    font-size: 1.15em;
+    font-weight: 700;
+    color: var(--text);
+    line-height: 1;
+}
+.tf-label { font-size: 0.68em; color: var(--text-3); line-height: 1.2; }
+.tf-xp strong { color: var(--gold-bright); }
+.tf-xp { border-left: 1px solid var(--border); padding-left: 10px; margin-left: 2px; }
+
+/* Achievement toast */
+.toast-achievement {
+    background: linear-gradient(135deg, rgba(244,196,48,0.18), rgba(244,196,48,0.08)) !important;
+    border-color: rgba(244,196,48,0.5) !important;
+    display: flex !important;
+    align-items: flex-start;
+    gap: 10px;
+    text-align: left;
+    min-width: 220px;
+}
+.ach-toast-icon { font-size: 1.6em; line-height: 1; flex-shrink: 0; }
+.ach-toast-body { font-size: 0.85em; line-height: 1.4; }
+.ach-toast-body strong { color: var(--gold); display: block; margin-bottom: 1px; }
+.ach-toast-body small { color: var(--text-3); font-size: 0.88em; }
+
+/* ═══════════════════════════════════════════════════════════════ */
+/* ═══ MOBILE SIDEBAR ════════════════════════════════════════ */
+/* ═══════════════════════════════════════════════════════════════ */
+.sidebar-toggle {
+    display: none;
+    position: fixed;
+    top: 12px;
+    left: 12px;
+    z-index: 1000;
+    width: 40px;
+    height: 40px;
+    background: var(--bg-raised);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    font-size: 1.2em;
+    color: var(--gold);
+    cursor: pointer;
+    padding: 0;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.4);
+    transition: background 0.15s;
+}
+.sidebar-toggle:hover { background: var(--bg-3); }
+.sidebar-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.55);
+    z-index: 900;
+    opacity: 0;
+    transition: opacity 0.25s;
+}
+.sidebar-overlay.active { opacity: 1; }
+
+@media (max-width: 768px) {
+    .sidebar-toggle { display: flex; }
+    .sidebar-overlay { display: block; }
+    .sidebar {
+        position: fixed !important;
+        top: 0; left: 0; bottom: 0;
+        width: 280px !important;
+        z-index: 950;
+        transform: translateX(-100%);
+        transition: transform 0.28s cubic-bezier(0.4,0,0.2,1);
+        overflow-y: auto;
+        box-shadow: 4px 0 24px rgba(0,0,0,0.5);
+    }
+    .sidebar.open { transform: translateX(0); }
+    .app-container { grid-template-columns: 1fr !important; }
+    .main-content { padding-top: 56px; }
+    .todays-focus-widget { gap: 6px; padding: 8px 12px; }
+    .tf-item strong { font-size: 1em; }
+    .tf-xp { border-left: none; padding-left: 0; margin-left: 0; border-top: 1px solid var(--border); padding-top: 6px; width: 100%; flex-direction: row; gap: 6px; justify-content: center; }
+}
+
 </style>
     <!-- Tone.js SFX -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.49/Tone.min.js"></script>
@@ -2074,7 +2180,11 @@ h2 .section-emoji,
 <div id="app" class="app-container">
 
     <!-- ═══════════════════════════════════════ SIDEBAR ═══════════════════════════════ -->
-    <aside class="sidebar">
+    <!-- Mobile sidebar toggle -->
+    <button id="sidebar-toggle" class="sidebar-toggle" aria-label="Toggle navigation">☰</button>
+    <div id="sidebar-overlay" class="sidebar-overlay"></div>
+
+    <aside class="sidebar" id="sidebar">
 
         <!-- Profile Block -->
         <div class="profile">
@@ -2209,6 +2319,14 @@ h2 .section-emoji,
             <div id="exam-countdown-display" class="exam-countdown" style="display:none"></div>
         </header>
 
+        <!-- Today's Focus Widget -->
+        <div id="todays-focus-widget" class="todays-focus-widget">
+            <div class="tf-item"><span class="tf-icon">📚</span><strong id="tf-topics">0</strong><span class="tf-label">Topics</span></div>
+            <div class="tf-item"><span class="tf-icon">❓</span><strong id="tf-questions">0</strong><span class="tf-label">Questions</span></div>
+            <div class="tf-item"><span class="tf-icon">🔄</span><strong id="tf-reviews">0</strong><span class="tf-label">Reviews</span></div>
+            <div class="tf-item"><span class="tf-icon">⏱</span><strong id="tf-focus">0</strong><span class="tf-label">Sessions</span></div>
+            <div class="tf-item tf-xp"><span class="tf-icon">✨</span><strong id="tf-xp">0</strong><span class="tf-label">XP Today</span></div>
+        </div>
         <div id="weekly-digest-banner" class="weekly-digest-banner" style="display:none"></div>
         <div id="combo-display" class="combo-display" style="display:none"></div>
 
@@ -2982,6 +3100,9 @@ let monthlyTaskProgress = {
     focusSessionsThisMonthCount: 0,
     quizSessionsThisMonthCount: 0,
     levelAtMonthStart: 0,
+    shakyRatingsThisMonthCount: 0,
+    specialtiesStudiedThisMonth: new Set(),
+    longestStreakThisMonth: 0,
 };
 
     // ===========================
@@ -3163,6 +3284,21 @@ const MONTHLY_TASK_CONFIG = [
       desc: 'Complete {target} USMLE quiz sessions this month',
       targets: [3, 6, 12], rewardsXP: [600, 1200, 2200], rewardsSP: [2, 3, 5],
       metric: 'quizSessionsThisMonthCount' },
+    { id: 'shaky_ratings_monthly',
+      name: '🔴 The Honest Reckoning', flavor: 'The gaps you admit are the ones you can fix.',
+      desc: 'Rate {target} topics as 🔴 Shaky this month',
+      targets: [10, 20, 40], rewardsXP: [400, 800, 1500], rewardsSP: [1, 2, 3],
+      metric: 'shakyRatingsThisMonthCount' },
+    { id: 'multi_specialty_monthly',
+      name: '🌐 The Generalist', flavor: 'Medicine rewards the doctor who sees the whole patient.',
+      desc: 'Study topics across {target} different specialties this month',
+      targets: [3, 5, 8], rewardsXP: [500, 1000, 1800], rewardsSP: [1, 2, 4],
+      metric: 'specialtiesStudiedThisMonthCount' },
+    { id: 'streak_monthly',
+      name: '🔥 The Relentless Month', flavor: 'Show up every day. That is the whole secret.',
+      desc: 'Maintain a {target}-day study streak this month',
+      targets: [5, 7, 14], rewardsXP: [600, 1200, 2500], rewardsSP: [2, 3, 5],
+      metric: 'longestStreakThisMonth' },
 ];
 const NUM_MONTHLY_TASKS_TO_OFFER = 3; // How many monthly tasks to show at a time
 
@@ -5979,6 +6115,17 @@ const achievementDescriptions = {
         updateMusicModeButtons();
     }
 
+    // ── Mobile sidebar toggle ─────────────────────────────
+    const sidebarToggleBtn = document.getElementById('sidebar-toggle');
+    const sidebarOverlay   = document.getElementById('sidebar-overlay');
+    const sidebarEl        = document.getElementById('sidebar');
+    function openSidebar()  { sidebarEl?.classList.add('open'); sidebarOverlay?.classList.add('active'); document.body.style.overflow='hidden'; }
+    function closeSidebar() { sidebarEl?.classList.remove('open'); sidebarOverlay?.classList.remove('active'); document.body.style.overflow=''; }
+    sidebarToggleBtn?.addEventListener('click', () => sidebarEl?.classList.contains('open') ? closeSidebar() : openSidebar());
+    sidebarOverlay?.addEventListener('click', closeSidebar);
+    // Close sidebar when a nav link is clicked on mobile
+    document.querySelectorAll('.sidebar-nav a').forEach(a => a.addEventListener('click', () => { if (window.innerWidth <= 768) closeSidebar(); }));
+
     // Auto-advance when track ends
     bgmAudioElement?.addEventListener('ended', () => {
         if (repeatOneMode) return; // loop attribute handles it
@@ -6624,6 +6771,10 @@ if (getYearMonthString() === lastMonthlyTasksGeneratedDate) {
                 showNotification(milestoneNotification, 5000);
             }
 
+            // Update longest streak this month for monthly challenge
+            if (getYearMonthString() === lastMonthlyTasksGeneratedDate) {
+                monthlyTaskProgress.longestStreakThisMonth = Math.max(monthlyTaskProgress.longestStreakThisMonth||0, dailyStreak);
+            }
             checkStreakAchievements();
             updateAndSave();
         } else {
@@ -7694,6 +7845,36 @@ function showXpToast(xpAmount, sourceText = '') {
 }
 
     // Generic toast for non-XP messages
+    // ── Achievement toast queue ───────────────────────────
+    let _achQueue   = [];
+    let _achShowing = false;
+    function queueAchievementToast(name, icon, xp, sp) {
+        _achQueue.push({ name, icon, xp, sp });
+        if (!_achShowing) drainAchievementQueue();
+    }
+    function drainAchievementQueue() {
+        if (_achQueue.length === 0) { _achShowing = false; return; }
+        _achShowing = true;
+        const { name, icon, xp, sp } = _achQueue.shift();
+        const reward = (xp > 0 ? `+${xp} XP` : '') + (xp > 0 && sp > 0 ? ' · ' : '') + (sp > 0 ? `+${sp} SP` : '');
+        const container = document.getElementById('toast-container');
+        if (!container) { drainAchievementQueue(); return; }
+        const toast = document.createElement('div');
+        toast.className = 'toast toast-achievement';
+        toast.innerHTML = `<span class="ach-toast-icon">${icon}</span><span class="ach-toast-body"><strong>Achievement!</strong><br>${name}${reward ? '<br><small>'+reward+'</small>' : ''}</span>`;
+        container.appendChild(toast);
+        void toast.offsetWidth;
+        toast.classList.add('show');
+        const delay = 2800 + Math.min(_achQueue.length * 200, 600);
+        setTimeout(() => {
+            toast.classList.remove('show');
+            setTimeout(() => {
+                if (toast.parentNode) toast.parentNode.removeChild(toast);
+                drainAchievementQueue();
+            }, 450);
+        }, delay);
+    }
+
     function showToast(message, type = 'info', duration = 3000) {
         const container = document.getElementById('toast-container');
         if (!container) { console.warn('Toast container missing:', message); return; }
@@ -8254,6 +8435,19 @@ if (!sfxAudioInitialized && toneJsLoaded) {
         }
     }
 
+    function updateTodayWidget() {
+        const today = getTodayDateString();
+        const hm = studyHeatmap[today] || { topics: 0, questions: 0, reviews: 0, focus: 0 };
+        const tr = todayRecordTracking;
+        const todayXP = (tr.date === today) ? (tr.xp || 0) : 0;
+        const el = id => document.getElementById(id);
+        if (el('tf-topics'))    el('tf-topics').textContent    = hm.topics    || 0;
+        if (el('tf-questions')) el('tf-questions').textContent = hm.questions  || 0;
+        if (el('tf-reviews'))   el('tf-reviews').textContent   = hm.reviews   || 0;
+        if (el('tf-focus'))     el('tf-focus').textContent     = hm.focus     || 0;
+        if (el('tf-xp'))        el('tf-xp').textContent        = todayXP.toLocaleString();
+    }
+
     function renderBossSection() {
         const el = document.getElementById('boss-battles-list');
         if (!el) return;
@@ -8306,6 +8500,7 @@ if (!sfxAudioInitialized && toneJsLoaded) {
     };
 
     function updateAndSave() {
+        updateTodayWidget();
         updateStatsUI();
         updateAchievementsListUI();
         updateQuestLogUI();
@@ -8374,6 +8569,11 @@ function generateNewMonthlyTasks() {
 }
 
 function updateActiveMonthlyTasksProgress() {
+    // Ensure Set is properly initialised (JSON parse loses Set type)
+    if (!monthlyTaskProgress.specialtiesStudiedThisMonth || typeof monthlyTaskProgress.specialtiesStudiedThisMonth.size === 'undefined') {
+        monthlyTaskProgress.specialtiesStudiedThisMonth = new Set(Array.isArray(monthlyTaskProgress.specialtiesStudiedThisMonth) ? monthlyTaskProgress.specialtiesStudiedThisMonth : []);
+    }
+    monthlyTaskProgress.specialtiesStudiedThisMonthCount = monthlyTaskProgress.specialtiesStudiedThisMonth.size;
     let changed = false;
     monthlyTasks.forEach(task => {
         if (task.completed) return;
@@ -8953,6 +9153,8 @@ function renderMonthlyTasksUI() {
         checkSpecialtyMastery(spec, true);
         if (getYearMonthString() === lastMonthlyTasksGeneratedDate) {
             monthlyTaskProgress.topicsStudiedThisMonthCount++;
+            if (!monthlyTaskProgress.specialtiesStudiedThisMonth) monthlyTaskProgress.specialtiesStudiedThisMonth = new Set();
+            monthlyTaskProgress.specialtiesStudiedThisMonth.add(specialty);
             updateActiveMonthlyTasksProgress();
         }
         renderDailyCase();
