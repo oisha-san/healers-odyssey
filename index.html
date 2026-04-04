@@ -2004,6 +2004,67 @@ h2 .section-emoji,
     box-shadow: 0 0 12px rgba(244,196,48,0.25);
 }
 
+/* ═══════════════════════════════════════════════════════════════ */
+/* ═══ FOCUS TIMER — STUDY PLAN UI ══════════════════════════ */
+/* ═══════════════════════════════════════════════════════════════ */
+.focus-plan-setup {
+    background: var(--bg-2);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 16px;
+    margin-bottom: 18px;
+}
+.focus-plan-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+.focus-plan-row label {
+    font-size: 0.85em;
+    font-weight: 600;
+    color: var(--text-2);
+    white-space: nowrap;
+    margin: 0;
+}
+.focus-plan-inputs {
+    display: flex;
+    gap: 6px;
+}
+.focus-plan-inputs select {
+    margin: 0;
+    width: auto;
+    min-width: 70px;
+    font-size: 0.85em;
+    padding: 7px 10px;
+}
+.focus-plan-preview {
+    margin-top: 12px;
+    padding-top: 10px;
+    border-top: 1px solid var(--border);
+}
+.focus-plan-summary {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 8px;
+    font-size: 0.83em;
+    color: var(--text-2);
+}
+.focus-plan-summary strong { color: var(--gold); }
+.focus-plan-progress {
+    font-size: 0.78em;
+    color: var(--text-3);
+    font-family: monospace;
+    letter-spacing: 0.02em;
+    margin-top: 3px;
+}
+/* Break state — teal colour */
+.focus-timer-countdown.break {
+    color: #14b8a6 !important;
+    text-shadow: 0 0 24px rgba(20,184,166,0.5) !important;
+}
+
 </style>
     <!-- Tone.js SFX -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.49/Tone.min.js"></script>
@@ -2167,10 +2228,40 @@ h2 .section-emoji,
         <!-- Focus Timer -->
         <section id="focus-timer-section" class="content-section">
             <h2>⏱ Focus Timer</h2>
+
+            <!-- Study Plan Setup -->
+            <div class="focus-plan-setup" id="focus-plan-setup">
+                <p class="section-desc">Set a study goal and the timer handles the rest — 25 min sessions with 5 min breaks.</p>
+                <div class="focus-plan-row">
+                    <label>Study goal:</label>
+                    <div class="focus-plan-inputs">
+                        <select id="focus-plan-hours">
+                            <option value="0">0 h</option>
+                            <option value="1">1 h</option>
+                            <option value="2">2 h</option>
+                            <option value="3">3 h</option>
+                            <option value="4">4 h</option>
+                            <option value="5">5 h</option>
+                            <option value="6">6 h</option>
+                        </select>
+                        <select id="focus-plan-mins">
+                            <option value="0">0 min</option>
+                            <option value="25">25 min</option>
+                            <option value="50">50 min</option>
+                        </select>
+                    </div>
+                    <button id="focus-plan-btn" class="btn-info">▶ Start Plan</button>
+                    <button id="focus-single-btn" class="btn-ghost">Single Session</button>
+                </div>
+                <div id="focus-plan-preview" class="focus-plan-preview" style="display:none"></div>
+            </div>
+
+            <!-- Active Timer -->
             <div class="focus-timer-layout">
                 <div id="focus-timer-display" class="focus-timer-countdown">25:00</div>
                 <div class="focus-timer-info">
-                    <p>25 minutes of deep, uninterrupted study. Complete it to earn <strong>+50 XP</strong>.</p>
+                    <p id="focus-session-label">25 minutes of deep, uninterrupted study.</p>
+                    <p id="focus-plan-progress" class="focus-plan-progress" style="display:none"></p>
                     <p class="focus-timer-total">Sessions: <strong id="focus-sessions-count">0</strong> &nbsp;·&nbsp; Total: <strong id="total-study-mins">0</strong></p>
                 </div>
                 <div class="focus-timer-btns">
@@ -2679,6 +2770,10 @@ document.addEventListener('DOMContentLoaded', () => {
     let focusTimerSecondsLeft = 25 * 60;
     let totalStudyMinutes = 0;
     let focusSessionsCompleted = 0;
+
+    // Study Plan state
+    let studyPlan = null; // { totalSessions, sessionsLeft, isBreak, sessionsDone }
+    let BREAK_DURATION_SECS = 5 * 60; // 5-minute break
 
     // === Feature: Cloud Sync ===
     let cloudApiKey = '';
@@ -5259,7 +5354,7 @@ const achievementIcons = {
 
     // Level Milestones
     "Clinical Apprentice": "⚕️",
-    "Medical Student": "🎓",
+    "Science Foundation": "📖",
     "Medical Intern": "👨‍⚕️",
     "Junior Resident": "🧑‍⚕️",
     "Resident Physician": "🩺",
@@ -5267,9 +5362,9 @@ const achievementIcons = {
     "The Elite": "🏆",
     "The Mythical": "🐉",
     "The Transcendent": "🌠",
-    "Adept Healer": "⚗️",
-    "Resident of Remedies": "🏥",
-    "Senior Resident": "🧑‍⚕️",
+    "Biochemical Scholar": "⚗️",
+    "Pharmacology Practitioner": "💊",
+    "Pathology Pioneer": "🔬",
     "Attending Physician": "👩‍⚕️",
 
     // Question Milestones
@@ -5459,10 +5554,10 @@ const achievementDescriptions = {
     "The Elite": "Reach Level 75 — Chief Resident. You are in the top tier of learners.",
     "The Mythical": "Reach Level 85 — Approaching the summit of medical mastery. Almost no one reaches this.",
     "The Transcendent": "Reach Level 102 — Every specialty unlocked. You are The Transcendent.",
-    "Medical Student": "Reach Level 3 — Physiology unlocks. The body's language begins to make sense.",
-    "Adept Healer": "Reach Level 6 — Biochemistry unlocks. Reading disease at the molecular level.",
-    "Resident of Remedies": "Reach Level 9 — Pharmacology unlocks. You now understand how to treat, not just diagnose.",
-    "Senior Resident": "Reach Level 12 — Pathology unlocks. You can see disease at the cellular level.",
+    "Science Foundation": "Reach Level 3 — Physiology unlocks. The body's language begins to make sense.",
+    "Biochemical Scholar": "Reach Level 6 — Biochemistry unlocks. Reading disease at the molecular level.",
+    "Pharmacology Practitioner": "Reach Level 9 — Pharmacology unlocks. You now understand how to treat, not just diagnose.",
+    "Pathology Pioneer": "Reach Level 12 — Pathology unlocks. Disease now makes sense at the cellular level.",
     "Attending Physician": "Reach Level 50 — You have earned the title of Attending Physician.",
 
     // Question Milestones
@@ -6738,7 +6833,7 @@ if (getYearMonthString() === lastMonthlyTasksGeneratedDate) {
 
     const ACHIEVEMENT_REWARDS = {
         "Clinical Apprentice": {xp:50,sp:0},
-        "Medical Student": {xp:100,sp:1},
+        "Science Foundation": {xp:100,sp:1},
         "Medical Intern": {xp:200,sp:1},
         "Junior Resident": {xp:400,sp:2},
         "Resident Physician": {xp:600,sp:2},
@@ -6746,9 +6841,9 @@ if (getYearMonthString() === lastMonthlyTasksGeneratedDate) {
         "The Elite": {xp:1500,sp:5},
         "The Mythical": {xp:2500,sp:7},
         "The Transcendent": {xp:3000,sp:10},
-        "Adept Healer": {xp:150,sp:1},
-        "Resident of Remedies": {xp:200,sp:1},
-        "Senior Resident": {xp:250,sp:1},
+        "Biochemical Scholar": {xp:150,sp:1},
+        "Pharmacology Practitioner": {xp:200,sp:1},
+        "Pathology Pioneer": {xp:250,sp:1},
         "Attending Physician": {xp:300,sp:2},
         "First Blood": {xp:25,sp:0},
         "Novice Diagnostician": {xp:75,sp:0},
@@ -6948,10 +7043,10 @@ if (getYearMonthString() === lastMonthlyTasksGeneratedDate) {
             40:  "Resident Physician",
             30:  "Junior Resident",
             20:  "Medical Intern",
-            12:  "Senior Resident",
-            9:   "Resident of Remedies",
-            6:   "Adept Healer",
-            3:   "Medical Student",
+            12:  "Pathology Pioneer",
+            9:   "Pharmacology Practitioner",
+            6:   "Biochemical Scholar",
+            3:   "Science Foundation",
             1:   "Clinical Apprentice"
         };
         for (const milestoneLevel in levelMilestones) {
@@ -7121,8 +7216,8 @@ if (getYearMonthString() === lastMonthlyTasksGeneratedDate) {
         const categories = [
             {
                 label: '🏥 Level Milestones',
-                names: ['Clinical Apprentice','Medical Student','Adept Healer','Resident of Remedies',
-                        'Senior Resident','Medical Intern','Junior Resident','Resident Physician',
+                names: ['Clinical Apprentice','Science Foundation','Biochemical Scholar','Pharmacology Practitioner',
+                        'Pathology Pioneer','Medical Intern','Junior Resident','Resident Physician',
                         'Attending Physician','Senior Physician','The Elite','The Mythical','The Transcendent']
             },
             {
@@ -8868,31 +8963,99 @@ function renderMonthlyTasksUI() {
     // ============================================================
     // ===== FEATURE: Focus Timer (Pomodoro) =====================
     // ============================================================
+    // ── Study Plan ────────────────────────────────────────────────────
+    function initStudyPlan() {
+        const hoursEl = document.getElementById('focus-plan-hours');
+        const minsEl  = document.getElementById('focus-plan-mins');
+        const preview = document.getElementById('focus-plan-preview');
+        if (!hoursEl || !minsEl) return;
+
+        const totalMins  = parseInt(hoursEl.value) * 60 + parseInt(minsEl.value);
+        const studySessions = Math.floor(totalMins / 25);
+        if (studySessions < 1) {
+            showToast('Set at least 25 minutes to start a plan.', 'warning', 2500);
+            return;
+        }
+
+        // 25 min study + 5 min break per session (no break after last)
+        const totalPlanMins = studySessions * 25 + Math.max(0, studySessions - 1) * 5;
+        const h = Math.floor(totalPlanMins / 60);
+        const m = totalPlanMins % 60;
+
+        studyPlan = { totalSessions: studySessions, sessionsLeft: studySessions, isBreak: false, sessionsDone: 0 };
+
+        if (preview) {
+            preview.style.display = 'block';
+            preview.innerHTML = `
+              <div class="focus-plan-summary">
+                <span>📋 Plan: <strong>${studySessions}</strong> sessions × 25 min + ${studySessions-1} breaks × 5 min</span>
+                <span>⏱ Total: <strong>${h > 0 ? h+'h ' : ''}${m > 0 ? m+'m' : ''}</strong></span>
+              </div>`;
+        }
+        updatePlanProgressLabel();
+        startFocusTimer();
+    }
+
+    function updatePlanProgressLabel() {
+        const labelEl   = document.getElementById('focus-session-label');
+        const progressEl = document.getElementById('focus-plan-progress');
+        if (!studyPlan) {
+            if (labelEl) labelEl.textContent = '25 minutes of deep, uninterrupted study.';
+            if (progressEl) progressEl.style.display = 'none';
+            return;
+        }
+        const done = studyPlan.sessionsDone;
+        const total = studyPlan.totalSessions;
+        const pct = Math.round((done / total) * 100);
+        if (studyPlan.isBreak) {
+            if (labelEl)   labelEl.textContent = `☕ Break time — ${done}/${total} sessions done.`;
+            if (progressEl) { progressEl.style.display = 'block'; progressEl.innerHTML = `Break ${done} of ${total-1} · ${pct}% through plan`; }
+        } else {
+            if (labelEl)   labelEl.textContent = `Session ${done+1} of ${total} · ${25*(total-done)} min of study left.`;
+            if (progressEl) { progressEl.style.display = 'block'; progressEl.innerHTML = `${'▓'.repeat(done)}${'░'.repeat(total-done)} ${pct}%`; }
+        }
+    }
+
+    function clearStudyPlan() {
+        studyPlan = null;
+        const preview  = document.getElementById('focus-plan-preview');
+        const labelEl  = document.getElementById('focus-session-label');
+        const progressEl = document.getElementById('focus-plan-progress');
+        if (preview)  preview.style.display = 'none';
+        if (labelEl)  labelEl.textContent = '25 minutes of deep, uninterrupted study.';
+        if (progressEl) progressEl.style.display = 'none';
+    }
+
     function startFocusTimer() {
         const btn = document.getElementById('focus-timer-btn');
         const resetBtn = document.getElementById('focus-reset-btn');
 
         if (focusTimerActive && !focusTimerPaused) {
-            // Running → Pause on click
             pauseFocusTimer(); return;
         }
         if (focusTimerPaused) {
-            // Paused → Resume on click
             focusTimerPaused = false; focusTimerActive = true;
             focusTimerInterval = setInterval(() => { focusTimerSecondsLeft--; updateFocusTimerDisplay(); if (focusTimerSecondsLeft <= 0) stopFocusTimer(true); }, 1000);
             updateFocusTimerDisplay();
             if (btn) { btn.textContent = '⏸ Pause'; btn.classList.add('timer-active'); }
             showToast('▶ Resumed!', 'info', 1500); return;
         }
-        // Not running → Start fresh
+        // Fresh start — determine duration (study or break)
+        const isBreak = studyPlan?.isBreak;
         focusTimerActive = true; focusTimerPaused = false;
-        focusTimerSecondsLeft = FOCUS_TIMER_DURATION_SECS;
+        focusTimerSecondsLeft = isBreak ? BREAK_DURATION_SECS : FOCUS_TIMER_DURATION_SECS;
         updateFocusTimerDisplay();
         focusTimerInterval = setInterval(() => { focusTimerSecondsLeft--; updateFocusTimerDisplay(); if (focusTimerSecondsLeft <= 0) stopFocusTimer(true); }, 1000);
-        if (btn) { btn.textContent = '⏸ Pause'; btn.classList.add('timer-active'); }
+        if (btn) { btn.textContent = isBreak ? '⏸ Break...' : '⏸ Pause'; btn.classList.add('timer-active'); }
         if (resetBtn) resetBtn.style.display = 'inline-flex';
-        playSound('skillUp');
-        showToast('🎯 Focus session started! 25 minutes of deep study.', 'info', 3000);
+        if (!isBreak) {
+            playSound('skillUp');
+            const msg = studyPlan
+                ? `🎯 Session ${studyPlan.sessionsDone+1}/${studyPlan.totalSessions} started!`
+                : '🎯 Focus session started! 25 minutes of deep study.';
+            showToast(msg, 'info', 3000);
+        }
+        updatePlanProgressLabel();
     }
     function pauseFocusTimer() {
         if (!focusTimerActive || focusTimerPaused) return;
@@ -8907,6 +9070,7 @@ function renderMonthlyTasksUI() {
         focusTimerActive = false; focusTimerPaused = false;
         clearInterval(focusTimerInterval); focusTimerInterval = null;
         focusTimerSecondsLeft = FOCUS_TIMER_DURATION_SECS;
+        clearStudyPlan();
         updateFocusTimerDisplay();
         const btn = document.getElementById('focus-timer-btn');
         if (btn) { btn.textContent = '▶ Start'; btn.classList.remove('timer-active'); }
@@ -8916,12 +9080,61 @@ function renderMonthlyTasksUI() {
     function stopFocusTimer(completed) {
         focusTimerActive = false; focusTimerPaused = false;
         clearInterval(focusTimerInterval); focusTimerInterval = null;
+
+        // ── Was this a BREAK ending? ─────────────────────────────
+        if (completed && studyPlan?.isBreak) {
+            studyPlan.isBreak = false;
+            playSound('diseaseCheck');
+            showToast('☕ Break over — next session starting!', 'info', 2000);
+            focusTimerSecondsLeft = FOCUS_TIMER_DURATION_SECS;
+            updateFocusTimerDisplay();
+            updatePlanProgressLabel();
+            setTimeout(() => startFocusTimer(), 2200);
+            return;
+        }
+
         if (completed) {
             const bonusXP = gainXP(FOCUS_TIMER_BONUS_XP + getFocusMasteryBonus());
             totalStudyMinutes += 25; focusSessionsCompleted++;
             playSound('levelUp');
-            triggerCelebration(`🎉 Focus Session Complete!<br><span style="font-size:0.55em">+${bonusXP} XP · ${formatStudyTime(totalStudyMinutes)} total</span>`);
-            addQuest(`⏱ Focus session #${focusSessionsCompleted} complete! (+${bonusXP} XP) · ${formatStudyTime(totalStudyMinutes)} total`);
+
+            // Update plan state
+            if (studyPlan) {
+                studyPlan.sessionsDone++;
+                studyPlan.sessionsLeft--;
+                if (studyPlan.sessionsLeft > 0) {
+                    // More sessions left — start a break
+                    studyPlan.isBreak = true;
+                    triggerCelebration(`✅ Session ${studyPlan.sessionsDone}/${studyPlan.totalSessions} done!<br><span style="font-size:0.55em">+${bonusXP} XP · ☕ 5-min break starting…</span>`);
+                    addQuest(`⏱ Study session ${studyPlan.sessionsDone}/${studyPlan.totalSessions} done (+${bonusXP} XP)`);
+                    focusTimerSecondsLeft = BREAK_DURATION_SECS;
+                    updateFocusTimerDisplay();
+                    updatePlanProgressLabel();
+                    setTimeout(() => startFocusTimer(), 2000);
+                } else {
+                    // Plan complete!
+                    const totalXP = studyPlan.totalSessions * (FOCUS_TIMER_BONUS_XP + getFocusMasteryBonus());
+                    triggerCelebration(`🏆 Study Plan Complete!<br><span style="font-size:0.5em">${studyPlan.totalSessions} sessions · ${formatStudyTime(studyPlan.totalSessions*25)} of deep work<br>+${bonusXP} XP</span>`);
+                    addQuest(`🏆 Study Plan done! ${studyPlan.totalSessions} sessions · ${formatStudyTime(totalStudyMinutes)} total`);
+                    clearStudyPlan();
+                    focusTimerSecondsLeft = FOCUS_TIMER_DURATION_SECS;
+                    updateFocusTimerDisplay();
+                    const btn = document.getElementById('focus-timer-btn');
+                    if (btn) { btn.textContent = '▶ Start'; btn.classList.remove('timer-active'); }
+                    const resetBtn = document.getElementById('focus-reset-btn');
+                    if (resetBtn) resetBtn.style.display = 'none';
+                }
+            } else {
+                triggerCelebration(`🎉 Focus Session Complete!<br><span style="font-size:0.55em">+${bonusXP} XP · ${formatStudyTime(totalStudyMinutes)} total</span>`);
+                addQuest(`⏱ Focus session #${focusSessionsCompleted} complete! (+${bonusXP} XP) · ${formatStudyTime(totalStudyMinutes)} total`);
+                focusTimerSecondsLeft = FOCUS_TIMER_DURATION_SECS;
+                updateFocusTimerDisplay();
+                const btn = document.getElementById('focus-timer-btn');
+                if (btn) { btn.textContent = '▶ Start'; btn.classList.remove('timer-active'); }
+                const resetBtn = document.getElementById('focus-reset-btn');
+                if (resetBtn) resetBtn.style.display = 'none';
+            }
+
             recordHeatmapActivity('focus', 1);
             updateTaskProgress(TASK_TYPES.FOCUS, 1);
             if (getYearMonthString() === lastMonthlyTasksGeneratedDate)
@@ -8935,17 +9148,11 @@ function renderMonthlyTasksUI() {
             if (focusSessionsCompleted >= 500)  checkAchievement('The Pomodoro Sage');
             if (focusSessionsCompleted >= 1000) checkAchievement('Focus Legend');
             const nowHour = new Date().getHours();
-            if (nowHour >= 22 || nowHour < 0)   checkAchievement('Night Cram');
+            if (nowHour >= 22)                  checkAchievement('Night Cram');
             if (nowHour >= 4 && nowHour < 6)    checkAchievement('Dawn Session');
-            // Weekend Scholar: completed a session on both days this weekend
-            const today = new Date();
-            const dayOfWeek = today.getDay(); // 0=Sun, 6=Sat
-            if (dayOfWeek === 0 || dayOfWeek === 6) {
-                const todayStr = getTodayDateString();
-                const weekendKey = `weekend_focus_${todayStr.slice(0,7)}`; // YYYY-MM
-                const otherDay = dayOfWeek === 6 ? 0 : 6;
-                // Check if we already did a session on the other weekend day this week
-                const weekStart = new Date(today); weekStart.setDate(today.getDate() - dayOfWeek);
+            const today2 = new Date(); const dow = today2.getDay();
+            if (dow === 0 || dow === 6) {
+                const weekStart = new Date(today2); weekStart.setDate(today2.getDate() - dow);
                 const sat = new Date(weekStart); sat.setDate(weekStart.getDate() + 6);
                 const sun = new Date(weekStart); sun.setDate(weekStart.getDate() + 7);
                 const satStr = `${sat.getFullYear()}-${String(sat.getMonth()+1).padStart(2,'0')}-${String(sat.getDate()).padStart(2,'0')}`;
@@ -8954,13 +9161,18 @@ function renderMonthlyTasksUI() {
             }
             updateActiveMonthlyTasksProgress();
             renderHeatmap(); updateAndSave();
+        } else {
+            // Timer was reset, not completed
+            if (!studyPlan?.isBreak) {
+                focusTimerSecondsLeft = FOCUS_TIMER_DURATION_SECS;
+            }
+            clearStudyPlan();
+            updateFocusTimerDisplay();
+            const btn = document.getElementById('focus-timer-btn');
+            if (btn) { btn.textContent = '▶ Start'; btn.classList.remove('timer-active'); }
+            const resetBtn = document.getElementById('focus-reset-btn');
+            if (resetBtn) resetBtn.style.display = 'none';
         }
-        focusTimerSecondsLeft = FOCUS_TIMER_DURATION_SECS;
-        updateFocusTimerDisplay();
-        const btn = document.getElementById('focus-timer-btn');
-        if (btn) { btn.textContent = '▶ Start'; btn.classList.remove('timer-active'); }
-        const resetBtn = document.getElementById('focus-reset-btn');
-        if (resetBtn) resetBtn.style.display = 'none';
     }
     function updateFocusTimerDisplay() {
         const el = document.getElementById('focus-timer-display');
@@ -8968,7 +9180,9 @@ function renderMonthlyTasksUI() {
         const m = Math.floor(focusTimerSecondsLeft / 60);
         const s = focusTimerSecondsLeft % 60;
         el.textContent = `${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
-        if (focusTimerPaused) el.className = 'focus-timer-countdown paused';
+        const isBreak = studyPlan?.isBreak;
+        if (focusTimerPaused)  el.className = 'focus-timer-countdown paused';
+        else if (isBreak && focusTimerActive) el.className = 'focus-timer-countdown active break';
         else if (focusTimerActive && focusTimerSecondsLeft <= 300) el.className = 'focus-timer-countdown active urgent';
         else if (focusTimerActive) el.className = 'focus-timer-countdown active';
         else el.className = 'focus-timer-countdown';
@@ -10422,6 +10636,31 @@ updateActiveMonthlyTasksProgress(); // Ensure initial progress syncs from loaded
     dailyStudyBtnEl?.addEventListener('click', handleRecordDailyStudy);
     document.getElementById('focus-timer-btn')?.addEventListener('click', startFocusTimer);
     document.getElementById('focus-reset-btn')?.addEventListener('click', resetFocusTimer);
+    document.getElementById('focus-plan-btn')?.addEventListener('click', initStudyPlan);
+    document.getElementById('focus-single-btn')?.addEventListener('click', () => {
+        clearStudyPlan();
+        startFocusTimer();
+    });
+    // Update preview when dropdowns change
+    ['focus-plan-hours','focus-plan-mins'].forEach(id => {
+        document.getElementById(id)?.addEventListener('change', () => {
+            const h = parseInt(document.getElementById('focus-plan-hours')?.value || '0');
+            const m = parseInt(document.getElementById('focus-plan-mins')?.value  || '0');
+            const totalMins = h * 60 + m;
+            const sessions  = Math.floor(totalMins / 25);
+            const preview   = document.getElementById('focus-plan-preview');
+            if (!preview) return;
+            if (sessions < 1) { preview.style.display = 'none'; return; }
+            const planMins = sessions * 25 + Math.max(0, sessions - 1) * 5;
+            const ph = Math.floor(planMins / 60), pm = planMins % 60;
+            preview.style.display = 'block';
+            preview.innerHTML = `
+              <div class="focus-plan-summary">
+                <span>📋 <strong>${sessions}</strong> sessions × 25 min + ${sessions > 1 ? sessions-1+' breaks × 5 min' : 'no break'}</span>
+                <span>⏱ Total: <strong>${ph > 0 ? ph+'h ' : ''}${pm > 0 ? pm+'m' : (ph > 0 ? '' : '25m')}</strong></span>
+              </div>`;
+        });
+    });
     document.getElementById('daily-case-btn')?.addEventListener('click', handleDailyCase);
     document.getElementById('cloudSetupBtn')?.addEventListener('click', handleCloudSetup);
     document.getElementById('cloudSaveBtn')?.addEventListener('click', saveToCloud);
