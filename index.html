@@ -2348,6 +2348,67 @@ h2 .section-emoji,
 .hm-detail-label { flex: 1; color: var(--text-2); }
 .hm-detail-row strong { color: var(--gold-bright); font-size: 1.05em; }
 
+/* ═══════════════════════════════════════════════════════════════ */
+/* ═══ MOBILE LAYOUT FIXES ═══════════════════════════════════ */
+/* ═══════════════════════════════════════════════════════════════ */
+@media (max-width: 600px) {
+    /* Boss battle cards */
+    .boss-card-row {
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+    .boss-card-row .boss-challenge-btn {
+        width: 100%;
+        text-align: center;
+    }
+    /* Focus plan inputs */
+    .focus-plan-row {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    .focus-plan-inputs {
+        width: 100%;
+    }
+    .focus-plan-inputs select {
+        flex: 1;
+        min-width: 0;
+    }
+    /* Settings grid — single column on very small screens */
+    .settings-grid {
+        grid-template-columns: 1fr;
+    }
+    /* Today widget — 2 rows */
+    .todays-focus-widget {
+        gap: 4px;
+    }
+    .tf-item {
+        min-width: 40px;
+    }
+    /* Music player — compact */
+    .music-volume-row { gap: 4px; }
+    /* Skill tier labels */
+    .skill-tier-label { font-size: 0.78em; }
+}
+
+/* ═══ Keyboard shortcut hint strip ══════════════════════════ */
+.kbd-hint {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 0.72em;
+    color: var(--text-3);
+    margin-top: 8px;
+}
+.kbd {
+    background: var(--bg-3);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 1px 5px;
+    font-family: var(--font-mono, monospace);
+    font-size: 0.9em;
+    color: var(--text-2);
+}
+
 </style>
     <!-- Tone.js SFX -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.49/Tone.min.js"></script>
@@ -2782,6 +2843,12 @@ h2 .section-emoji,
                 <button id="flashcard-prev-btn" class="fc-nav-btn">← Prev</button>
                 <span id="flashcard-counter" class="fc-counter"></span>
                 <button id="flashcard-next-btn" class="fc-nav-btn">Next →</button>
+            </div>
+            <div class="kbd-hint">
+                <kbd class="kbd">Space</kbd> flip &nbsp;·&nbsp;
+                <kbd class="kbd">1</kbd><kbd class="kbd">2</kbd><kbd class="kbd">3</kbd> rate &nbsp;·&nbsp;
+                <kbd class="kbd">←</kbd><kbd class="kbd">→</kbd> navigate &nbsp;·&nbsp;
+                <kbd class="kbd">Esc</kbd> close quiz
             </div>
         </section>
 
@@ -6679,8 +6746,7 @@ function getYearMonthString() {
                  studied = data.studied || {};
                  totalQuestions = data.totalQuestions || 0;
                  totalReviewsCompleted = data.totalReviewsCompleted || 0;
-                 questLog = data.questLog || [];
-                 if (questLog.length > 50) questLog = questLog.slice(0, 50);
+                 questLog = (data.questLog || []).slice(0, 200); // trim old saves on load
                  dailyStreak = data.dailyStreak || 0;
                  longestStreak = data.longestStreak || 0;
                  lastStudyDate = data.lastStudyDate || null;
@@ -9332,8 +9398,14 @@ function renderMonthlyTasksUI() {
         el.style.display = 'flex';
         let tier = COMBO_TIERS[0];
         for (const t of COMBO_TIERS) { if (comboCount >= t.min) tier = t; }
-        el.innerHTML = `${tier.label} <span style="font-size:0.75em;opacity:0.8">${comboCount} topics</span>`;
-        el.className = `combo-display combo-tier-${COMBO_TIERS.indexOf(tier)}`;
+        el.innerHTML = `${tier.label} <span style="font-size:0.75em;opacity:0.8">${comboCount} topics in a row</span>`;
+        el.title = `Hot Streak Combo! Study ${COMBO_TIERS[0].min}+ topics in a row to get x${COMBO_TIERS[0].mult} XP. Keep going!`;
+
+        // First-time combo tutorial toast
+        if (!achievements.includes('_comboTutorialShown')) {
+            achievements.push('_comboTutorialShown'); // hidden marker, not a real achievement
+            showToast(`🔥 Combo started! Study topics back-to-back for bonus XP multipliers: x1.5 → x2.0 → x3.0!`, 'info', 6000);
+        }
     }
     function getComboXP(baseXP) {
         return Math.ceil(baseXP * getCurrentComboMultiplier());
@@ -10422,25 +10494,35 @@ for (const [spec, qs] of Object.entries(extra2)) {
 
 // Return a set of N random questions for a given specialty
 function getQuizQuestions(specName, n = 4) {
-    // Try exact match, then fuzzy match
+    // Resolve specialty pool with fuzzy match
     let pool = QUIZ_BANK[specName];
     if (!pool) {
-        // Try partial match
         const key = Object.keys(QUIZ_BANK).find(k =>
             k.toLowerCase().includes(specName.toLowerCase()) ||
             specName.toLowerCase().includes(k.toLowerCase())
         );
         pool = key ? QUIZ_BANK[key] : null;
     }
-    // Fallback to Internal Medicine if no match
-    if (!pool || pool.length === 0) pool = QUIZ_BANK["Internal Medicine"];
-    // Fisher-Yates shuffle + take n
-    const arr = [...pool];
-    for (let i = arr.length - 1; i > 0; i--) {
+    if (!pool || pool.length === 0) pool = QUIZ_BANK["Internal Medicine"] || [];
+
+    // Difficulty weighting based on past quiz accuracy for this specialty
+    const specEntries = Object.entries(quizHistory).filter(([k]) => k.startsWith(specName + '|||'));
+    let totalAttempts = 0, totalCorrect = 0;
+    for (const [, v] of specEntries) { totalAttempts += v.attempts || 0; totalCorrect += v.correct || 0; }
+    const overallAcc = totalAttempts > 0 ? totalCorrect / totalAttempts : 1.0;
+    // Low accuracy (<50%): pool appears 3x — seen more often; high accuracy (>80%): 1x normal
+    const weight = overallAcc < 0.5 ? 3 : overallAcc < 0.7 ? 2 : 1;
+    const weighted = [];
+    for (const q of pool) { for (let i = 0; i < weight; i++) weighted.push(q); }
+
+    // Deduplicate by question text, then Fisher-Yates shuffle, take n
+    const seen = new Set();
+    const deduped = weighted.filter(q => { const k = q.q.slice(0, 60); if (seen.has(k)) return false; seen.add(k); return true; });
+    for (let i = deduped.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
-        [arr[i], arr[j]] = [arr[j], arr[i]];
+        [deduped[i], deduped[j]] = [deduped[j], deduped[i]];
     }
-    return arr.slice(0, Math.min(n, arr.length));
+    return deduped.slice(0, Math.min(n, deduped.length));
 }
 
     function launchAIQuiz(spec, disease) {
@@ -11339,20 +11421,72 @@ updateActiveMonthlyTasksProgress(); // Ensure initial progress syncs from loaded
         flashcardFlipped = false; renderFlashcard();
     });
 
-    // Keyboard shortcuts
+    // ── Keyboard shortcuts ───────────────────────────────────────
     document.addEventListener('keydown', (e) => {
-        // Ctrl+D or Cmd+D = Daily Check-in
-        if ((e.ctrlKey || e.metaKey) && e.key === 'd') {
-            e.preventDefault();
-            handleRecordDailyStudy();
-        }
-        // Escape = close any open modal
+        // Ignore when typing in inputs / textareas
+        const tag = document.activeElement?.tagName;
+        if (tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT') return;
+
+        // Escape — close any open modal or overlay
         if (e.key === 'Escape') {
+            // Close heatmap day modal
+            document.querySelector('.hm-day-modal-overlay')?.remove();
+            // Close quiz modals
+            const fixedModal = document.querySelector('[style*="position:fixed"][style*="z-index:4000"]');
+            if (fixedModal) {
+                quizInProgress = false;
+                document.body.removeChild(fixedModal);
+                return;
+            }
+            // Close standard modals
             document.querySelectorAll('.modal.is-open').forEach(m => {
                 m.classList.remove('is-open');
                 setTimeout(() => { if (!m.classList.contains('is-open')) m.style.display = 'none'; }, 300);
             });
             document.querySelector('.celebration.show')?.classList.remove('show');
+            return;
+        }
+
+        // Flashcard section shortcuts
+        const fcSection = document.getElementById('flashcard-section');
+        const fcVisible = fcSection && fcSection.getBoundingClientRect().top < window.innerHeight && fcSection.getBoundingClientRect().bottom > 0;
+        if (fcVisible && flashcardDeck.length > 0) {
+            // Space / Enter = flip card
+            if (e.key === ' ' || (e.key === 'Enter' && !flashcardFlipped)) {
+                e.preventDefault();
+                flashcardFlipped = !flashcardFlipped;
+                renderFlashcard();
+                return;
+            }
+            // 1 = Shaky, 2 = OK, 3 = Solid (only when flipped)
+            if (flashcardFlipped && (e.key === '1' || e.key === '2' || e.key === '3')) {
+                e.preventDefault();
+                window._fcRating?.(parseInt(e.key));
+                return;
+            }
+            // ArrowRight / J = next card
+            if (e.key === 'ArrowRight' || e.key === 'j') {
+                e.preventDefault();
+                flashcardCurrentIndex = (flashcardCurrentIndex + 1) % Math.max(flashcardDeck.length, 1);
+                flashcardFlipped = false; renderFlashcard();
+                return;
+            }
+            // ArrowLeft / K = previous card
+            if (e.key === 'ArrowLeft' || e.key === 'k') {
+                e.preventDefault();
+                flashcardCurrentIndex = ((flashcardCurrentIndex - 1) + flashcardDeck.length) % Math.max(flashcardDeck.length, 1);
+                flashcardFlipped = false; renderFlashcard();
+                return;
+            }
+        }
+
+        // Quiz answer shortcuts (when a quiz is open)
+        if (quizInProgress) {
+            if (e.key === 'a' || e.key === 'A') { window._quizAnswer?.('A'); window._wsAnswer?.('A'); }
+            if (e.key === 'b' || e.key === 'B') { window._quizAnswer?.('B'); window._wsAnswer?.('B'); }
+            if (e.key === 'c' || e.key === 'C') { window._quizAnswer?.('C'); window._wsAnswer?.('C'); }
+            if (e.key === 'd' || e.key === 'D') { window._quizAnswer?.('D'); window._wsAnswer?.('D'); }
+            return;
         }
     });
     questLogHeaderEl?.addEventListener('click', handleToggleQuestLog);
