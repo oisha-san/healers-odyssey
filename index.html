@@ -2140,19 +2140,19 @@ h2 .section-emoji,
 }
 .sidebar-toggle:hover { background: var(--bg-3); }
 .sidebar-overlay {
-    display: none;
+    display: block;
     position: fixed;
     inset: 0;
     background: rgba(0,0,0,0.55);
     z-index: 900;
     opacity: 0;
+    pointer-events: none;
     transition: opacity 0.25s;
 }
-.sidebar-overlay.active { opacity: 1; }
+.sidebar-overlay.active { opacity: 1; pointer-events: auto; }
 
 @media (max-width: 768px) {
     .sidebar-toggle { display: flex; }
-    .sidebar-overlay { display: block; }
     .sidebar {
         position: fixed !important;
         top: 0; left: 0; bottom: 0;
@@ -2170,6 +2170,183 @@ h2 .section-emoji,
     .tf-item strong { font-size: 1em; }
     .tf-xp { border-left: none; padding-left: 0; margin-left: 0; border-top: 1px solid var(--border); padding-top: 6px; width: 100%; flex-direction: row; gap: 6px; justify-content: center; }
 }
+
+/* ═══ Music volume slider ═══════════════════════════════════ */
+.music-volume-row {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    margin-top: 8px;
+    padding-top: 8px;
+    border-top: 1px solid var(--border);
+}
+.music-vol-icon { font-size: 0.9em; flex-shrink: 0; width: 18px; text-align: center; }
+.music-vol-slider {
+    flex: 1;
+    -webkit-appearance: none;
+    appearance: none;
+    height: 4px;
+    border-radius: 2px;
+    background: var(--border);
+    outline: none;
+    margin: 0;
+    cursor: pointer;
+    padding: 0;
+    border: none;
+}
+.music-vol-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 14px; height: 14px;
+    border-radius: 50%;
+    background: var(--gold);
+    cursor: pointer;
+    border: none;
+    box-shadow: 0 0 0 2px var(--bg-1);
+    transition: transform 0.1s;
+}
+.music-vol-slider::-webkit-slider-thumb:hover { transform: scale(1.2); }
+.music-vol-slider::-moz-range-thumb {
+    width: 14px; height: 14px;
+    border-radius: 50%;
+    background: var(--gold);
+    cursor: pointer;
+    border: none;
+}
+.music-vol-label {
+    font-size: 0.7em;
+    color: var(--text-3);
+    min-width: 28px;
+    text-align: right;
+}
+
+/* ═══════════════════════════════════════════════════════════════ */
+/* ═══ WEAK SPOTS QUIZ ═══════════════════════════════════════ */
+/* ═══════════════════════════════════════════════════════════════ */
+.weak-spots-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-top: 14px;
+    padding-top: 12px;
+    border-top: 1px solid var(--border);
+    flex-wrap: wrap;
+}
+.weak-spots-btn {
+    background: linear-gradient(135deg, rgba(240,68,68,0.15), rgba(240,68,68,0.08));
+    border: 1px solid rgba(240,68,68,0.35);
+    color: var(--error);
+    font-weight: 700;
+    font-size: 0.85em;
+    padding: 9px 18px;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: background 0.15s, box-shadow 0.15s;
+    white-space: nowrap;
+}
+.weak-spots-btn:hover {
+    background: rgba(240,68,68,0.22);
+    box-shadow: 0 3px 12px rgba(240,68,68,0.2);
+}
+.weak-spots-count { font-size: 0.8em; color: var(--text-3); }
+.weak-spots-count-warn { color: var(--error) !important; font-weight: 600; }
+.weak-spots-count-ok   { color: var(--success) !important; }
+
+/* ═══════════════════════════════════════════════════════════════ */
+/* ═══ MUSIC PROGRESS BAR ════════════════════════════════════ */
+/* ═══════════════════════════════════════════════════════════════ */
+.music-progress-wrap {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin: 6px 0 4px;
+}
+.music-time {
+    font-size: 0.68em;
+    color: var(--text-3);
+    min-width: 30px;
+    font-variant-numeric: tabular-nums;
+}
+.music-time:last-child { text-align: right; }
+.music-progress-bar {
+    flex: 1;
+    height: 4px;
+    background: var(--border);
+    border-radius: 2px;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    transition: height 0.15s;
+}
+.music-progress-bar:hover { height: 6px; }
+.music-progress-fill {
+    height: 100%;
+    width: 0%;
+    background: var(--gold);
+    border-radius: 2px;
+    transition: width 0.25s linear;
+    pointer-events: none;
+}
+
+/* ═══════════════════════════════════════════════════════════════ */
+/* ═══ HEATMAP DAY DRILL-DOWN ════════════════════════════════ */
+/* ═══════════════════════════════════════════════════════════════ */
+.hm-day-modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.55);
+    z-index: 3000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.hm-day-modal {
+    background: var(--bg-raised);
+    border: 1px solid var(--border-gold);
+    border-radius: 14px;
+    padding: 20px 22px;
+    min-width: 260px;
+    max-width: 360px;
+    width: 90%;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+}
+.hm-day-modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 14px;
+    gap: 10px;
+}
+.hm-day-modal-date {
+    font-family: var(--font-header);
+    font-size: 0.92em;
+    font-weight: 700;
+    color: var(--gold);
+    line-height: 1.3;
+}
+.hm-day-modal-close {
+    background: none;
+    border: none;
+    color: var(--text-3);
+    cursor: pointer;
+    font-size: 1.1em;
+    padding: 0;
+    flex-shrink: 0;
+    line-height: 1;
+}
+.hm-day-modal-close:hover { color: var(--text); }
+.hm-detail-grid { display: flex; flex-direction: column; gap: 8px; }
+.hm-detail-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 0.88em;
+    padding: 8px 10px;
+    background: var(--bg-2);
+    border-radius: 8px;
+}
+.hm-detail-icon { font-size: 1.1em; flex-shrink: 0; }
+.hm-detail-label { flex: 1; color: var(--text-2); }
+.hm-detail-row strong { color: var(--gold-bright); font-size: 1.05em; }
 
 </style>
     <!-- Tone.js SFX -->
@@ -2266,11 +2443,23 @@ h2 .section-emoji,
                 </div>
             </div>
             <p id="current-track-name" class="current-track-name">No track playing</p>
+            <div class="music-progress-wrap">
+                <span class="music-time" id="music-time-current">0:00</span>
+                <div class="music-progress-bar" id="music-progress-bar" title="Click to seek">
+                    <div class="music-progress-fill" id="music-progress-fill"></div>
+                </div>
+                <span class="music-time" id="music-time-total">--:--</span>
+            </div>
             <select id="trackSelector" class="track-selector" title="Choose a track"></select>
             <div class="music-controls">
                 <button id="prevTrackBtn" class="music-ctrl-btn" title="Previous / Restart">⏮</button>
                 <button id="musicToggle" class="music-play-btn" title="Play/Pause">▶ Play</button>
                 <button id="nextTrackBtn" class="music-ctrl-btn" title="Next track">⏭</button>
+            </div>
+            <div class="music-volume-row">
+                <span class="music-vol-icon" id="music-vol-icon">🔊</span>
+                <input type="range" id="music-volume" class="music-vol-slider" min="0" max="100" value="70" title="Volume">
+                <span class="music-vol-label" id="music-vol-label">70%</span>
             </div>
         </div>
 
@@ -2403,7 +2592,10 @@ h2 .section-emoji,
                 <input type="number" id="questions" min="1" placeholder="e.g. 20">
                 <button id="add-questions-btn">+ Add XP</button>
             </div>
-
+            <div class="weak-spots-row">
+                <button id="weak-spots-btn" class="weak-spots-btn">🔴 Weak Spots Quiz</button>
+                <span id="weak-spots-count" class="weak-spots-count"></span>
+            </div>
         </section>
 
         <!-- Daily Tasks -->
@@ -2896,7 +3088,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // === Feature: Cloud Sync ===
     let cloudApiKey = '';
     let cloudBinId = '';
-    const CLOUD_SAVE_KEY = 'healersOdysseyCloud';
+    const CLOUD_SAVE_KEY = 'healersOdysseyCloud'; // Stores JSONBin credentials only (not game data)
 
     // === Feature: Prestige System ===
     let prestigeLevel = 0;
@@ -3111,8 +3303,8 @@ let monthlyTaskProgress = {
     const XP_PER_QUESTION = 5;
     const XP_PER_DISEASE = 20;
     const XP_PER_REVIEW_BASE = 10;
-    const XP_LEVEL_BASE = 100;
-    const XP_LEVEL_QUADRATIC_FACTOR = 10;
+    const XP_LEVEL_BASE = 2000;  // flattened curve: ~462K total to Lv102
+    const XP_LEVEL_QUADRATIC_FACTOR = 50;  // linear slope: each level costs 50 more XP than previous
     const SKILL_POINTS_PER_LEVEL = 1;
     const BONUS_SP_MILESTONES = { 10: 2, 25: 3, 50: 5, 75: 7, 100: 10 };
     const XP_BOOST_PER_SKILL_POINT = 0.08;
@@ -3124,7 +3316,7 @@ let monthlyTaskProgress = {
     const FOCUS_MASTERY_XP_PER_POINT = 15; // +15 XP per focus session per skill level
     const REVIEW_INTERVALS_DAYS = [1, 3, 7, 14, 30, 60, 120, 180];
     const MS_PER_DAY = 24 * 60 * 60 * 1000;
-    const SAVE_KEY = 'healersOdysseySave_v11';
+    const SAVE_KEY = 'healersOdysseySave_v11'; // Main game save — all progress lives here
 
     // Focus Timer rewards
     const FOCUS_TIMER_BONUS_XP = 50;
@@ -3374,6 +3566,64 @@ const NUM_MONTHLY_TASKS_TO_OFFER = 3; // How many monthly tasks to show at a tim
     const clearSearchBtnEl = document.getElementById('clearSearchBtn');
     // --- BGM Audio Element Reference ---
     const bgmAudioElement = document.getElementById('bgmAudio'); // Reference to the <audio> tag in HTML
+
+    // ── Volume slider ──────────────────────────────────────────────
+    const musicVolSlider = document.getElementById('music-volume');
+    const musicVolLabel  = document.getElementById('music-vol-label');
+    const musicVolIcon   = document.getElementById('music-vol-icon');
+
+    // Load saved volume (default 70%)
+    const _savedVol = parseFloat(localStorage.getItem('bgmVolume') ?? '0.7');
+    if (bgmAudioElement) bgmAudioElement.volume = _savedVol;
+    if (musicVolSlider)  musicVolSlider.value    = Math.round(_savedVol * 100);
+    if (musicVolLabel)   musicVolLabel.textContent = Math.round(_savedVol * 100) + '%';
+
+    function updateVolIcon(vol) {
+        if (!musicVolIcon) return;
+        musicVolIcon.textContent = vol === 0 ? '🔇' : vol < 0.35 ? '🔈' : vol < 0.7 ? '🔉' : '🔊';
+    }
+    updateVolIcon(_savedVol);
+
+    // ── Music progress bar ────────────────────────────────────────
+    function updateMusicProgress() {
+        const bar    = document.getElementById('music-progress-fill');
+        const timeEl = document.getElementById('music-time-current');
+        const durEl  = document.getElementById('music-time-total');
+        if (!bgmAudioElement) return;
+        const cur = bgmAudioElement.currentTime || 0;
+        const dur = bgmAudioElement.duration   || 0;
+        const pct = dur > 0 ? (cur / dur) * 100 : 0;
+        if (bar)    bar.style.width    = pct + '%';
+        if (timeEl) timeEl.textContent = fmtTime(cur);
+        if (durEl && dur > 0 && !isNaN(dur)) durEl.textContent = fmtTime(dur);
+    }
+    function fmtTime(s) {
+        const m = Math.floor(s / 60);
+        const sec = Math.floor(s % 60);
+        return `${m}:${String(sec).padStart(2,'0')}`;
+    }
+    bgmAudioElement?.addEventListener('timeupdate', updateMusicProgress);
+    bgmAudioElement?.addEventListener('loadedmetadata', updateMusicProgress);
+    bgmAudioElement?.addEventListener('ended', () => {
+        const bar = document.getElementById('music-progress-fill');
+        if (bar) bar.style.width = '0%';
+    });
+
+    // Progress bar click-to-seek
+    document.getElementById('music-progress-bar')?.addEventListener('click', function(e) {
+        if (!bgmAudioElement || !bgmAudioElement.duration) return;
+        const rect = this.getBoundingClientRect();
+        const pct  = (e.clientX - rect.left) / rect.width;
+        bgmAudioElement.currentTime = pct * bgmAudioElement.duration;
+    });
+
+    musicVolSlider?.addEventListener('input', () => {
+        const vol = musicVolSlider.value / 100;
+        if (bgmAudioElement) bgmAudioElement.volume = vol;
+        if (musicVolLabel) musicVolLabel.textContent = musicVolSlider.value + '%';
+        updateVolIcon(vol);
+        localStorage.setItem('bgmVolume', String(vol));
+    });
 
 
     // =====================================================
@@ -6115,6 +6365,8 @@ const achievementDescriptions = {
         updateMusicModeButtons();
     }
 
+
+
     // ── Mobile sidebar toggle ─────────────────────────────
     const sidebarToggleBtn = document.getElementById('sidebar-toggle');
     const sidebarOverlay   = document.getElementById('sidebar-overlay');
@@ -6196,7 +6448,9 @@ function getYearMonthString() {
  }
     function calculateXpNeededForLevel(level) {
          if (level <= 0) return XP_LEVEL_BASE;
-         return XP_LEVEL_BASE * level + XP_LEVEL_QUADRATIC_FACTOR * level * level;
+         // Linear: each level costs BASE + SLOPE*(level-1) XP
+         // Total to Lv102 ≈ 462K — reachable in 2-3 years at ~500 XP/day
+         return XP_LEVEL_BASE + XP_LEVEL_QUADRATIC_FACTOR * (level - 1);
      }
     function getCurrentXpBoostMultiplier() {
          return (1 + (skills.xpBoost * XP_BOOST_PER_SKILL_POINT)) * totalPrestigeXPMultiplier;
@@ -6469,6 +6723,14 @@ monthlyTasks.forEach(t => {
 });
 lastMonthlyTasksGeneratedDate = data.lastMonthlyTasksGeneratedDate || null;
 monthlyTaskProgress = { topicsStudiedThisMonthCount:0, reviewsCompletedThisMonthCount:0, questionsAnsweredThisMonthCount:0, levelsGainedThisMonthCount:0, solidRatingsThisMonthCount:0, focusSessionsThisMonthCount:0, quizSessionsThisMonthCount:0, levelAtMonthStart: data.level||1, ...(data.monthlyTaskProgress||{}) };
+// Restore Set type immediately — JSON.parse converts Set→Array and we need it back as Set
+if (!monthlyTaskProgress.specialtiesStudiedThisMonth || typeof monthlyTaskProgress.specialtiesStudiedThisMonth.add !== 'function') {
+    monthlyTaskProgress.specialtiesStudiedThisMonth = new Set(
+        Array.isArray(monthlyTaskProgress.specialtiesStudiedThisMonth)
+            ? monthlyTaskProgress.specialtiesStudiedThisMonth : []
+    );
+}
+monthlyTaskProgress.specialtiesStudiedThisMonthCount = monthlyTaskProgress.specialtiesStudiedThisMonth.size;
 // Ensure levelAtMonthStart is reasonable if loading old save
 if (!monthlyTaskProgress.levelAtMonthStart && data.level) {
     monthlyTaskProgress.levelAtMonthStart = data.level;
@@ -7770,7 +8032,7 @@ if (getYearMonthString() === lastMonthlyTasksGeneratedDate) {
     function addQuest(message) {
          const timestamp = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
          questLog.unshift({ message, timestamp });
-         if (questLog.length > 50) questLog.pop();
+         if (questLog.length > 200) questLog.pop();
          updateQuestLogUI();
      }
     function updateQuestLogUI() {
@@ -8501,6 +8763,7 @@ if (!sfxAudioInitialized && toneJsLoaded) {
 
     function updateAndSave() {
         updateTodayWidget();
+        updateWeakSpotsCount();
         updateStatsUI();
         updateAchievementsListUI();
         updateQuestLogUI();
@@ -8969,6 +9232,13 @@ function renderMonthlyTasksUI() {
                 cell.style.gridRow    = String(day + 1);
                 cell.title = title;
 
+                // Day drill-down on click
+                if (inYear && !isFuture) {
+                    const clickKey = key;
+                    cell.style.cursor = 'pointer';
+                    cell.addEventListener('click', () => showHeatmapDayDetail(clickKey));
+                }
+
                 grid.appendChild(cell);
                 cur.setDate(cur.getDate() + 1);
             }
@@ -8997,6 +9267,39 @@ function renderMonthlyTasksUI() {
     // ============================================================
     // ===== FEATURE: Hot Streak Combo ===========================
     // ============================================================
+    function showHeatmapDayDetail(dateKey) {
+        const data = studyHeatmap[dateKey];
+        const date = new Date(dateKey + 'T12:00:00');
+        const label = date.toLocaleDateString('en-US', { weekday:'long', year:'numeric', month:'long', day:'numeric' });
+
+        const hasActivity = data && (data.topics || data.questions || data.reviews || data.focus);
+        let body = '';
+        if (!hasActivity) {
+            body = `<p style="color:var(--text-3);font-style:italic;text-align:center;padding:16px">No study activity recorded on this day.</p>`;
+        } else {
+            const items = [
+                data.topics    ? `<div class="hm-detail-row"><span class="hm-detail-icon">📚</span><span class="hm-detail-label">Topics studied</span><strong>${data.topics}</strong></div>` : '',
+                data.questions ? `<div class="hm-detail-row"><span class="hm-detail-icon">❓</span><span class="hm-detail-label">Questions answered</span><strong>${data.questions}</strong></div>` : '',
+                data.reviews   ? `<div class="hm-detail-row"><span class="hm-detail-icon">🔄</span><span class="hm-detail-label">Reviews completed</span><strong>${data.reviews}</strong></div>` : '',
+                data.focus     ? `<div class="hm-detail-row"><span class="hm-detail-icon">⏱</span><span class="hm-detail-label">Focus sessions</span><strong>${data.focus}</strong></div>` : '',
+            ].filter(Boolean).join('');
+            body = `<div class="hm-detail-grid">${items}</div>`;
+        }
+
+        const modal = document.createElement('div');
+        modal.className = 'hm-day-modal-overlay';
+        modal.innerHTML = `
+          <div class="hm-day-modal">
+            <div class="hm-day-modal-header">
+              <span class="hm-day-modal-date">${label}</span>
+              <button class="hm-day-modal-close" onclick="this.closest('.hm-day-modal-overlay').remove()">✕</button>
+            </div>
+            ${body}
+          </div>`;
+        modal.addEventListener('click', e => { if (e.target === modal) modal.remove(); });
+        document.body.appendChild(modal);
+    }
+
     function incrementCombo() {
         comboCount++;
         // Reset the idle timer
@@ -9643,7 +9946,7 @@ function renderMonthlyTasksUI() {
         level = 1;
         xp = 0;
         skillPoints = 0;
-        skills = { xpBoost: 0, reviewMastery: 0, acceleratedRecall: 0, studyBurst: 0, efficientLearner: 0 };
+        skills = { xpBoost: 0, reviewMastery: 0, acceleratedRecall: 0, studyBurst: 0, efficientLearner: 0, focusMastery: 0 };
         totalSkillLevelsPurchased = 0;
 
         // Unlock all level 1 specialties (anatomy always visible)
@@ -10255,7 +10558,151 @@ function getQuizQuestions(specName, n = 4) {
 
 
     // ============================================================
-    // ===== FEATURE: Browser Notifications ======================
+    // ===== FEATURE: Global Topic Search ========================
+    // ============================================================
+    
+    // ============================================================
+    // ===== FEATURE: Weak Spots Quiz ============================
+    // ============================================================
+    function getWeakSpotTopics() {
+        // Returns array of {spec, dis, reason} for topics with <60% quiz accuracy
+        // or studied-but-never-quizzed with shaky confidence
+        const weak = [];
+        for (const [spec, topics] of Object.entries(studied)) {
+            for (const [dis, data] of Object.entries(topics)) {
+                const histKey = `${spec}|||${dis}`;
+                const hist    = quizHistory[histKey];
+                if (hist && hist.attempts > 0) {
+                    const acc = hist.correct / hist.attempts;
+                    if (acc < 0.6) weak.push({ spec, dis, reason: `${Math.round(acc*100)}% accuracy` });
+                } else if (data.confidence === 1) {
+                    weak.push({ spec, dis, reason: 'rated 🔴 Shaky' });
+                }
+            }
+        }
+        return weak;
+    }
+
+    function updateWeakSpotsCount() {
+        const el = document.getElementById('weak-spots-count');
+        if (!el) return;
+        const n = getWeakSpotTopics().length;
+        el.textContent = n > 0 ? `${n} weak topic${n === 1 ? '' : 's'} found` : 'No weak spots yet — keep studying!';
+        el.className = 'weak-spots-count ' + (n > 0 ? 'weak-spots-count-warn' : 'weak-spots-count-ok');
+    }
+
+    function launchWeakSpotsQuiz() {
+        const weak = getWeakSpotTopics();
+        if (weak.length === 0) {
+            showToast('No weak spots found! Either keep quizzing or study more topics.', 'info', 3500);
+            return;
+        }
+
+        // Shuffle weak topics, take up to 8, pull questions from those specialties
+        const shuffled = weak.sort(() => Math.random() - 0.5).slice(0, 8);
+        let questions = [];
+        for (const { spec } of shuffled) {
+            const qs = getQuizQuestions(spec, 1);
+            questions.push(...qs);
+        }
+        // Deduplicate and limit to 6
+        const seen = new Set();
+        questions = questions.filter(q => { if (seen.has(q.q)) return false; seen.add(q.q); return true; }).slice(0, 6);
+
+        if (questions.length === 0) {
+            showToast('No quiz questions available for your weak topics yet. Keep studying!', 'warning', 3500);
+            return;
+        }
+
+        // Reuse launchAIQuiz UI with weak spots framing
+        if (quizInProgress) return;
+        quizInProgress = true;
+
+        const specsInvolved = [...new Set(shuffled.map(w => w.spec))].join(', ');
+        const modal = document.createElement('div');
+        modal.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.85);z-index:4000;display:flex;align-items:center;justify-content:center;backdrop-filter:blur(6px)';
+        modal.innerHTML = `
+          <div id="quiz-card" style="background:var(--bg-2,#1a1d22);border:1px solid rgba(240,68,68,0.4);border-radius:16px;padding:28px;max-width:620px;width:94%;box-shadow:0 8px 40px rgba(0,0,0,0.6);max-height:92vh;overflow-y:auto">
+            <div style="display:flex;align-items:center;gap:10px;margin-bottom:4px">
+              <span style="font-family:var(--font-header,serif);color:#f04444;font-size:1.1em">🔴 Weak Spots Quiz</span>
+              <span style="font-size:0.72em;background:rgba(240,68,68,0.2);color:#f04444;padding:2px 10px;border-radius:10px;font-weight:700">${questions.length} questions</span>
+            </div>
+            <p style="color:var(--text-muted-color,#888);font-size:0.82em;margin-bottom:20px">Targeting your gaps: <strong style="color:var(--text-color,#eee)">${specsInvolved}</strong></p>
+            <div id="quiz-body"></div>
+          </div>`;
+        document.body.appendChild(modal);
+
+        let currentQ = 0, score = 0, answered = false;
+
+        function showQ() {
+            const q = questions[currentQ];
+            answered = false;
+            const qb = document.getElementById('quiz-body');
+            qb.innerHTML = `
+              <div style="font-size:0.72em;color:var(--text-muted-color,#888);margin-bottom:12px;font-weight:700">
+                Question ${currentQ+1} of ${questions.length}
+                <span style="float:right">Score: ${score}/${currentQ}</span>
+              </div>
+              <div style="background:var(--bg-1,#141618);border-radius:10px;padding:16px;margin-bottom:16px;font-size:0.9em;line-height:1.6;color:var(--text-color,#eee)">${q.q}</div>
+              <div id="options-wrap" style="display:flex;flex-direction:column;gap:8px;margin-bottom:16px">
+                ${['A','B','C','D'].map(l => `
+                  <button data-letter="${l}" onclick="window._wsAnswer('${l}')"
+                    style="text-align:left;background:var(--bg-3,#20242b);border:1px solid var(--border-color,#252930);color:var(--text-color,#eee);padding:11px 16px;border-radius:9px;cursor:pointer;font-size:0.86em;width:100%">
+                    <strong>${l}.</strong> ${q.options[l]}
+                  </button>`).join('')}
+              </div>
+              <div id="quiz-explanation" style="display:none"></div>`;
+
+            window._wsAnswer = function(chosen) {
+                if (answered) return;
+                answered = true;
+                const isCorrect = chosen === q.correct;
+                if (isCorrect) score++;
+                document.querySelectorAll('#options-wrap button').forEach(btn => {
+                    const l = btn.dataset.letter;
+                    if (l === q.correct) btn.style.background = 'rgba(52,196,98,0.2)';
+                    else if (l === chosen && !isCorrect) btn.style.background = 'rgba(240,68,68,0.2)';
+                    btn.style.cursor = 'default'; btn.onclick = null;
+                });
+                const exp = document.getElementById('quiz-explanation');
+                exp.style.display = 'block';
+                exp.innerHTML = `
+                  <div style="background:${isCorrect?'rgba(52,196,98,0.1)':'rgba(240,68,68,0.1)'};border-radius:8px;padding:14px;font-size:0.84em;line-height:1.6;color:var(--text-color,#eee);margin-bottom:14px">
+                    <strong style="color:${isCorrect?'#34c462':'#f04444'}">${isCorrect?'✓ Correct!':'✗ Incorrect — '+q.correct+' is correct'}</strong><br><br>${q.explanation}
+                  </div>
+                  <button onclick="${currentQ+1 < questions.length ? 'window._wsNext()' : 'window._wsDone()'}"
+                    style="background:linear-gradient(135deg,rgba(240,68,68,0.8),#f04444);color:#fff;border:none;padding:10px 24px;border-radius:20px;font-weight:700;cursor:pointer;font-size:0.9em">
+                    ${currentQ+1 < questions.length ? 'Next →' : 'See Results'}
+                  </button>`;
+            };
+            window._wsNext = () => { currentQ++; showQ(); };
+        }
+
+        window._wsDone = function() {
+            const pct = Math.round((score / questions.length) * 100);
+            const qb  = document.getElementById('quiz-body');
+            const msg = pct >= 80 ? "Great improvement! These topics are getting stronger." : pct >= 50 ? "Keep drilling — you're making progress." : "Review these topics in the Specialties section and try again.";
+            qb.innerHTML = `
+              <div style="text-align:center;padding:10px 0">
+                <div style="font-size:2.5em;margin-bottom:8px">${pct>=80?'💪':pct>=50?'📈':'🔴'}</div>
+                <p style="font-family:var(--font-header,serif);color:#f04444;font-size:1.4em;margin-bottom:4px">${score}/${questions.length} Correct</p>
+                <p style="color:var(--text-muted-color,#888);font-size:0.88em;margin-bottom:8px">${pct}%</p>
+                <p style="color:var(--text-color,#eee);font-size:0.85em;margin-bottom:16px">${msg}</p>
+                ${score*10>0?`<p style="color:#f04444;font-weight:700;margin-bottom:16px">+${score*10} XP</p>`:''}
+                <button onclick="document.body.removeChild(this.closest('[style*=fixed]'));window._wsAnswer=null;window._wsNext=null;window._wsDone=null;updateWeakSpotsCount();"
+                  style="background:linear-gradient(135deg,rgba(240,68,68,0.8),#f04444);color:#fff;padding:12px 28px;border-radius:20px;font-weight:700;border:none;cursor:pointer;font-size:1em">Done ✓</button>
+              </div>`;
+            const xpEarned = score * 10;
+            if (xpEarned > 0) gainXP(xpEarned);
+            saveProgress(); updateAndSave();
+            quizInProgress = false;
+        };
+
+        showQ();
+    }
+
+    // ============================================================
+    // ===== FEATURE: Browser Notifications =====================
     // ============================================================
     async function requestNotificationPermission() {
         if (!('Notification' in window)) {
@@ -10973,6 +11420,10 @@ clearSearchBtnEl?.addEventListener('click', () => {
 document.getElementById('notes-search')?.addEventListener('input', e => {
     renderNotesSection(e.target.value.toLowerCase());
 });
+
+// Weak Spots Quiz
+document.getElementById('weak-spots-btn')?.addEventListener('click', launchWeakSpotsQuiz);
+
 
     init();
 
