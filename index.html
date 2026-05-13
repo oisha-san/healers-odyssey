@@ -8856,11 +8856,19 @@ function checkAndGenerateMonthlyTasks() {
 }
 
 function resetMonthlyTaskCountersAndSetDate() {
-    monthlyTaskProgress.topicsStudiedThisMonthCount = 0;
-    monthlyTaskProgress.reviewsCompletedThisMonthCount = 0;
-    monthlyTaskProgress.questionsAnsweredThisMonthCount = 0;
-    monthlyTaskProgress.levelsGainedThisMonthCount = 0;
-    monthlyTaskProgress.levelAtMonthStart = level; // Capture current level at the start of the month's tasks
+    // Reset ALL counters for every monthly quest — nothing from the previous month carries over
+    monthlyTaskProgress.topicsStudiedThisMonthCount      = 0;
+    monthlyTaskProgress.reviewsCompletedThisMonthCount   = 0;
+    monthlyTaskProgress.questionsAnsweredThisMonthCount  = 0;
+    monthlyTaskProgress.levelsGainedThisMonthCount       = 0;
+    monthlyTaskProgress.solidRatingsThisMonthCount       = 0;
+    monthlyTaskProgress.focusSessionsThisMonthCount      = 0;
+    monthlyTaskProgress.quizSessionsThisMonthCount       = 0;
+    monthlyTaskProgress.shakyRatingsThisMonthCount       = 0;
+    monthlyTaskProgress.specialtiesStudiedThisMonth      = new Set();  // fresh Set for the new month
+    monthlyTaskProgress.specialtiesStudiedThisMonthCount = 0;
+    monthlyTaskProgress.longestStreakThisMonth           = 0;          // streak quest starts from 0 in the new month
+    monthlyTaskProgress.levelAtMonthStart = level; // capture current level so level-gain quest counts from now
     lastMonthlyTasksGeneratedDate = getYearMonthString();
 }
 
